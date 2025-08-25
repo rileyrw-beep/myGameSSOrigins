@@ -520,12 +520,44 @@ public class Game {
         if (!advancedGameLoop(boardDaltonHall, player, -1, "", 2, 7, -1, -1)) return;
         //finish the battle stuff
         currentAct[currentChapter-1]++;
+        endText();
     }
     public void chapOneActTwo() {
-        System.out.println("ASDKJALDKJALDSKJASLKDJLASKDJALKJD");
-        currentAct[currentChapter-1]++;
-        return;
-    }
+        System.out.println();
+        System.out.println("Act 2: Dalton's Trip");
+        endText();
+        time(3);
+
+        System.out.println("As you leave the apartment complex doors the sun shines in your eyes as you are greeted by the noisy traffic of Brumeshire City.");
+        System.out.println();
+        time(5);
+
+        System.out.println("Brumeshire City, once a historical, major port of the United States, is now one of the world leaders of cutting edge technology.");
+        System.out.println();
+        time(5);
+
+        System.out.println("With skyscrapers taller than the cloudline and automated machines left and right, Brumeshire City is the go to spot for innovators of all types.");
+        System.out.println();
+        time(5);
+
+        System.out.println();
+        System.out.println("You walk past a manhole cover with steam bellowing out of it. It was a common sight as all manhole covers throughout the city do so.");
+        System.out.println();
+        time(5);
+
+        System.out.println("There are many speculations why, but the city always chalks it up to the heating system of the city.");
+        System.out.println();
+        time(4);
+
+        System.out.println("You, however, have no time to dwell on that now. You need to get to the Tech Fair at Nelson's Labs.");
+        System.out.println();
+        time(4);
+
+        System.out.println("It is to the West. Go there now.");
+        System.out.println();
+        time(3);
+
+        currentAct[currentChapter-1]++;}
 
     //chapter 1 method
     public void chapterOne() {

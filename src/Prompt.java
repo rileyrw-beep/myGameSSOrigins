@@ -67,7 +67,179 @@ public class Prompt {
 
 
     }
+    //different prompts:
+    public void displayActions(Board board, Player player, Game game) {
+        int x = board.getCharPosX();
+        int y = board.getCharPosY();
+        ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
 
+        currentNorth = boardList.get(y-1).get(x);
+        currentEast = boardList.get(y).get(x+1);
+        currentSouth = boardList.get(y+1).get(x);
+        currentWest = boardList.get(y).get(x-1);
+
+        northActionList = currentNorth.getActionList();
+        eastActionList = currentEast.getActionList();
+        southActionList = currentSouth.getActionList();
+        westActionList = currentWest.getActionList();
+
+
+        if (!northActionList.isEmpty()) {
+            for (int i = 0; i < northActionList.size(); i++) {
+                System.out.println("- " + northActionList.get(i));
+            }
+        }
+        if (player.checkNorth(board)) {
+            System.out.println("- Move North");
+        }
+        if (!northActionList.isEmpty() || player.checkNorth(board)) {
+            //System.out.println();
+        }
+
+
+        if(!eastActionList.isEmpty()) {
+            for (int i = 0; i < eastActionList.size(); i++) {
+                System.out.println("- " + eastActionList.get(i));
+            }
+        }
+        if (player.checkEast(board)) {
+            System.out.println("- Move East");
+        }
+        if (!eastActionList.isEmpty() || player.checkEast(board)) {
+            //System.out.println();
+        }
+
+
+        if (!southActionList.isEmpty()) {
+            for (int i = 0; i < southActionList.size(); i++) {
+                System.out.println("- " + southActionList.get(i));
+            }
+        }
+        if (player.checkSouth(board)) {
+            System.out.println("- Move South");
+        }
+        if (!southActionList.isEmpty() || player.checkSouth(board)) {
+            //System.out.println();
+        }
+
+
+        if (!westActionList.isEmpty()) {
+            for (int i = 0; i < westActionList.size(); i++) {
+                System.out.println("- " + westActionList.get(i));
+            }
+        }
+        if (player.checkWest(board)) {
+            System.out.println("- Move West");
+        }
+        if (!westActionList.isEmpty() || player.checkWest(board)) {
+            //System.out.println();
+        }
+
+
+
+
+    }
+    public boolean[] doAction(String response, Board board, Player player, Game game) {
+        if(response.length()>4) {
+            if (response.substring(0,4).equals("Move")) {
+                return(player.performAction(response, board, game));
+            }
+        }
+        if (response.equals("No Fast")) {
+            game.setTimeNumber(10000);
+        }
+        if (response.equals("Help")) {
+            return help();
+        }
+        if (response.equals("Legend")) {
+            board.printLegend();
+            board.printBoard();
+        }
+        if (response.equals("Inventory")) {
+            System.out.println("Inventory: ");
+            System.out.println();
+            player.getInventory().printInventory();
+            System.out.println();
+            board.printBoard();
+
+
+            String get = "";
+
+            if (!player.getInventory().getItems().isEmpty()) {
+                outerOuterLoop:
+                while (true) {
+                    System.out.print("Type the name of the item you would like to see the details of: ");
+                    outerLoop:
+                    while (true) {
+                        get = game.getInput().nextLine();
+                        for (int i = 0; i < player.getInventory().getItems().size(); i++) {
+                            if (get.equals(player.getInventory().getItems().get(i).getItemName())) {
+                                System.out.println();
+                                System.out.println();
+                                System.out.println(player.getInventory().getItems().get(i).getItemDescription());
+                                System.out.println();
+                                break outerLoop;
+                            }
+                        }
+                        System.out.println();
+                        System.out.println();
+                        System.out.print("Please enter a valid item: ");
+                    }
+                    System.out.println("Would you like to see the details of another item?");
+                    ArrayList<String> options = new ArrayList<>(Arrays.asList("Yes", "No"));
+                    String get2 = game.basicGameLoop("", options);
+                    if (get2.equals("No")) {
+                        break outerOuterLoop;
+                    }
+
+                }
+            }
+            else {
+                System.out.println("Your inventory is currently empty.");
+            }
+
+        }
+
+        ArrayList<ArrayList<String>> listofLists = new ArrayList<ArrayList<String>>();
+        listofLists.add(northActionList);
+        listofLists.add(eastActionList);
+        listofLists.add(southActionList);
+        listofLists.add(westActionList);
+
+        int longest = 0;
+        for (int i = 0; i < 4; i++) {
+            if (longest < listofLists.get(i).size()) {
+                longest = listofLists.get(i).size();
+            }
+        }
+
+        for (int i = 0; i < longest; i++) {
+            if (i < northActionList.size()) {
+                if (northActionList.get(i).equals(response)) {
+                    return(currentNorth.performAction(response, board, game));
+                }
+            }
+            if (i < eastActionList.size()) {
+                if (eastActionList.get(i).equals(response)) {
+                    return(currentEast.performAction(response, board, game));
+                }
+            }
+            if (i < southActionList.size()) {
+                if (southActionList.get(i).equals(response)) {
+                    return(currentSouth.performAction(response, board, game));
+
+                }
+            }
+            if (i < westActionList.size()) {
+                if (westActionList.get(i).equals(response)) {
+                    return(currentWest.performAction(response, board, game));
+
+                }
+            }
+        }
+
+        return new boolean[]{false, false};
+    }
     public boolean[] displayBattleActions(Board board, Player player, Game game) {
         boolean[] returnArray = {false, true};
         //default return array, only runs to end stuff because if it is run and not changed, something went wrong.
@@ -87,6 +259,7 @@ public class Prompt {
         return returnArray;
     }
 
+    //the battles
     public boolean[] battleOneOne(Game game, Player player, Board board, boolean startFromBattle) {
         boolean[] returnArray = {true, false};
 
@@ -418,199 +591,5 @@ public class Prompt {
         return returnArray;
     }
 
-    public void displayActions(Board board, Player player, Game game) {
-        int x = board.getCharPosX();
-        int y = board.getCharPosY();
-        ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
 
-        currentNorth = boardList.get(y-1).get(x);
-        currentEast = boardList.get(y).get(x+1);
-        currentSouth = boardList.get(y+1).get(x);
-        currentWest = boardList.get(y).get(x-1);
-
-        northActionList = currentNorth.getActionList();
-        eastActionList = currentEast.getActionList();
-        southActionList = currentSouth.getActionList();
-        westActionList = currentWest.getActionList();
-
-
-        if (!northActionList.isEmpty()) {
-            for (int i = 0; i < northActionList.size(); i++) {
-                System.out.println("- " + northActionList.get(i));
-            }
-        }
-        if (player.checkNorth(board)) {
-            System.out.println("- Move North");
-        }
-        if (!northActionList.isEmpty() || player.checkNorth(board)) {
-            //System.out.println();
-        }
-
-
-        if(!eastActionList.isEmpty()) {
-            for (int i = 0; i < eastActionList.size(); i++) {
-                System.out.println("- " + eastActionList.get(i));
-            }
-        }
-        if (player.checkEast(board)) {
-            System.out.println("- Move East");
-        }
-        if (!eastActionList.isEmpty() || player.checkEast(board)) {
-            //System.out.println();
-        }
-
-
-        if (!southActionList.isEmpty()) {
-            for (int i = 0; i < southActionList.size(); i++) {
-                System.out.println("- " + southActionList.get(i));
-            }
-        }
-        if (player.checkSouth(board)) {
-            System.out.println("- Move South");
-        }
-        if (!southActionList.isEmpty() || player.checkSouth(board)) {
-            //System.out.println();
-        }
-
-
-        if (!westActionList.isEmpty()) {
-            for (int i = 0; i < westActionList.size(); i++) {
-                System.out.println("- " + westActionList.get(i));
-            }
-        }
-        if (player.checkWest(board)) {
-            System.out.println("- Move West");
-        }
-        if (!westActionList.isEmpty() || player.checkWest(board)) {
-            //System.out.println();
-        }
-
-
-
-
-    }
-
-    /*
-     *  if (!northActionList.isEmpty() || player.checkNorth(board)) {
-            System.out.println("To the North you can: ");
-        }
-        if (!westActionList.isEmpty() || player.checkWest(board)) {
-            System.out.println("To the West you can: ");
-        }
-        if (!southActionList.isEmpty() || player.checkSouth(board)) {
-            System.out.println("To the South you can: ");
-        }
-        if (!eastActionList.isEmpty() || player.checkEast(board)) {
-            System.out.println("To the East you can: ");
-        }
-
-     */
-
-    //getAction
-
-    //doAction {
-    // list of IFs with enums on them.
-    //}
-
-    public boolean[] doAction(String response, Board board, Player player, Game game) {
-        if(response.length()>4) {
-            if (response.substring(0,4).equals("Move")) {
-                return(player.performAction(response, board, game));
-            }
-        }
-        if (response.equals("No Fast")) {
-            game.setTimeNumber(10000);
-        }
-        if (response.equals("Help")) {
-            return help();
-        }
-        if (response.equals("Legend")) {
-            board.printLegend();
-            board.printBoard();
-        }
-        if (response.equals("Inventory")) {
-            System.out.println("Inventory: ");
-            System.out.println();
-            player.getInventory().printInventory();
-            System.out.println();
-            board.printBoard();
-
-
-            String get = "";
-
-            if (!player.getInventory().getItems().isEmpty()) {
-                outerOuterLoop:
-                while (true) {
-                    System.out.print("Type the name of the item you would like to see the details of: ");
-                    outerLoop:
-                    while (true) {
-                        get = game.getInput().nextLine();
-                        for (int i = 0; i < player.getInventory().getItems().size(); i++) {
-                            if (get.equals(player.getInventory().getItems().get(i).getItemName())) {
-                                System.out.println();
-                                System.out.println();
-                                System.out.println(player.getInventory().getItems().get(i).getItemDescription());
-                                System.out.println();
-                                break outerLoop;
-                            }
-                        }
-                        System.out.println();
-                        System.out.println();
-                        System.out.print("Please enter a valid item: ");
-                    }
-                    System.out.println("Would you like to see the details of another item?");
-                    ArrayList<String> options = new ArrayList<>(Arrays.asList("Yes", "No"));
-                    String get2 = game.basicGameLoop("", options);
-                    if (get2.equals("No")) {
-                        break outerOuterLoop;
-                    }
-
-                }
-            }
-            else {
-                System.out.println("Your inventory is currently empty.");
-            }
-
-        }
-
-        ArrayList<ArrayList<String>> listofLists = new ArrayList<ArrayList<String>>();
-        listofLists.add(northActionList);
-        listofLists.add(eastActionList);
-        listofLists.add(southActionList);
-        listofLists.add(westActionList);
-
-        int longest = 0;
-        for (int i = 0; i < 4; i++) {
-            if (longest < listofLists.get(i).size()) {
-                longest = listofLists.get(i).size();
-            }
-        }
-
-        for (int i = 0; i < longest; i++) {
-            if (i < northActionList.size()) {
-                if (northActionList.get(i).equals(response)) {
-                    return(currentNorth.performAction(response, board, game));
-                }
-            }
-            if (i < eastActionList.size()) {
-                if (eastActionList.get(i).equals(response)) {
-                    return(currentEast.performAction(response, board, game));
-                }
-            }
-            if (i < southActionList.size()) {
-                if (southActionList.get(i).equals(response)) {
-                    return(currentSouth.performAction(response, board, game));
-
-                }
-            }
-            if (i < westActionList.size()) {
-                if (westActionList.get(i).equals(response)) {
-                    return(currentWest.performAction(response, board, game));
-
-                }
-            }
-        }
-
-        return new boolean[]{false, false};
-    }
 }
