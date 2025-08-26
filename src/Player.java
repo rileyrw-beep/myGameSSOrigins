@@ -24,20 +24,20 @@ public class Player implements Nodeable, Moveable {
 
     public boolean[] performAction(String response, Board board, Game game) {
         boolean[] returnArray = {true, false};
-        if (response.equals("Move North") && this.checkNorth(board)) {
-            this.moveNorth(board);
+        if ((response.equals("Move North") || response.equals("w")) && this.checkNorth(board)) {
+            this.moveNorth(board, game);
             return returnArray;
         }
-        else if (response.equals("Move East") && this.checkEast(board)) {
-            this.moveEast(board);
+        else if ((response.equals("Move East") || response.equals("d")) && this.checkEast(board)) {
+            this.moveEast(board, game);
             return returnArray;
         }
-        else if (response.equals("Move South") && this.checkSouth(board)) {
-            this.moveSouth(board);
+        else if ((response.equals("Move South") || response.equals("s")) && this.checkSouth(board)) {
+            this.moveSouth(board, game);
             return returnArray;
         }
-        else if (response.equals("Move West") && this.checkWest(board)) {
-            this.moveWest(board);
+        else if ((response.equals("Move West") || response.equals("a")) && this.checkWest(board)) {
+            this.moveWest(board, game);
             return returnArray;
         }
         else {
@@ -64,21 +64,22 @@ public class Player implements Nodeable, Moveable {
         y++;
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
 
-        if (y<=9 && boardList.get(y).get(x).getCanMoveTo()) {
-            return true;
+        if (y>9) {
+            Map map = board.getMap();
+            return map.checkBoard(Direction.SOUTH);
         }
-        return false;
+        return boardList.get(y).get(x).getCanMoveTo();
     }
     public boolean checkEast(Board board) {
         int x = board.getCharPosX();
         int y = board.getCharPosY();
         x++;
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
-
-        if (x<=9 && boardList.get(y).get(x).getCanMoveTo()) {
-            return true;
+        if (x>9) {
+            Map map = board.getMap();
+            return map.checkBoard(Direction.EAST);
         }
-        return false;
+        return boardList.get(y).get(x).getCanMoveTo();
     }
     public boolean checkNorth(Board board) {
         int x = board.getCharPosX();
@@ -86,29 +87,44 @@ public class Player implements Nodeable, Moveable {
         y--;
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
 
-        if (y>=0 && boardList.get(y).get(x).getCanMoveTo()) {
-            return true;
+        if (y<0) {
+            Map map = board.getMap();
+            return map.checkBoard(Direction.NORTH);
         }
-        return false;
+        return boardList.get(y).get(x).getCanMoveTo();
     }
     public boolean checkWest(Board board) {
         int x = board.getCharPosX();
         int y = board.getCharPosY();
         x--;
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
-
-        if (x>=0 && boardList.get(y).get(x).getCanMoveTo()) {
-            return true;
+        if (x<0) {
+            Map map = board.getMap();
+            return map.checkBoard(Direction.WEST);
         }
-        return false;
+        return boardList.get(y).get(x).getCanMoveTo();
     }
 
-    public void moveSouth(Board board) {
+    public void moveSouth(Board board, Game game) {
         if(this.checkSouth(board)) {
             int x = board.getCharPosX();
             int prev = board.getCharPosY();
             int y = prev + 1;
             ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
+            if (y >= 10) {
+                Map map = board.getMap();
+                ArrayList<ArrayList<Board>> mapBoard = map.getMapBoard();
+                Board newBoard = mapBoard.get(map.getCurrentBoardY()+1).get(map.getCurrentBoardX());
+                ArrayList<ArrayList<Nodeable>> newBoardList = newBoard.getBoard();
+                Nodeable placeholder = newBoardList.get(0).get(x);
+                board.addNode(x, prev, previousNode);
+                previousNode = placeholder;
+                newBoard.addNode(x, 0, this);
+                newBoard.setCharPosX(x);
+                newBoard.setCharPosY(0);
+                game.setBoard(newBoard);
+                return;
+            }
             Nodeable placeholder = boardList.get(y).get(x);
             board.addNode(x, prev, previousNode);
             previousNode = placeholder;
@@ -120,18 +136,32 @@ public class Player implements Nodeable, Moveable {
         System.out.println("You cannot move to that spot! Try again.");
 
     }
-    public void moveEast(Board board) {
+    public void moveEast(Board board, Game game) {
         if(this.checkEast(board)) {
             int prev = board.getCharPosX();
             int y = board.getCharPosY();
             int x = prev + 1;
             ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
+            if (x >= 10) {
+                Map map = board.getMap();
+                ArrayList<ArrayList<Board>> mapBoard = map.getMapBoard();
+                Board newBoard = mapBoard.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()+1);
+                ArrayList<ArrayList<Nodeable>> newBoardList = newBoard.getBoard();
+                Nodeable placeholder = newBoardList.get(y).get(0);
+                board.addNode(prev, y, previousNode);
+                previousNode = placeholder;
+                newBoard.addNode(0, y, this);
+                newBoard.setCharPosX(0);
+                newBoard.setCharPosY(y);
+                game.setBoard(newBoard);
+                return;
+            }
             Nodeable placeholder = boardList.get(y).get(x);
             board.addNode(prev, y, previousNode);
             previousNode = placeholder;
             board.addNode(x,y,this);
             if (hobo!=null) {
-                hobo.moveEast(board);
+                hobo.moveEast(board, game);
             }
             board.setCharPosX(x);
             board.setCharPosY(y);
@@ -140,12 +170,26 @@ public class Player implements Nodeable, Moveable {
         System.out.println("You cannot move to that spot! Try again.");
 
     }
-    public void moveNorth(Board board) {
+    public void moveNorth(Board board, Game game) {
         if(this.checkNorth(board)) {
             int x = board.getCharPosX();
             int prev = board.getCharPosY();
             int y = prev - 1;
             ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
+            if (y < 0) {
+                Map map = board.getMap();
+                ArrayList<ArrayList<Board>> mapBoard = map.getMapBoard();
+                Board newBoard = mapBoard.get(map.getCurrentBoardY()-1).get(map.getCurrentBoardX());
+                ArrayList<ArrayList<Nodeable>> newBoardList = newBoard.getBoard();
+                Nodeable placeholder = newBoardList.get(9).get(x);
+                board.addNode(x, prev, previousNode);
+                previousNode = placeholder;
+                newBoard.addNode(x, 9, this);
+                newBoard.setCharPosX(x);
+                newBoard.setCharPosY(9);
+                game.setBoard(newBoard);
+                return;
+            }
             Nodeable placeholder = boardList.get(y).get(x);
             board.addNode(x, prev, previousNode);
             previousNode = placeholder;
@@ -157,18 +201,32 @@ public class Player implements Nodeable, Moveable {
         System.out.println("You cannot move to that spot! Try again.");
 
     }
-    public void moveWest(Board board) {
+    public void moveWest(Board board, Game game) {
         if(this.checkWest(board)) {
             int prev = board.getCharPosX();
             int y = board.getCharPosY();
             int x = prev - 1;
             ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
+            if (x < 0) {
+                Map map = board.getMap();
+                ArrayList<ArrayList<Board>> mapBoard = map.getMapBoard();
+                Board newBoard = mapBoard.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()+1);
+                ArrayList<ArrayList<Nodeable>> newBoardList = newBoard.getBoard();
+                Nodeable placeholder = newBoardList.get(y).get(9);
+                board.addNode(prev, y, previousNode);
+                previousNode = placeholder;
+                newBoard.addNode(9, y, this);
+                newBoard.setCharPosX(9);
+                newBoard.setCharPosY(y);
+                game.setBoard(newBoard);
+                return;
+            }
             Nodeable placeholder = boardList.get(y).get(x);
             board.addNode(prev, y, previousNode);
             previousNode = placeholder;
             board.addNode(x,y,this);
             if (hobo!=null) {
-                hobo.moveWest(board);
+                hobo.moveWest(board, game);
             }
             board.setCharPosX(x);
             board.setCharPosY(y);

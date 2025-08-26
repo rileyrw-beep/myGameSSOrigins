@@ -91,7 +91,7 @@ public class Hobo implements Nodeable, Moveable {
         return false;
     }
 
-    public void moveSouth(Board board) {
+    public void moveSouth(Board board, Game game) {
         if(this.checkSouth(board)) {
             int x = currentX;
             int prev = currentY;
@@ -109,7 +109,7 @@ public class Hobo implements Nodeable, Moveable {
 
 
     }
-    public void moveEast(Board board) {
+    public void moveEast(Board board, Game game) {
         if(this.checkEast(board)) {
             int prev = currentX;
             int y = currentY;
@@ -126,7 +126,7 @@ public class Hobo implements Nodeable, Moveable {
 
 
     }
-    public void moveNorth(Board board) {
+    public void moveNorth(Board board, Game game) {
         if(this.checkNorth(board)) {
             int x = currentX;
             int prev = currentY;
@@ -144,7 +144,7 @@ public class Hobo implements Nodeable, Moveable {
 
 
     }
-    public void moveWest(Board board) {
+    public void moveWest(Board board, Game game) {
         if(this.checkWest(board)) {
             int prev = currentX;
             int y = currentY;

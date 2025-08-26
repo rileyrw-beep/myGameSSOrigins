@@ -6,9 +6,10 @@ public class Board {
     private int charPosX;
     private int charPosY;
     private String boardName;
+    private Map map;
 
 
-    public Board(String boardName) {
+    public Board(String boardName, Map map) {
         boardList = new ArrayList<>();
         Space space = new Space();
         int rows = 10;
@@ -23,6 +24,7 @@ public class Board {
         this.boardName = boardName;
         this.charPosX = -1;
         this.charPosY = -1;
+        this.map = map;
     }
 
     public void addNode(int x, int y, Nodeable node) {
@@ -65,6 +67,9 @@ public class Board {
         System.out.println();
 
     }
+    public Map getMap() {
+        return map;
+    }
 
     public int getCharPosX() {
         return charPosX;
@@ -84,6 +89,15 @@ public class Board {
 
     public ArrayList<ArrayList<Nodeable>> getBoard() {
         return boardList;
+    }
+
+    public boolean isFullOfEmpty() {
+        for (ArrayList<Nodeable> row : boardList) {
+            for (Nodeable node : row) {
+                if (node.getInGameid().equals("Space")) return true;
+            }
+        }
+        return false;
     }
 
     private boolean checkLegendList(ArrayList<Nodeable> nodeList, Nodeable currentNode) {

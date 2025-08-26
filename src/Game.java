@@ -17,6 +17,7 @@ public class Game {
     private int[] currentAct;
     private int[] latestActs;
     private final int[] totalActs;
+    private Board currentBoard;
 
     //convenience.
     private int timeNumber;
@@ -54,6 +55,12 @@ public class Game {
     }
     public Player getPlayer() {
         return currentPlayer;
+    }
+    public void setBoard(Board board) {
+        currentBoard = board;
+    }
+    public Board getBoard() {
+        return currentBoard;
     }
 
     //getters for chapters and acts
@@ -356,7 +363,10 @@ public class Game {
 
     //Chapter 1 acts.
     public void chapOneActOne() {
-        Board boardDaltonRoom = new Board("Dalton's Room");
+        Board boardDaltonHall = new Board("Apartment Hallway", null);
+        Board boardDaltonRoom = new Board("Dalton's Room", null);
+
+        setBoard(boardDaltonRoom);
         System.out.println();
         System.out.println("Act 1: Dalton's Apartment");
         endText();
@@ -441,7 +451,7 @@ public class Game {
         optionList.clear();
         optionList.add("Get Up");
         basicGameLoop("", optionList);
-        player.moveSouth(boardDaltonRoom);
+        player.moveSouth(boardDaltonRoom, this);
         System.out.println();
         System.out.println("...");
         this.time(3);
@@ -465,12 +475,13 @@ public class Game {
 
         String message = "Game Tip: You always have access to the 'Help' action. This can tell you the universal actions you always have at your disposal.";
         String message2 = "I don't have all day and neither do you. You should probably get going to the Tech Fair!";
-        if (!advancedGameLoop(boardDaltonRoom, player, 0, message, 6, 5, -1, -1)) return;
-        if (!advancedGameLoop(boardDaltonRoom, player, 9, message2, 2, 6, -1, -1)) return;
+        if (!advancedGameLoop(currentBoard, player, 0, message, 6, 5, -1, -1)) return;
+        if (!advancedGameLoop(currentBoard, player, 9, message2, 2, 6, -1, -1)) return;
 
         //-----------------------board change------------------------
 
-        Board boardDaltonHall = new Board("Apartment Hallway");
+
+        setBoard(boardDaltonHall);
         boardDaltonHall.buildRectRoom(3,0,6,0,6,9,3,9,3,7,Direction.WEST);
         Door doorApartment = new Door(false, true);
         Hobo hobo = new Hobo(floor, 5, 5);
@@ -515,14 +526,15 @@ public class Game {
 
         System.out.println("Go there now.");
 
-        if (!advancedGameLoop(boardDaltonHall, player, -1, "", 2, 7, -1, hobo.currentY-1)) return;
+        if (!advancedGameLoop(currentBoard, player, -1, "", 2, 7, -1, hobo.currentY-1)) return;
         player.setHobo(null);
-        if (!advancedGameLoop(boardDaltonHall, player, -1, "", 2, 7, -1, -1)) return;
+        if (!advancedGameLoop(currentBoard, player, -1, "", 2, 7, -1, -1)) return;
         //finish the battle stuff
         currentAct[currentChapter-1]++;
         endText();
     }
     public void chapOneActTwo() {
+
         System.out.println();
         System.out.println("Act 2: Dalton's Trip");
         endText();

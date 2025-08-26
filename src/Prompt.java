@@ -145,6 +145,7 @@ public class Prompt {
                 return(player.performAction(response, board, game));
             }
         }
+        if (response.length()==1) return player.performAction(response, board, game);
         if (response.equals("No Fast")) {
             game.setTimeNumber(10000);
         }
