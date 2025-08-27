@@ -569,6 +569,8 @@ public class Game {
         System.out.println();
         time(3);
 
+        // make the map now
+
         currentAct[currentChapter-1]++;}
 
     //chapter 1 method
