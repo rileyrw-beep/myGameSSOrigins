@@ -11,7 +11,7 @@ public class Map {
         for (int i = 0; i < 10; i++) {
             ArrayList<Board> row = new ArrayList<>();
             for (int k = 0; k < 10; k++) {
-                Board board = new Board("empty", this);
+                Board board = new Board(" ", this);
                 row.add(board);
             }
             map.add(row);
@@ -31,8 +31,9 @@ public class Map {
     public void printMap() {
         for (ArrayList<Board> row : map) {
             for (Board board : row) {
-                board.printBoard();
+                System.out.print(board.getBoardName() + " ");
             }
+            System.out.println();
         }
     }
 

@@ -87,6 +87,9 @@ public class Board {
         charPosY = newPos;
     }
 
+    public String getBoardName() {
+        return boardName;
+    }
     public ArrayList<ArrayList<Nodeable>> getBoard() {
         return boardList;
     }

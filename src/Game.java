@@ -190,7 +190,7 @@ public class Game {
         returnArray[1] = false;
         return returnArray;
     }
-    public void askPlayerName() {
+    public boolean askPlayerName() {
         this.endText();
         System.out.println("Welcome to S.S. Origins");
         System.out.println();
@@ -198,14 +198,18 @@ public class Game {
         String get = input.nextLine();
         this.setPlayerName(get);
         System.out.println();
-        System.out.println("Hello, " + playerName);
+        if (get.equals("Tori")) System.out.println("Hi hi my love <3");
+        else {System.out.println("Hello, " + playerName);}
         if (get.equals("fast")) {
             timeNumber = 200;
         }
-
+        if (get.equals("Tori")) {
+            return true;
+        }
         this.endText();
+        return false;
     }
-    public void startGame() {
+    public void startGame(boolean x) {
         System.out.println("Enter the word 'begin' below to start the game.");
         String get = "";
         while (true) {
@@ -223,6 +227,9 @@ public class Game {
             currentAct[currentChapter-1] = 1;
             latestChapter = 1;
             latestActs[latestChapter-1] = 1;
+            if (x) {
+                currentChapter = 99;
+            }
         }
         else {
             System.out.println("Interesting, we must have an OG fan on our hands.");
@@ -587,7 +594,184 @@ public class Game {
             chapOneActTwo();
         }
 
-        System.out.println("YAyy");
+    }
+
+    //---------------------------------------
+
+    public void toriGameActOne(Map map) {
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        time(3);
+
+        System.out.println("Act 0: Awakening");
+        System.out.println();
+        time(3);
+
+        System.out.println("You are Tori Huynh");
+        System.out.println();
+        time(3);
+
+        System.out.println("A beautiful, kind, and fun girl who is a little on the shorter side.");
+        System.out.println();
+        time(4);
+
+        System.out.println("You wake up in a field of grass; looking up you see you are in a large, dimly lit room with a large machine in the center and a terminal in the corner.");
+        System.out.println();
+        time(6);
+
+        currentBoard.printLegend();
+        currentBoard.printBoard();
+
+        System.out.println("Game Tip: When you see words following the '-' symbol, it means it is an ACTION. Type in the following action word for word to do it.");
+        System.out.println();
+        System.out.println("- Get Up");
+        System.out.println();
+        String firstGet = "";
+        while(true) {
+            firstGet = input.nextLine();
+            if (firstGet.equals("Get Up")) {
+                break;
+            }
+            else {System.out.println("Game Tip: Not quite, you need to type each action *word for word* and without the '-', try again.");}
+        }
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        this.time(3);
+
+        System.out.println();
+        System.out.println("You do not know why you are here, but some inner voice inside of you tells you that you have a purpose to fulfill in this strange land.");
+        System.out.println();
+        time(5);
+
+        System.out.println("You decide to look around and explore.");
+        System.out.println();
+        time(3);
+
+        String message = "Game Tip: You always have access to the 'Help' action. This can tell you the universal actions you always have at your disposal.";
+        advancedGameLoop(currentBoard, currentPlayer, 0, message, 0, 6, -1, -1);
+
+    }
+
+    public void toriGame() {
+        System.out.println("Welcome to Tori's Wonderland");
+        time(3);
+        System.out.println();
+
+        //create the Map:
+
+        Map toriMap = new Map(5, 3);
+
+        Board leftHand = new Board("[", toriMap);
+        Board leftArm = new Board("|", toriMap);
+        Board leftShoulder = new Board("|", toriMap);
+        Board leftShoulderConnector = new  Board("|", toriMap);
+        Board leftLung = new  Board("|", toriMap);
+        toriMap.addBoard(leftHand, 2, 5);
+        toriMap.addBoard(leftArm, 2, 4);
+        toriMap.addBoard(leftShoulder, 2, 3);
+        toriMap.addBoard(leftShoulderConnector, 3, 3);
+        toriMap.addBoard(leftLung, 4, 3);
+
+        Board rightHand = new Board("]", toriMap);
+        Board rightArm = new Board("|", toriMap);
+        Board rightShoulder = new Board("|", toriMap);
+        Board rightShoulderConnector = new  Board("|", toriMap);
+        Board rightLung = new  Board("|", toriMap);
+        toriMap.addBoard(rightHand, 8, 5);
+        toriMap.addBoard(rightArm, 8, 4);
+        toriMap.addBoard(rightShoulder, 8, 3);
+        toriMap.addBoard(rightShoulderConnector, 7, 3);
+        toriMap.addBoard(rightLung, 6, 3);
+
+        Board heart = new Board("|", toriMap);
+        toriMap.addBoard(heart, 5, 3);
+        currentBoard = heart;
+
+        Board neck = new Board("|", toriMap);
+        Board mouth = new Board("|", toriMap);
+        Board brainCenter = new Board("|", toriMap);
+        Board brainLeft = new Board("|", toriMap);
+        Board brainRight = new  Board("|", toriMap);
+        Board leftEye = new Board("0", toriMap);
+        Board rightEye = new Board("0", toriMap);
+        toriMap.addBoard(neck, 5, 2);
+        toriMap.addBoard(mouth, 5, 1);
+        toriMap.addBoard(brainCenter, 5, 0);
+        toriMap.addBoard(brainLeft, 4, 0);
+        toriMap.addBoard(brainRight, 6, 0);
+        toriMap.addBoard(leftEye, 4, 1);
+        toriMap.addBoard(rightEye, 6, 1);
+
+        Board ribCage = new Board("|", toriMap);
+        Board stomach = new Board("|", toriMap);
+        Board lowerStomach =  new Board("|", toriMap);
+        toriMap.addBoard(ribCage, 5, 4);
+        toriMap.addBoard(stomach, 5, 5);
+        toriMap.addBoard(lowerStomach, 5, 6);
+
+        Board hipCenter = new Board("|", toriMap);
+        Board hipLeft = new Board("|", toriMap);
+        Board hipRight = new Board("|", toriMap);
+        toriMap.addBoard(hipCenter, 5, 7);
+        toriMap.addBoard(hipLeft, 4, 7);
+        toriMap.addBoard(hipRight, 6, 7);
+
+        Board rightKnee = new Board("|", toriMap);
+        Board rightLeg = new  Board("|", toriMap);
+        Board rightFoot = new  Board("[", toriMap);
+        toriMap.addBoard(rightKnee, 7, 7);
+        toriMap.addBoard(rightLeg, 7, 8);
+        toriMap.addBoard(rightFoot, 7, 9);
+
+        Board leftKnee = new Board("|", toriMap);
+        Board leftLeg = new  Board("|", toriMap);
+        Board leftFoot = new  Board("]", toriMap);
+        toriMap.addBoard(leftKnee, 3, 7);
+        toriMap.addBoard(leftLeg, 3, 8);
+        toriMap.addBoard(leftFoot, 3, 9);
+
+        //fill the boards:
+        heart.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, 5, 0, Direction.NORTH);
+        heart.getBoard().get(0).get(5).performAction("Lock Door", heart, this);
+        Door topDoor = new Door(false, true);
+        Door bottomDoor1 = new Door(false, true);
+        Door bottomDoor2 = new Door(false, true);
+        Door rightDoor = new Door(false, true);
+        Door leftDoor = new Door(false, false);
+
+        heart.addNode(4, 0, topDoor);
+        heart.addNode(4, 9, bottomDoor1);
+        heart.addNode(5, 9, bottomDoor2);
+        heart.addNode(9, 6, rightDoor);
+        heart.addNode(0, 6, leftDoor);
+
+        //add the heart to heart.
+        Heart heartPiece = new Heart();
+        heart.addNode(3,2, heartPiece);
+        heart.addNode(4,3, heartPiece);
+        heart.addNode(5,3, heartPiece);
+        heart.addNode(6,2, heartPiece);
+        heart.addNode(7,3, heartPiece);
+        heart.addNode(7,4, heartPiece);
+        heart.addNode(6,5, heartPiece);
+        heart.addNode(5,6, heartPiece);
+        heart.addNode(4,6, heartPiece);
+        heart.addNode(3,5, heartPiece);
+        heart.addNode(2,4, heartPiece);
+        heart.addNode(2,3, heartPiece);
+
+        HeartTerminal terminal = new HeartTerminal();
+        heart.addNode(7,8, terminal);
+
+        Floor floor = new Floor();
+        Player toriPlayer = new Player("T", "Tori", floor);
+        heart.addNode(2, 7, toriPlayer);
+        currentPlayer = toriPlayer;
+
+        toriGameActOne(toriMap);
+
     }
 
 

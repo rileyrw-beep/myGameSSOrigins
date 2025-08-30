@@ -8,10 +8,12 @@ public class Main {
 
         Game game = new Game();
 
-        game.askPlayerName();
-        game.startGame();
+        boolean x = game.askPlayerName();
+        game.startGame(x);
 
-
+        if (game.getCurrentChapter()==99) {
+            game.toriGame();
+        }
         if (game.getCurrentChapter()==1){
             game.chapterOne();
         }
