@@ -771,6 +771,8 @@ public class Game {
         currentPlayer = toriPlayer;
 
         toriGameActOne(toriMap);
+        toriPlayer.moveWest(currentBoard, this);
+        currentBoard.printBoard();
 
     }
 
