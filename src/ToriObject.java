@@ -45,7 +45,7 @@ public class ToriObject implements Nodeable {
             System.out.println();
             game.time(3);
 
-            System.out.println("You approach the object on the ground and see that is is " + name + ".");
+            System.out.println("You approach the object on the ground and see that it is " + name + ".");
             System.out.println();
             game.time(3);
 

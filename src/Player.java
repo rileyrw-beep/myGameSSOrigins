@@ -66,7 +66,7 @@ public class Player implements Nodeable, Moveable {
 
         if (y>9) {
             Map map = board.getMap();
-            return map.checkBoard(Direction.SOUTH);
+            return map.checkBoard(Direction.SOUTH, board.getCharPosX(), board.getCharPosY());
         }
         return boardList.get(y).get(x).getCanMoveTo();
     }
@@ -77,7 +77,7 @@ public class Player implements Nodeable, Moveable {
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
         if (x>9) {
             Map map = board.getMap();
-            return map.checkBoard(Direction.EAST);
+            return map.checkBoard(Direction.EAST, board.getCharPosX(), board.getCharPosY());
         }
         return boardList.get(y).get(x).getCanMoveTo();
     }
@@ -89,7 +89,7 @@ public class Player implements Nodeable, Moveable {
 
         if (y<0) {
             Map map = board.getMap();
-            return map.checkBoard(Direction.NORTH);
+            return map.checkBoard(Direction.NORTH, board.getCharPosX(), board.getCharPosY());
         }
         return boardList.get(y).get(x).getCanMoveTo();
     }
@@ -100,7 +100,7 @@ public class Player implements Nodeable, Moveable {
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
         if (x<0) {
             Map map = board.getMap();
-            return map.checkBoard(Direction.WEST);
+            return map.checkBoard(Direction.WEST, board.getCharPosX(), board.getCharPosY());
         }
         return boardList.get(y).get(x).getCanMoveTo();
     }

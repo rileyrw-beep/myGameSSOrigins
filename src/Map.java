@@ -58,32 +58,32 @@ public class Map {
         return map;
     }
 
-    public boolean checkBoard(Direction direction) {
+    public boolean checkBoard(Direction direction, int x, int y) {
 
         Board currentBoard = map.get(currentBoardY).get(currentBoardX);
         switch (direction) {
             case NORTH:
                 if (currentBoardY-1 >= 0){
                     Board desiredBoard = map.get(currentBoardY - 1).get(currentBoardX);
-                    if (!(currentBoard.getCharPosY() - 1 > 0) && !desiredBoard.isFullOfEmpty()) return true;
+                    if (!(currentBoard.getCharPosY() - 1 > 0) && desiredBoard.getBoard().get(9).get(x).getCanMoveTo()) return true;
                 }
                 return false;
             case EAST:
                 if (currentBoardX+1 <= 9){
                     Board desiredBoard2 = map.get(currentBoardY).get(currentBoardX + 1);
-                    if (!(currentBoard.getCharPosX() + 1 < 9) && !desiredBoard2.isFullOfEmpty()) return true;
+                    if (!(currentBoard.getCharPosX() + 1 < 9) && desiredBoard2.getBoard().get(y).get(0).getCanMoveTo()) return true;
                 }
                 return false;
             case SOUTH:
                 if (currentBoardY+1 <= 9){
                     Board desiredBoard3 = map.get(currentBoardY + 1).get(currentBoardX);
-                    if (!(currentBoard.getCharPosY() + 1 < 9) && !desiredBoard3.isFullOfEmpty()) return true;
+                    if (!(currentBoard.getCharPosY() + 1 < 9) && desiredBoard3.getBoard().get(0).get(x).getCanMoveTo()) return true;
                 }
                 return false;
             case WEST:
                 if (currentBoardX-1 >= 0){
                     Board desiredBoard4 = map.get(currentBoardY).get(currentBoardX - 1);
-                    if (!(currentBoard.getCharPosX() - 1 > 0) && !desiredBoard4.isFullOfEmpty()) return true;
+                    if (!(currentBoard.getCharPosX() - 1 > 0) && desiredBoard4.getBoard().get(y).get(9).getCanMoveTo()) return true;
                 }
         }
         return false;

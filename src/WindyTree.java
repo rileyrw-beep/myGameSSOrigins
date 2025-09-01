@@ -7,9 +7,9 @@ public class WindyTree implements Nodeable {
     private ListOfNodes type;
     private ArrayList<String> actionList;
 
-    public WindyTree() {
-        displayid = "F";
-        inGameid = "Windy Tree";
+    public WindyTree(String dis, String gam) {
+        displayid = dis;
+        inGameid = gam;
         type = ListOfNodes.WALL;
         canMoveTo = false;
         actionList = new ArrayList<String>();
