@@ -122,7 +122,10 @@ public class Player implements Nodeable, Moveable {
                 newBoard.addNode(x, 0, this);
                 newBoard.setCharPosX(x);
                 newBoard.setCharPosY(0);
+                map.setCurrentBoardX(map.getCurrentBoardX());
+                map.setCurrentBoardY(map.getCurrentBoardY()+1);
                 game.setBoard(newBoard);
+                map.boardChanged();
                 return;
             }
             Nodeable placeholder = boardList.get(y).get(x);
@@ -153,7 +156,10 @@ public class Player implements Nodeable, Moveable {
                 newBoard.addNode(0, y, this);
                 newBoard.setCharPosX(0);
                 newBoard.setCharPosY(y);
+                map.setCurrentBoardX(map.getCurrentBoardX()+1);
+                map.setCurrentBoardY(map.getCurrentBoardY());
                 game.setBoard(newBoard);
+                map.boardChanged();
                 return;
             }
             Nodeable placeholder = boardList.get(y).get(x);
@@ -187,7 +193,10 @@ public class Player implements Nodeable, Moveable {
                 newBoard.addNode(x, 9, this);
                 newBoard.setCharPosX(x);
                 newBoard.setCharPosY(9);
+                map.setCurrentBoardX(map.getCurrentBoardX());
+                map.setCurrentBoardY(map.getCurrentBoardY()-1);
                 game.setBoard(newBoard);
+                map.boardChanged();
                 return;
             }
             Nodeable placeholder = boardList.get(y).get(x);
@@ -210,7 +219,7 @@ public class Player implements Nodeable, Moveable {
             if (x < 0) {
                 Map map = board.getMap();
                 ArrayList<ArrayList<Board>> mapBoard = map.getMapBoard();
-                Board newBoard = mapBoard.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()+1);
+                Board newBoard = mapBoard.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()-1);
                 ArrayList<ArrayList<Nodeable>> newBoardList = newBoard.getBoard();
                 Nodeable placeholder = newBoardList.get(y).get(9);
                 board.addNode(prev, y, previousNode);
@@ -218,7 +227,10 @@ public class Player implements Nodeable, Moveable {
                 newBoard.addNode(9, y, this);
                 newBoard.setCharPosX(9);
                 newBoard.setCharPosY(y);
+                map.setCurrentBoardX(map.getCurrentBoardX()-1);
+                map.setCurrentBoardY(map.getCurrentBoardY());
                 game.setBoard(newBoard);
+                map.boardChanged();
                 return;
             }
             Nodeable placeholder = boardList.get(y).get(x);

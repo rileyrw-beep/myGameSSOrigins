@@ -68,20 +68,49 @@ public class Prompt {
 
     }
     //different prompts:
-    public void displayActions(Board board, Player player, Game game) {
+    public void displayActions(Map map, Player player, Game game) {
+        Board board = map.getCurrentBoard();
+        ArrayList<ArrayList<Board>> mapList = map.getMapBoard();
         int x = board.getCharPosX();
         int y = board.getCharPosY();
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
 
-        currentNorth = boardList.get(y-1).get(x);
-        currentEast = boardList.get(y).get(x+1);
-        currentSouth = boardList.get(y+1).get(x);
-        currentWest = boardList.get(y).get(x-1);
+        Wall wall = new Wall();
+        if (y!=0) currentNorth = boardList.get(y-1).get(x);
+        else {
+            Board desiredBoard = mapList.get(map.getCurrentBoardY()-1).get(map.getCurrentBoardX());
+            ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
+            currentNorth = desiredBoardList.get(9).get(x);
+        }
+
+        if (x!=9) currentEast = boardList.get(y).get(x+1);
+        else {
+            Board desiredBoard = mapList.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()+1);
+            ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
+            currentEast = desiredBoardList.get(y).get(0);
+        }
+
+        if (y!=9) currentSouth = boardList.get(y+1).get(x);
+        else {
+            Board desiredBoard = mapList.get(map.getCurrentBoardY()+1).get(map.getCurrentBoardX());
+            ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
+            currentSouth = desiredBoardList.get(0).get(x);
+        }
+
+        if (x!=0) currentWest = boardList.get(y).get(x-1);
+        else {
+            Board desiredBoard = mapList.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()-1);
+            ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
+            currentWest = desiredBoardList.get(y).get(9);
+        }
+
 
         northActionList = currentNorth.getActionList();
         eastActionList = currentEast.getActionList();
         southActionList = currentSouth.getActionList();
         westActionList = currentWest.getActionList();
+
+
 
 
         if (!northActionList.isEmpty()) {
@@ -139,7 +168,8 @@ public class Prompt {
 
 
     }
-    public boolean[] doAction(String response, Board board, Player player, Game game) {
+    public boolean[] doAction(String response, Map map, Player player, Game game) {
+        Board board = map.getCurrentBoard();
         if(response.length()>4) {
             if (response.substring(0,4).equals("Move")) {
                 return(player.performAction(response, board, game));
@@ -154,14 +184,15 @@ public class Prompt {
         }
         if (response.equals("Legend")) {
             board.printLegend();
-            board.printBoard();
+            return new boolean[]{true, false};
         }
         if (response.equals("Inventory")) {
             System.out.println("Inventory: ");
             System.out.println();
             player.getInventory().printInventory();
             System.out.println();
-            board.printBoard();
+            //board.printBoard();
+
 
 
             String get = "";
@@ -198,7 +229,7 @@ public class Prompt {
             else {
                 System.out.println("Your inventory is currently empty.");
             }
-
+            return new boolean[]{true, false};
         }
 
         ArrayList<ArrayList<String>> listofLists = new ArrayList<ArrayList<String>>();

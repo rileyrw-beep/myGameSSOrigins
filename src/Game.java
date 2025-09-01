@@ -310,16 +310,19 @@ public class Game {
         }
         return userInput;
     }
-    public boolean advancedGameLoop(Board board, Player player, int messageCounter, String message, int endX, int endY, int battleX, int battleY) {
+    public boolean advancedGameLoop(Map map, Player player, int messageCounter, String message, int endBoardX, int endBoardY, int endX, int endY, int battleX, int battleY) {
+        Board thisBoard = map.getCurrentBoard();
         String get = "";
         boolean[] boolArray = new boolean[2];
-        board.printBoard();
+        thisBoard.printBoard();
         boolean canPrintBoard = true;
         int counter = 0;
+        int boardCounter;
         // false false -> battle again
         // true false -> good, continue
         // false true -> retart from last act
         while (true) {
+            Board board = map.getCurrentBoard();
             if ((board.getCharPosX()==battleX && board.getCharPosY()==battleY) || (battleX==-1 && board.getCharPosY()==battleY) || (battleY==1 && board.getCharPosX()==battleX)) {
                 boolArray = prompt.displayBattleActions(board, player, this);
                 if (boolArray[1]) {
@@ -331,12 +334,13 @@ public class Game {
                 System.out.println(message);
                 System.out.println();
             }
-            prompt.displayActions(board, player,this);
+            prompt.displayActions(map, player,this);
             System.out.println();
 
             get = input.nextLine();
             System.out.println();
-            boolArray = prompt.doAction(get, board, player, this);
+            boardCounter = map.getBoardChangeCounter();
+            boolArray = prompt.doAction(get, map, player, this);
             if (!boolArray[0]) {
                 if (boolArray[1]) {
                     return false;
@@ -356,11 +360,19 @@ public class Game {
                 System.out.println();
             }
 
-            if (board.getCharPosX()==endX && board.getCharPosY()==endY) {
-                break;
+            if (map.getCurrentBoardX()==endBoardX && map.getCurrentBoardY()==endBoardY) {
+                if (board.getCharPosX() == endX && board.getCharPosY() == endY) {
+                    break;
+                }
             }
             if (canPrintBoard) {
+                board = map.getCurrentBoard();
                 board.printBoard();
+                if (map.getBoardChangeCounter() != boardCounter) {
+                    System.out.println();
+                    System.out.println("Entering... " + board.getBoardName());
+                    System.out.println();
+                }
             }
             canPrintBoard = true;
             counter++;
@@ -370,8 +382,13 @@ public class Game {
 
     //Chapter 1 acts.
     public void chapOneActOne() {
-        Board boardDaltonHall = new Board("Apartment Hallway", null);
-        Board boardDaltonRoom = new Board("Dalton's Room", null);
+        Map moop = new Map(5, 5);
+
+        Map meep = new Map(5, 5);
+        Board boardDaltonHall = new Board("a", moop, "Apartment Hallway");
+        Board boardDaltonRoom = new Board("a", meep, "Dalton's Room");
+        moop.addBoard(boardDaltonHall, 5, 5);
+        meep.addBoard(boardDaltonRoom, 5, 5);
 
         setBoard(boardDaltonRoom);
         System.out.println();
@@ -482,8 +499,8 @@ public class Game {
 
         String message = "Game Tip: You always have access to the 'Help' action. This can tell you the universal actions you always have at your disposal.";
         String message2 = "I don't have all day and neither do you. You should probably get going to the Tech Fair!";
-        if (!advancedGameLoop(currentBoard, player, 0, message, 6, 5, -1, -1)) return;
-        if (!advancedGameLoop(currentBoard, player, 9, message2, 2, 6, -1, -1)) return;
+        if (!advancedGameLoop(meep, player, 0, message, 5, 5, 6, 5, -1, -1)) return;
+        if (!advancedGameLoop(meep, player, 9, message2, 5, 5, 2, 6, -1, -1)) return;
 
         //-----------------------board change------------------------
 
@@ -533,9 +550,9 @@ public class Game {
 
         System.out.println("Go there now.");
 
-        if (!advancedGameLoop(currentBoard, player, -1, "", 2, 7, -1, hobo.currentY-1)) return;
+        if (!advancedGameLoop(moop, player, -1, "", 5, 5, 2, 7, -1, hobo.currentY-1)) return;
         player.setHobo(null);
-        if (!advancedGameLoop(currentBoard, player, -1, "", 2, 7, -1, -1)) return;
+        if (!advancedGameLoop(moop, player, -1, "", 5, 5, 2, 7, -1, -1)) return;
         //finish the battle stuff
         currentAct[currentChapter-1]++;
         endText();
@@ -598,7 +615,7 @@ public class Game {
 
     //---------------------------------------
 
-    public void toriGameActOne(Map map) {
+    public void toriGameActZero(Map map) {
         System.out.println();
         System.out.println("...");
         System.out.println();
@@ -619,6 +636,7 @@ public class Game {
         System.out.println("You wake up in a field of grass; looking up you see you are in a large, dimly lit room with a large machine in the center and a terminal in the corner.");
         System.out.println();
         time(6);
+
 
         currentBoard.printLegend();
         currentBoard.printBoard();
@@ -650,52 +668,186 @@ public class Game {
         time(3);
 
         String message = "Game Tip: You always have access to the 'Help' action. This can tell you the universal actions you always have at your disposal.";
-        advancedGameLoop(currentBoard, currentPlayer, 0, message, 0, 6, -1, -1);
+        advancedGameLoop(map, currentPlayer, 0, message, 5, 3, 0, 6, -1, -1);
 
+    }
+
+    public void toriGameActOne(Map map) {
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        time(3);
+
+        System.out.println("Act 1: Embarkment");
+        System.out.println();
+        time(3);
+
+        System.out.println("You step through the door way,..................................................");
+        System.out.println();
+        time(3);
+
+        currentBoard.printLegend();
+        currentBoard.printBoard();
+
+        System.out.println("more exposition");
+        System.out.println();
+        time(1);
+
+        advancedGameLoop(map, currentPlayer, 0, "", 2, 5, 0, 2, -1, -1);
+    }
+
+    public void designLeftLung(Board leftLung, Space space, Floor floor) {
+        leftLung.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
+        WindyTree f = new  WindyTree();
+        leftLung.addNode(8,5,f);
+        leftLung.addNode(7,5,f);
+        leftLung.addNode(4,5,f);
+        leftLung.addNode(3,5,f);
+        leftLung.addNode(2,5,f);
+        leftLung.addNode(1,1,f);
+        leftLung.addNode(2,1,space);
+        leftLung.addNode(3,1,space);
+        leftLung.addNode(4,1,space);
+        leftLung.addNode(5,1,f);
+        leftLung.addNode(6,1,f);
+        leftLung.addNode(7,1,space);
+        leftLung.addNode(8,1,space);
+        leftLung.addNode(0,2,floor);
+        leftLung.addNode(1,2,floor);
+        leftLung.addNode(2,2,f);
+        leftLung.addNode(3,2,f);
+        leftLung.addNode(4,2,f);
+        leftLung.addNode(5,2,floor);
+        leftLung.addNode(6,2,floor);
+        leftLung.addNode(7,2,f);
+        leftLung.addNode(8,2,space);
+        leftLung.addNode(1,3,floor);
+        leftLung.addNode(2,3,floor);
+        leftLung.addNode(3,3,floor);
+        leftLung.addNode(4,3,floor);
+        leftLung.addNode(5,3,floor);
+        leftLung.addNode(6,3,f);
+        leftLung.addNode(7,3,space);
+        leftLung.addNode(8,3,space);
+        leftLung.addNode(1,4,f);
+        leftLung.addNode(2,4,floor);
+        leftLung.addNode(3,4,floor);
+        leftLung.addNode(4,4,f);
+        leftLung.addNode(5,4,floor);
+        leftLung.addNode(6,4,f);
+        leftLung.addNode(7,4,space);
+        leftLung.addNode(8,4,space);
+        leftLung.addNode(1,5,floor);
+        leftLung.addNode(2,5,f);
+        leftLung.addNode(3,5,f);
+        leftLung.addNode(4,5,f);
+        leftLung.addNode(5,5,floor);
+        leftLung.addNode(6,5,floor);
+        leftLung.addNode(7,5,f);
+        leftLung.addNode(8,5,f);
+        leftLung.addNode(1,6,floor);
+        leftLung.addNode(2,6,floor);
+        leftLung.addNode(3,6,floor);
+        leftLung.addNode(4,6,floor);
+        leftLung.addNode(5,6,floor);
+        leftLung.addNode(6,6,floor);
+        leftLung.addNode(7,6,floor);
+        leftLung.addNode(8,6,floor);
+        leftLung.addNode(9,6,floor);
+        leftLung.addNode(1,7,f);
+        leftLung.addNode(2,7,floor);
+        leftLung.addNode(3,7,floor);
+        leftLung.addNode(4,7,f);
+        leftLung.addNode(5,7,f);
+        leftLung.addNode(6,7,f);
+        leftLung.addNode(7,7,f);
+        leftLung.addNode(8,7,f);
+        leftLung.addNode(1,8,space);
+        leftLung.addNode(2,8,f);
+        leftLung.addNode(3,8,f);
+        leftLung.addNode(4,8,space);
+        leftLung.addNode(5,8,space);
+        leftLung.addNode(6,8,space);
+        leftLung.addNode(7,8,space);
+        leftLung.addNode(8,8,space);
+        //6, 2
+        Item previewDinnerItem = new Item("Preview Dinner", "This was the day that I got to see you after a long summer of you being at UF without me!. Thank you for making my preview special by showing up and cooking us a yummy dinner. I loved seeing you then and I love seeing you now !");
+        ToriObject previewDinner = new ToriObject("S", "A Steak Dinner", previewDinnerItem, 6, 2);
+        leftLung.addNode(6,2,previewDinner);
+        Item wallEItem = new Item("Wall E Disk", "This was the movie we watched in bed that one night, its my favorite Pixar movie but you made it even more amazing in my eyes. My eeeeeva <3. ");
+        ToriObject wallE = new ToriObject("W", "Move Disk", wallEItem, 1, 5);
+        leftLung.addNode(1, 5, wallE);
+    }
+    public void designLeftShoulderConnector(Board leftShoulderConnector, Space space, Floor floor) {
+
+    }
+    public void addHeart(Board heart, Space space) {
+        Heart heartPiece = new Heart();
+        heart.addNode(3,2, heartPiece);
+        heart.addNode(4,3, heartPiece);
+        heart.addNode(5,3, heartPiece);
+        heart.addNode(6,2, heartPiece);
+        heart.addNode(7,3, heartPiece);
+        heart.addNode(7,4, heartPiece);
+        heart.addNode(6,5, heartPiece);
+        heart.addNode(5,6, heartPiece);
+        heart.addNode(4,6, heartPiece);
+        heart.addNode(3,5, heartPiece);
+        heart.addNode(2,4, heartPiece);
+        heart.addNode(2,3, heartPiece);
+        heart.addNode(3,3,space);
+        heart.addNode(3,4,space);
+        heart.addNode(4,4,space);
+        heart.addNode(5,4,space);
+        heart.addNode(6,4,space);
+        heart.addNode(6,3,space);
+        heart.addNode(4,5,space);
+        heart.addNode(5,5,space);
     }
 
     public void toriGame() {
         System.out.println("Welcome to Tori's Wonderland");
         time(3);
+        Floor floor = new Floor();
         System.out.println();
 
         //create the Map:
 
         Map toriMap = new Map(5, 3);
 
-        Board leftHand = new Board("[", toriMap);
-        Board leftArm = new Board("|", toriMap);
-        Board leftShoulder = new Board("|", toriMap);
-        Board leftShoulderConnector = new  Board("|", toriMap);
-        Board leftLung = new  Board("|", toriMap);
+        Board leftHand = new Board("[", toriMap, "Left Corridor");
+        Board leftArm = new Board("|", toriMap, "Left Hallway Two");
+        Board leftShoulder = new Board("|", toriMap, "Left Bend");
+        Board leftShoulderConnector = new  Board("|", toriMap, "Left Hallway One");
+        Board leftLung = new  Board("|", toriMap, "Windy Forest Left");
         toriMap.addBoard(leftHand, 2, 5);
         toriMap.addBoard(leftArm, 2, 4);
         toriMap.addBoard(leftShoulder, 2, 3);
         toriMap.addBoard(leftShoulderConnector, 3, 3);
         toriMap.addBoard(leftLung, 4, 3);
 
-        Board rightHand = new Board("]", toriMap);
-        Board rightArm = new Board("|", toriMap);
-        Board rightShoulder = new Board("|", toriMap);
-        Board rightShoulderConnector = new  Board("|", toriMap);
-        Board rightLung = new  Board("|", toriMap);
+        Board rightHand = new Board("]", toriMap, "Right Corridor");
+        Board rightArm = new Board("|", toriMap, "Right Hallway Two");
+        Board rightShoulder = new Board("|", toriMap, "Right Bend");
+        Board rightShoulderConnector = new  Board("|", toriMap, "Right Hallway One");
+        Board rightLung = new  Board("|", toriMap, "Windy Forest Right");
         toriMap.addBoard(rightHand, 8, 5);
         toriMap.addBoard(rightArm, 8, 4);
         toriMap.addBoard(rightShoulder, 8, 3);
         toriMap.addBoard(rightShoulderConnector, 7, 3);
         toriMap.addBoard(rightLung, 6, 3);
 
-        Board heart = new Board("|", toriMap);
+        Board heart = new Board("|", toriMap, "The Room Where it Happened");
         toriMap.addBoard(heart, 5, 3);
         currentBoard = heart;
 
-        Board neck = new Board("|", toriMap);
-        Board mouth = new Board("|", toriMap);
-        Board brainCenter = new Board("|", toriMap);
-        Board brainLeft = new Board("|", toriMap);
-        Board brainRight = new  Board("|", toriMap);
-        Board leftEye = new Board("0", toriMap);
-        Board rightEye = new Board("0", toriMap);
+        Board neck = new Board("|", toriMap, "Upward Passageway");
+        Board mouth = new Board("|", toriMap, "Docking Bay");
+        Board brainCenter = new Board("|", toriMap, "Central Processing Unit");
+        Board brainLeft = new Board("|", toriMap, "Left Processing Unit");
+        Board brainRight = new  Board("|", toriMap, "Right Processing Unit");
+        Board leftEye = new Board("0", toriMap, "Left Window");
+        Board rightEye = new Board("0", toriMap, "Right Window");
         toriMap.addBoard(neck, 5, 2);
         toriMap.addBoard(mouth, 5, 1);
         toriMap.addBoard(brainCenter, 5, 0);
@@ -704,30 +856,30 @@ public class Game {
         toriMap.addBoard(leftEye, 4, 1);
         toriMap.addBoard(rightEye, 6, 1);
 
-        Board ribCage = new Board("|", toriMap);
-        Board stomach = new Board("|", toriMap);
-        Board lowerStomach =  new Board("|", toriMap);
+        Board ribCage = new Board("|", toriMap, "Protected Passagway");
+        Board stomach = new Board("|", toriMap, "Storage Warehouse");
+        Board lowerStomach =  new Board("|", toriMap, "Delivery Bay");
         toriMap.addBoard(ribCage, 5, 4);
         toriMap.addBoard(stomach, 5, 5);
         toriMap.addBoard(lowerStomach, 5, 6);
 
-        Board hipCenter = new Board("|", toriMap);
-        Board hipLeft = new Board("|", toriMap);
-        Board hipRight = new Board("|", toriMap);
+        Board hipCenter = new Board("|", toriMap, "Lower Lands Center");
+        Board hipLeft = new Board("|", toriMap, "Lower Lands Left");
+        Board hipRight = new Board("|", toriMap, "Lower Lands Right");
         toriMap.addBoard(hipCenter, 5, 7);
         toriMap.addBoard(hipLeft, 4, 7);
         toriMap.addBoard(hipRight, 6, 7);
 
-        Board rightKnee = new Board("|", toriMap);
-        Board rightLeg = new  Board("|", toriMap);
-        Board rightFoot = new  Board("[", toriMap);
+        Board rightKnee = new Board("|", toriMap, "Lower Lands Bend Right");
+        Board rightLeg = new  Board("|", toriMap, "Lower Lands Hallway Right");
+        Board rightFoot = new  Board("[", toriMap, "Lower Lands Corridor Right");
         toriMap.addBoard(rightKnee, 7, 7);
         toriMap.addBoard(rightLeg, 7, 8);
         toriMap.addBoard(rightFoot, 7, 9);
 
-        Board leftKnee = new Board("|", toriMap);
-        Board leftLeg = new  Board("|", toriMap);
-        Board leftFoot = new  Board("]", toriMap);
+        Board leftKnee = new Board("|", toriMap, "Lower Lands Bend Left");
+        Board leftLeg = new  Board("|", toriMap, "Lower Lands Hallway Left");
+        Board leftFoot = new  Board("]", toriMap, "Lower Lands Corridor Left");
         toriMap.addBoard(leftKnee, 3, 7);
         toriMap.addBoard(leftLeg, 3, 8);
         toriMap.addBoard(leftFoot, 3, 9);
@@ -748,31 +900,28 @@ public class Game {
         heart.addNode(0, 6, leftDoor);
 
         //add the heart to heart.
-        Heart heartPiece = new Heart();
-        heart.addNode(3,2, heartPiece);
-        heart.addNode(4,3, heartPiece);
-        heart.addNode(5,3, heartPiece);
-        heart.addNode(6,2, heartPiece);
-        heart.addNode(7,3, heartPiece);
-        heart.addNode(7,4, heartPiece);
-        heart.addNode(6,5, heartPiece);
-        heart.addNode(5,6, heartPiece);
-        heart.addNode(4,6, heartPiece);
-        heart.addNode(3,5, heartPiece);
-        heart.addNode(2,4, heartPiece);
-        heart.addNode(2,3, heartPiece);
+        Space space = new Space();
+        addHeart(heart, space);
+
+
 
         HeartTerminal terminal = new HeartTerminal();
         heart.addNode(7,8, terminal);
 
-        Floor floor = new Floor();
+        //design left
+        designLeftLung(leftLung, space, floor);
+        designLeftShoulderConnector(leftShoulder, space, floor);
+
+
+
         Player toriPlayer = new Player("T", "Tori", floor);
         heart.addNode(2, 7, toriPlayer);
         currentPlayer = toriPlayer;
 
-        toriGameActOne(toriMap);
+        toriGameActZero(toriMap);
         toriPlayer.moveWest(currentBoard, this);
-        currentBoard.printBoard();
+        toriGameActOne(toriMap);
+
 
     }
 

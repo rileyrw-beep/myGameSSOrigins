@@ -5,11 +5,12 @@ public class Board {
     private ArrayList<ArrayList<Nodeable>> boardList;
     private int charPosX;
     private int charPosY;
+    private String boardChar;
     private String boardName;
     private Map map;
 
 
-    public Board(String boardName, Map map) {
+    public Board(String boardChar, Map map, String boardName) {
         boardList = new ArrayList<>();
         Space space = new Space();
         int rows = 10;
@@ -21,6 +22,7 @@ public class Board {
             }
             boardList.add(row);
         }
+        this.boardChar = boardChar;
         this.boardName = boardName;
         this.charPosX = -1;
         this.charPosY = -1;
@@ -87,6 +89,10 @@ public class Board {
         charPosY = newPos;
     }
 
+    public String getBoardChar() {
+        return boardChar;
+    }
+
     public String getBoardName() {
         return boardName;
     }
@@ -97,10 +103,10 @@ public class Board {
     public boolean isFullOfEmpty() {
         for (ArrayList<Nodeable> row : boardList) {
             for (Nodeable node : row) {
-                if (node.getInGameid().equals("Space")) return true;
+                if (!node.getInGameid().equals("Space")) return false;
             }
         }
-        return false;
+        return true;
     }
 
     private boolean checkLegendList(ArrayList<Nodeable> nodeList, Nodeable currentNode) {
@@ -132,6 +138,8 @@ public class Board {
             else {System.out.println(node.getDisplayid() + " = " + node.getInGameid());}
         }
         System.out.println();
+        System.out.println("You are currently in... " + boardName);
+
     }
 
 
