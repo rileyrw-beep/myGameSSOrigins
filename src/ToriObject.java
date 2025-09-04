@@ -45,7 +45,14 @@ public class ToriObject implements Nodeable {
             System.out.println();
             game.time(3);
 
-            System.out.println("You approach the object on the ground and see that it is " + name + ".");
+            boolean isInWater = board.getBoard().get(y-1).get(x).getDisplayid().equals("~") || board.getBoard().get(y+1).get(x).getDisplayid().equals("~") || board.getBoard().get(y).get(x+1).getDisplayid().equals("~") || board.getBoard().get(y).get(x-1).getDisplayid().equals("~");
+
+            if (isInWater) {
+                System.out.println("You approach the object floating in the sea and see that it is " + name + ".");
+            }
+            else {
+                System.out.println("You approach the object on the ground and see that it is " + name + ".");
+            }
             System.out.println();
             game.time(3);
 
@@ -62,8 +69,16 @@ public class ToriObject implements Nodeable {
             System.out.println();
 
             actionList.clear();
-            Floor floor = new Floor();
-            board.addNode(x, y, floor);
+            if (isInWater) {
+                River river = new River();
+                board.addNode(x, y, river);
+
+            }
+            else {
+                Floor floor = new Floor();
+                board.addNode(x, y, floor);
+
+            }
             return returnArray;
         }
         returnArray[0] = false;

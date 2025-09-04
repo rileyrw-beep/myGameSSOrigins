@@ -25,7 +25,7 @@ public class Inventory {
         for (Item item : inventoryList) {
             if (inventoryList.indexOf(item) != inventoryList.size() - 1) {
                 System.out.print(item.getItemName() + ", ");
-                if (counter % 3 == 0) {
+                if (counter % 3 == 0 && counter!=0) {
                     System.out.println();
                 }
             }

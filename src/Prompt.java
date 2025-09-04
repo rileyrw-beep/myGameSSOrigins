@@ -223,7 +223,9 @@ public class Prompt {
                     if (get2.equals("No")) {
                         break outerOuterLoop;
                     }
-
+                    System.out.println();
+                    player.getInventory().printInventory();
+                    System.out.println();
                 }
             }
             else {
