@@ -191,9 +191,6 @@ public class Prompt {
             System.out.println();
             player.getInventory().printInventory();
             System.out.println();
-            //board.printBoard();
-
-
 
             String get = "";
 
@@ -230,6 +227,7 @@ public class Prompt {
             }
             else {
                 System.out.println("Your inventory is currently empty.");
+                game.time(3);
             }
             return new boolean[]{true, false};
         }
