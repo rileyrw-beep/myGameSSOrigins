@@ -56,7 +56,9 @@ public class ToriObject implements Nodeable {
             System.out.println();
             game.time(3);
 
-            System.out.println("It reminds you of a memory and you smile :) before putting it in your pocket");
+            if (name.equals("Memory Container")) System.out.println("You wonder what is inside before putting it in your pocket.");
+            else System.out.println("It reminds you of a memory and you smile :) before putting it in your pocket.");
+
             System.out.println();
             game.time(3);
 

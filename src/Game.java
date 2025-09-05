@@ -203,6 +203,7 @@ public class Game {
         else {System.out.println("Hello, " + playerName);}
         if (get.equals("fast")) {
             timeNumber = 200;
+            return true;
         }
         if (get.equals("Tori")) {
             return true;
@@ -723,6 +724,7 @@ public class Game {
         System.out.println();
         time(1);
 
+        currentBoard.printLegend();
         advancedGameLoop(map, currentPlayer, 0, "", 3, 3, 0, 5, -1, -1);
         currentPlayer.moveWest(currentBoard, this);
 
@@ -743,6 +745,7 @@ public class Game {
         System.out.println();
         time(3);
 
+        currentBoard.printLegend();
         advancedGameLoop(map, currentPlayer, 0, "", 2, 3, 4, 9, -1, -1);
         currentPlayer.moveSouth(currentBoard, this);
 
@@ -763,7 +766,8 @@ public class Game {
         System.out.println();
         time(3);
 
-        advancedGameLoop(map, currentPlayer, 0, "", 2 , 4, 5, 9, -1 , -1);
+        currentBoard.printLegend();
+        advancedGameLoop(map, currentPlayer, 0, "", 2 , 4, 4, 9, -1 , -1);
         currentPlayer.moveSouth(currentBoard, this);
 
         System.out.println("You step off your raft and move to the next room.");
@@ -774,12 +778,10 @@ public class Game {
         System.out.println();
         time(6);
 
+        currentBoard.printLegend();
         advancedGameLoop(map, currentPlayer, 0, "", 2, 5, 4, 6, -1, -1);
 
-        System.out.println();
-        System.out.println("...");
-        System.out.println();
-        time(3);
+
 
 
 
@@ -791,7 +793,38 @@ public class Game {
         System.out.println();
         time(4);
 
+        advancedGameLoop(map, currentPlayer, 0, "", 2, 4, 4, 8, -1, -1);
+
+        Item sirRibbitsItem = new Item("Sir Ribbits", "This is the first plushie of mine that I gave you, and you loved him so much! You gave him the personality I never could have, and thank you for making him special to us :)");
+        ToriObject ribbits = new ToriObject("R", "A Froggie Plushie", sirRibbitsItem, 7, 5);
+        map.getMapBoard().get(4).get(2).addNode(7, 5, ribbits);
+
+        System.out.println("As you get back onto your raft, you see another object floating in the river.");
+        System.out.println();
+        time(4);
+
         advancedGameLoop(map, currentPlayer, 0, "", 5,3,1,6,-1,-1);
+
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        time(3);
+
+        System.out.println("You return to the Room Where it Happened with your new collections of items, more confused than when you had left.");
+        System.out.println();
+        time(5);
+
+        System.out.println("You hear a click come from the opposite side of the room. It seems the Right door had unlocked.");
+        System.out.println();
+        time(4);
+
+        System.out.println("Go to it now.");
+        time(3);
+
+        currentBoard.getBoard().get(6).get(9).performAction("Unlock Door", currentBoard, this);
+
+        advancedGameLoop(map, currentPlayer, 0, "", 5, 3, 9, 6, -1, -1);
+        currentPlayer.moveEast(currentBoard, this);
     }
 
     public void designLeftLung(Board leftLung, Space space, Floor floor) {
@@ -892,8 +925,8 @@ public class Game {
         leftShoulderConnector.addNode(7, 8, tree);
         leftShoulderConnector.addNode(6, 1, tree);
         leftShoulderConnector.addNode(1, 8, tree);
-        Item drawingItem = new Item("Some Drawings", "The drawings of us that you made and drew at the beginning of our relationship that are so funny and I love so much. Thank you for giving our relationship personality and I am not that round >:O (JK I am, I am eating orange chicken as I write this)." );
-        ToriObject  drawing = new ToriObject("O", "Drawings", drawingItem, 4,8);
+        Item drawingItem = new Item("Drawings", "The drawings of us that you made and drew at the beginning of our relationship that are so funny and I love so much. Thank you for giving our relationship personality and I am not that round >:O (JK I am, I am eating orange chicken as I write this)." );
+        ToriObject  drawing = new ToriObject("O", "Some Drawings", drawingItem, 4,8);
         leftShoulderConnector.addNode(4, 8, drawing);
 
 
@@ -903,7 +936,7 @@ public class Game {
         leftShoulder.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
         leftShoulder.buildRectRoom(0,0,3,0,3,9,0,9,3,2,Direction.EAST);
         leftShoulder.buildRectRoom(0,0,9,0,9,3,0,3,4,3,Direction.SOUTH);
-        leftShoulder.buildRectRoom(6,7, 9,7,9,9,6,9,-1,-1,Direction.NONE);
+        leftShoulder.buildRectRoom(5,6, 9,6,9,9,5,9,-1,-1,Direction.NONE);
         Door dooor = new Door(false, false);
         Door doior = new Door(false, false);
         leftShoulder.addNode(3,5,dooor);
@@ -922,7 +955,8 @@ public class Game {
     }
     public void designLeftArm(Board a, Space s, Floor f, River r) {
         Item promFotoItem = new Item("2025 Prom Photo", "This is our first real photo together [unfortunately Shane and Thomas were in it]. But it was then when I realized how pretty you were and I began to have more of a crush on you waaaahhhh.");
-        ToriObject promFoto = new ToriObject("P", "Photograph", promFotoItem, 2, 4);
+        ToriObject promFoto = new ToriObject("P", "A Photograph", promFotoItem, 2, 4);
+
 
         int y = 1;//1
         a.addNode(1, y, s);
@@ -952,53 +986,53 @@ public class Game {
         a.addNode(7, y,s);
         a.addNode(8, y,s);
         y++;//4
-        a.addNode(1, y,r);
-        a.addNode(2, y,promFoto);
-        a.addNode(3, y,r);
-        a.addNode(4, y,s);
-        a.addNode(5, y,s);
-        a.addNode(6, y,r);
-        a.addNode(7, y,r);
-        a.addNode(8, y,s);
+        a.addNode(1, y, r);
+        a.addNode(2, y, promFoto);
+        a.addNode(3, y, r);
+        a.addNode(4, y, s);
+        a.addNode(5, y, s);
+        a.addNode(6, y, r);
+        a.addNode(7, y, r);
+        a.addNode(8, y, s);
         y++; //5
-        a.addNode(1, y,r);
-        a.addNode(2, y,r);
-        a.addNode(3, y,s);
-        a.addNode(4, y,s);
-        a.addNode(5, y,s);
-        a.addNode(6, y,s);
-        a.addNode(7, y,r);
-        a.addNode(8, y,r);
+        a.addNode(1, y, r);
+        a.addNode(2, y, r);
+        a.addNode(3, y, s);
+        a.addNode(4, y, s);
+        a.addNode(5, y, s);
+        a.addNode(6, y, r);
+        a.addNode(7, y, r);
+        a.addNode(8, y, r);
         y++; //6
-        a.addNode(1, y,s);
-        a.addNode(2, y,r);
-        a.addNode(3, y,r);
-        a.addNode(4, y,s);
-        a.addNode(5, y,s);
-        a.addNode(6, y,s);
-        a.addNode(7, y,r);
-        a.addNode(8, y,r);
+        a.addNode(1, y, s);
+        a.addNode(2, y, r);
+        a.addNode(3, y, r);
+        a.addNode(4, y, s);
+        a.addNode(5, y, s);
+        a.addNode(6, y, s);
+        a.addNode(7, y, r);
+        a.addNode(8, y, r);
         y++;//7
-        a.addNode(1, y,s);
-        a.addNode(2, y,s);
-        a.addNode(3, y,r);
-        a.addNode(4, y,r);
-        a.addNode(5, y,s);
-        a.addNode(6, y,r);
-        a.addNode(7, y,r);
-        a.addNode(8, y,s);
+        a.addNode(1, y, s);
+        a.addNode(2, y, s);
+        a.addNode(3, y, r);
+        a.addNode(4, y, r);
+        a.addNode(5, y, s);
+        a.addNode(6, y, r);
+        a.addNode(7, y, r);
+        a.addNode(8, y, s);
         y++;//8
-        a.addNode(1, y,s);
-        a.addNode(2, y,s);
-        a.addNode(3, y,s);
-        a.addNode(4, y,r);
-        a.addNode(5, y,r);
-        a.addNode(6, y,r);
-        a.addNode(7, y,s);
-        a.addNode(8, y,s);
+        a.addNode(1, y, s);
+        a.addNode(2, y, s);
+        a.addNode(3, y, s);
+        a.addNode(4, y, r);
+        a.addNode(5, y, r);
+        a.addNode(6, y, r);
+        a.addNode(7, y, s);
+        a.addNode(8, y, s);
 
-        a.addNode(4,0,f);
-        a.addNode(5,9,f);
+        a.addNode(4,0, f);
+        a.addNode(4,9, f);
 
 
 
@@ -1008,16 +1042,20 @@ public class Game {
         Wall w = new Wall();
         Item memCont1 = new Item("Memory Container One", "This Memory Container is currently locked. Please upload to the Brain and access on the Terminal.");
         ToriObject memoryContainer1 = new ToriObject("M", "Memory Container", memCont1, 4, 7);
-        h.addNode(0,4,f);
-        for (int y = 1; y <= 8; y++) {
-            for (int x = 1; x <= 8; x++) {
+
+        for (int y = 0; y <= 8; y++) {
+            for (int x = 0; x <= 8; x++) {
                 if (y==3 && (x == 2 || x ==3 || x==5 || x==6)) h.addNode(x, y, s);
-                else if (y >= 4) h.addNode(8, y, r);
+                else if (y >= 4 && (x==0 || x==8)) h.addNode(x, y, r);
                 else if (x!=4) h.addNode(x, y, r);
             }
         }
+        for (int y = 1; y <= 8; y++) {
+            if (y==4 || y==7) continue;
+            h.addNode(4, y, f);
+        }
 
-        
+        h.addNode(4, 0, f);
         int y = 4; //4
         h.addNode(1,y, s);
         h.addNode(2,y, s);
@@ -1036,21 +1074,37 @@ public class Game {
         y++; //6
         h.addNode(1,y, s);
         h.addNode(2,y, w);
+        h.addNode(3,y, f);
+        h.addNode(5,y, f);
         h.addNode(6,y, w);
         h.addNode(7,y, s);
         y++; //7
         h.addNode(1,y, s);
         h.addNode(2,y, w);
+        h.addNode(3,y, f);
         h.addNode(4,y, memoryContainer1);
+        h.addNode(5,y, f);
         h.addNode(6,y, w);
         h.addNode(7,y, s);
         y++; //8
-        h.addNode(1,y, s);
+        h.addNode(1,y, r);
         h.addNode(2,y, s);
         h.addNode(3,y, w);
         h.addNode(5,y, w);
         h.addNode(6,y, s);
         h.addNode(7,y, r);
+    }
+
+    public void designRightLung(Board l, Space s, Floor f, WindyTree t) {
+        l.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
+        for (int y = 1; y <= 8; y++) {
+            for (int x = 1; x <= 8; x++) {
+                if ((y==1 && x >= 3) || (y==3 && (x==2 || (x >=4 && x <=7))) || (y==4 && (x==2 || x==4)) || (y==5 && (x==1 || x==2 || x==5 || x==7 || x==8)) || (y==6 && (x==2 || x==3 || x==5 || x==7 || x==8)) || (y==7 && (x==3 || x==5 || x==7)) || (y==8 && (x==1 || x==5))) l.addNode(x,y,t);
+            }
+        }
+        Item noopCupItem = new Item("Snoopy Cup", "This was the cup I gave you for your very first Valentine's Day with a significant other. I told you at the beginning that I promised to be your first Valentine and I am so happy that I was :}, and thank you for making it the best Valentine's Day ever! P.S. With many more to come ;)" );
+        ToriObject noopCup = new ToriObject("C", "A Cup", noopCupItem, 5, 4);
+        l.addNode(5, 4, noopCup);
     }
     public void addHeart(Board heart, Space space) {
         Heart heartPiece = new Heart();
@@ -1086,10 +1140,10 @@ public class Game {
 
         Map toriMap = new Map(5, 3);
 
-        Board leftHand = new Board("[", toriMap, "Left Corridor");
-        Board leftArm = new Board("|", toriMap, "Left Hallway");
-        Board leftShoulder = new Board("|", toriMap, "Left Bend");
-        Board leftShoulderConnector = new  Board("|", toriMap, "Left Field");
+        Board leftHand = new Board("[", toriMap, "Ocean Shrine");
+        Board leftArm = new Board("|", toriMap, "Space River");
+        Board leftShoulder = new Board("|", toriMap, "Tech Sector Hall");
+        Board leftShoulderConnector = new  Board("|", toriMap, "Flat Field");
         Board leftLung = new  Board("|", toriMap, "Windy Forest Left");
         toriMap.addBoard(leftHand, 2, 5);
         toriMap.addBoard(leftArm, 2, 4);
@@ -1185,6 +1239,7 @@ public class Game {
         designLeftShoulderConnector(leftShoulderConnector, space, floor);
         designLeftShoulder(leftShoulder, floor);
         designLeftArm(leftArm, space, floor, river);
+        designLeftHand(leftHand, space, floor, river);
 
 
         Player toriPlayer = new Player("T", "Tori", floor);
