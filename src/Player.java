@@ -268,4 +268,28 @@ public class Player implements Nodeable, Moveable {
     }
 
 
+    public boolean checkTeleport(Board board, int x, int y) {
+        if (x < 0 || x > 9 || y < 0 || y > 9) return false;
+        ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
+        Nodeable desiredNode = boardList.get(y).get(x);
+        return desiredNode.getCanMoveTo();
+    }
+
+    public void teleport(Board board, Game game, int x, int y) {
+        if (checkTeleport(board, x, y)) {
+            ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
+            Nodeable desiredNode = boardList.get(y).get(x);
+            Nodeable placeholder = previousNode;
+            previousNode = desiredNode;
+            board.addNode(board.getCharPosX(), board.getCharPosY(), placeholder);
+            board.addNode(x, y, this);
+            board.setCharPosX(x);
+            board.setCharPosY(y);
+        }
+        else {
+            System.out.println("You cannot teleport there.");
+        }
+    }
+
+
 }

@@ -99,6 +99,7 @@ public class Door implements Nodeable {
                     unlockDoor();
                     actionList.remove("Unlock Door");
                     game.getPlayer().getInventory().removeItem(key);
+                    System.out.println("Door Unlocked!");
                 }
                 else {
                     System.out.println("You need a key to unlock the door.");

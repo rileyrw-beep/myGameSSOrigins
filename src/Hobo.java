@@ -170,6 +170,12 @@ public class Hobo implements Nodeable, Moveable {
         return new ArrayList<String>();
     }
 
+    public boolean checkTeleport(Board board, int x, int y) {
+        return true;
+    }
 
+    public void teleport(Board board, Game game, int x, int y) {
+        return;
+    }
 
 }

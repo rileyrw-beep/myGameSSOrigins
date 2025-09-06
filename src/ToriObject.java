@@ -13,7 +13,8 @@ public class ToriObject implements Nodeable {
 
     public ToriObject (String displayid, String name, Item item, int x, int y) {
         this.displayid = displayid;
-        this.inGameid = "Object";
+        if (name.startsWith("Memory Container")) this.inGameid = "Memory Container";
+        else this.inGameid = "Object";
         this.name = name;
         type = ListOfNodes.DESK;
         canMoveTo = false;

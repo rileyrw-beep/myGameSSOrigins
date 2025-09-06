@@ -895,6 +895,27 @@ public class Game {
         currentBoard.printLegend();
         advancedGameLoop(map, currentPlayer, 0, "", 8, 3, 5, 9, -1, -1);
         currentPlayer.moveSouth(currentBoard, this);
+
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        time(3);
+
+        System.out.println("You walk into the next room and are greeted with a wall. ");
+        System.out.println();
+        time(3);
+
+        System.out.println("The technological hallway from before seems to has present itself again, however traversing it will be different.");
+        System.out.println();
+        time(5);
+
+        System.out.println("See if you can figure it out!");
+        System.out.println();
+        time(3);
+
+        currentBoard.printLegend();
+        advancedGameLoop(map, currentPlayer, 0, "", 8, 4, 5, 9, -1, -1);
+        currentPlayer.moveSouth(currentBoard, this);
     }
 
     public void designLeftLung(Board leftLung, Space space, Floor floor, WindyTree f) {
@@ -1240,6 +1261,62 @@ public class Game {
 
         b.addNode(5,9,f);
     }
+    public void designRightArm(Board b,  Floor f, Wall w) {
+        b.buildRectRoom(6,0,9,0,9,3,6,3,6,1,Direction.WEST);
+        b.buildRectRoom(6,3,9,3,9,6,6,6,-1,-1,Direction.NONE);
+        b.buildRectRoom(6,6,9,6,9,9,6,9,6,8,Direction.WEST);
+        b.buildRectRoom(0,0,4,0,4,3,0,3,-1,-1,Direction.NONE);
+        b.buildRectRoom(0,3,4,3,4,6,0,6,-1,-1,Direction.NONE);
+        b.buildRectRoom(0,6,4,6,4,9,0,9,2,6,Direction.NORTH);
+        for (int y = 0; y <= 9; y++) {
+            if (y==3 || y==6) b.addNode(5,y,w);
+            else b.addNode(5,y,f);
+        }
+        Reference r1 = new Reference(1,8);
+        Reference r2 = new Reference(8,1);
+        Reference r3 = new Reference(8,5);
+        Reference r4 = new Reference(2,1);
+        Reference r5 = new Reference(5,2);
+        Reference r6 = new Reference(5,4);
+        Reference r7 = new Reference(8,7);
+        Reference r8 = new Reference(1,5);
+        b.addNode(1,8,r1);
+        b.addNode(8,1,r2);
+        b.addNode(8,5,r3);
+        b.addNode(2,1,r4);
+        b.addNode(5,2,r5);
+        b.addNode(5,4,r6);
+        b.addNode(8,7,r7);
+        b.addNode(1,5,r8);
+
+        Pointer p1 = new Pointer(r1);
+        Pointer p2 = new Pointer(r2);
+        Pointer p3 = new Pointer(r3);
+        Pointer p4 = new Pointer(r4);
+        Pointer p5 = new Pointer(r5);
+        Pointer p6 = new Pointer(r6);
+        Pointer p7 = new Pointer(r7);
+        Pointer p8 = new Pointer(r1);
+        Pointer p9 = new Pointer(r8);
+        b.addNode(8,2,p1);
+        b.addNode(3,5,p2);
+        b.addNode(1,4,p3);
+        b.addNode(7,4,p4);
+        b.addNode(5,5,p5);
+        b.addNode(3,1,p6);
+        b.addNode(1,2,p7);
+        b.addNode(3,8,p8);
+        b.addNode(5,7,p9);
+
+        Item braceItem = new Item("Bracelets", "These are the bracelets you gave to me, one you made and the other was from the pack you gave to your color guard friends, and I love these bracelets because they make me think of you :)");
+        ToriObject brace = new ToriObject("O", "A Pair of Bracelets", braceItem, 3,4);
+        Item bottl = new Item("The Beatles", "This is the very first band we listened to on that first fateful day of ribbon making, and it is the band we have bonded over. With songs like 'I Will' and 'When I'm Sixty-Four' the Beatles have been our favorite and I love them even more because of you. Thank you for making every aspect of my life better :D ");
+        ToriObject beatl = new ToriObject("B", "THE BEATLES", bottl, 7, 7);
+
+        b.addNode(3,4,brace);
+        b.addNode(7,7,beatl);
+
+    }
     public void addHeart(Board heart, Space space) {
         Heart heartPiece = new Heart();
         heart.addNode(3,2, heartPiece);
@@ -1379,6 +1456,7 @@ public class Game {
         designRightLung(rightLung, space, floor, f);
         designRightShoulderConnector(rightShoulderConnector, floor);
         designRightShoulder(rightShoulder, floor);
+        designRightArm(rightArm, floor, new Wall());
 
 
         Player toriPlayer = new Player("T", "Tori", floor);
