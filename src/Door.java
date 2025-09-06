@@ -7,6 +7,7 @@ public class Door implements Nodeable {
     ListOfNodes type;
     private ArrayList<String> actionList;
     private boolean isLocked;
+    private Item key;
 
     public Door(boolean isOpen, boolean isLocked) {
         if (isOpen) {
@@ -16,7 +17,7 @@ public class Door implements Nodeable {
             actionList = new ArrayList<String>();
             actionList.add("Close Door");
         }
-        else if (!isOpen) {
+        else {
             displayid = "[";
             inGameid = "Closed Door";
             canMoveTo = false;
@@ -25,6 +26,30 @@ public class Door implements Nodeable {
         }
         type = ListOfNodes.DOOR;
         this.isLocked = isLocked;
+    }
+
+    public Door(boolean isOpen, boolean isLocked, Item key) {
+        if (isOpen) {
+            displayid="]";
+            inGameid = "Opened Door";
+            canMoveTo = true;
+            actionList = new ArrayList<String>();
+            actionList.add("Close Door");
+        }
+        else {
+            displayid = "[";
+            inGameid = "Closed Door";
+            canMoveTo = false;
+            actionList = new ArrayList<String>();
+            actionList.add("Open Door");
+        }
+        type = ListOfNodes.DOOR;
+        this.isLocked = isLocked;
+        this.key = key;
+        if (isLocked) {
+            actionList.add("Unlock Door");
+        }
+        else actionList.add("Lock Door");
     }
 
     public String getDisplayid() {
@@ -69,7 +94,19 @@ public class Door implements Nodeable {
             return returnArray;
         }
         else if (response.equals("Unlock Door")) {
-            unlockDoor();
+            if (key!=null) {
+                if ((game.getPlayer().getInventory().containsItem(key, "Key"))) {
+                    unlockDoor();
+                    actionList.remove("Unlock Door");
+                    game.getPlayer().getInventory().removeItem(key);
+                }
+                else {
+                    System.out.println("You need a key to unlock the door.");
+                }
+            }
+            else {
+                unlockDoor();
+            }
             return returnArray;
         }
         else {

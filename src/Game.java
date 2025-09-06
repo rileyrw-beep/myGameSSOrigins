@@ -363,7 +363,7 @@ public class Game {
             }
 
             if (map.getCurrentBoardX()==endBoardX && map.getCurrentBoardY()==endBoardY) {
-                if (board.getCharPosX() == endX && board.getCharPosY() == endY) {
+                if ((board.getCharPosX() == endX && board.getCharPosY() == endY) || (endX==-1 && board.getCharPosY()==endY) || (endY==-1 && board.getCharPosX()==endX)) {
                     break;
                 }
             }
@@ -374,6 +374,7 @@ public class Game {
                     System.out.println();
                     System.out.println("Entering... " + board.getBoardName());
                     System.out.println();
+
                 }
             }
             canPrintBoard = true;
@@ -673,7 +674,6 @@ public class Game {
         advancedGameLoop(map, currentPlayer, 0, message, 5, 3, 0, 6, -1, -1);
 
     }
-
     public void toriGameActOne(Map map) {
         System.out.println();
         System.out.println("...");
@@ -824,12 +824,81 @@ public class Game {
         currentBoard.getBoard().get(6).get(9).performAction("Unlock Door", currentBoard, this);
 
         advancedGameLoop(map, currentPlayer, 0, "", 5, 3, 9, 6, -1, -1);
+    }
+    public void toriGameActTwo(Map map) {
+        System.out.println();
+        System.out.println("Act 2: The Search Continues");
+        time(3);
+
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        time(3);
+
+        System.out.println("You enter through the right door to find yourself back in the Windy Forest");
+        System.out.println();
+        time(3);
+
+        System.out.println("However, the layout seems different, but it is still as daunting as before.");
+        System.out.println();
+        time(3);
+
+        System.out.println("Your expedition continues!");
+        System.out.println();
+        time(3);
+
+        currentBoard.printLegend();
+        advancedGameLoop(map, currentPlayer, 0, "", 6,3,9,5,-1,-1);
         currentPlayer.moveEast(currentBoard, this);
+
+        System.out.println("You move to the next room to find yourself in a small room with a door.");
+        System.out.println();
+        time(3);
+
+        System.out.println("Upon walking through the door, you find another large, spacious area that seemed to go on for miles.");
+        System.out.println();
+        time(4);
+
+        System.out.println("However, the key difference here is that this room was full of sand and cacti were sprouted up everywhere.");
+        System.out.println();
+        time(5);
+
+        System.out.println("You try and look further but the back wall seems missing, however the sandstorm blowing by obscures your vision");
+        System.out.println();
+        time(5);
+
+        System.out.println("Regardless, you must trek through it.");
+        System.out.println();
+        time(3);
+
+        currentBoard.printLegend();
+        advancedGameLoop(map, currentPlayer, 0, "", 7, 3, 9, -1, -1, -1);
+        currentPlayer.moveEast(currentBoard, this);
+
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        time(3);
+
+        System.out.println("You waddle through the sandstorm when it suddenly calms down. ");
+        System.out.println();
+        time(3);
+
+        System.out.println("You look around and see a door leading to the next room and a bunch of chests littered around the place.");
+        System.out.println();
+        time(4);
+
+        System.out.println("Continue on! You got this!");
+        System.out.println();
+        time(2);
+
+        currentBoard.printLegend();
+        advancedGameLoop(map, currentPlayer, 0, "", 8, 3, 5, 9, -1, -1);
+        currentPlayer.moveSouth(currentBoard, this);
     }
 
-    public void designLeftLung(Board leftLung, Space space, Floor floor) {
+    public void designLeftLung(Board leftLung, Space space, Floor floor, WindyTree f) {
         leftLung.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
-        WindyTree f = new  WindyTree("F", "Windy Tree");
         leftLung.addNode(8,5,f);
         leftLung.addNode(7,5,f);
         leftLung.addNode(4,5,f);
@@ -1099,12 +1168,77 @@ public class Game {
         l.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
         for (int y = 1; y <= 8; y++) {
             for (int x = 1; x <= 8; x++) {
-                if ((y==1 && x >= 3) || (y==3 && (x==2 || (x >=4 && x <=7))) || (y==4 && (x==2 || x==4)) || (y==5 && (x==1 || x==2 || x==5 || x==7 || x==8)) || (y==6 && (x==2 || x==3 || x==5 || x==7 || x==8)) || (y==7 && (x==3 || x==5 || x==7)) || (y==8 && (x==1 || x==5))) l.addNode(x,y,t);
+                if ((y==1 && x >= 3) || (y==3 && (x==2 || (x >=4 && x <7))) || (y==4 && (x==2 || x==4 || x==8)) || (y==5 && (x==1 || x==2 || x==5 || x==7)) || (y==6 && (x==2 || x==3 || x==5 || x==7)) || (y==7 && (x==3 || x==5 || x==7)) || (y==8 && (x==1 || x==5))) l.addNode(x,y,t);
             }
         }
         Item noopCupItem = new Item("Snoopy Cup", "This was the cup I gave you for your very first Valentine's Day with a significant other. I told you at the beginning that I promised to be your first Valentine and I am so happy that I was :}, and thank you for making it the best Valentine's Day ever! P.S. With many more to come ;)" );
         ToriObject noopCup = new ToriObject("C", "A Cup", noopCupItem, 5, 4);
+        Item notebookItem = new Item("Biology Notebook", "This was the notebook we had to make in 9th grade biology. While I could do with never stepping foot in that class again, it is notable because that is the first time we met :), And I am so glad we did :)))))");
+        ToriObject notebook = new ToriObject("N", "A Notebook", notebookItem, 1, 4);
+        l.addNode(1,4,notebook);
         l.addNode(5, 4, noopCup);
+        l.addNode(0,6,f);
+        l.addNode(9,5,f);
+    }
+    public void designRightShoulderConnector(Board s, Floor f) {
+        WindyTree c = new WindyTree("f", "Cactus");
+        s.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
+
+        int a = -1;
+        int b = -1;
+        int d = -1;
+        for (int y = 1; y <= 8; y++) {
+            if (y==1) a=7;
+            if (y==2) {a=3; b=8;}
+            if (y==3) {a=1; b=6;}
+            if (y==4) {a=4; b=-1;}
+            if (y==5) a=5;
+            if (y==6) a=-1;
+            if (y==7) {a=4; b=6; d=8;}
+            if (y==8) {a=-1; b=7; d=3;}
+
+            for (int x = 1; x <= 9; x++) {
+                if (x==a || x==b || x==d) s.addNode(x,y,c);
+                if (x == 9) s.addNode(x,y,f);
+            }
+        }
+
+        s.buildRectRoom(0,4,2,4,2,6,0,6,2,5,Direction.EAST);
+        s.addNode(0,5,f);
+        Item buttersItem = new Item("Butters", "This rectangular, delicious-looking, bounceable, butthole-having dog is the first stuffed animal I bought you from my trip to Universal. Even though that trip was one of my favorite days of my life, I was still thinking of you during the whole time. I love you <3");
+        ToriObject butter = new ToriObject("B", "A Slab of Butter", buttersItem, 7,7);
+        s.addNode(7,7,butter);
+    }
+    public void designRightShoulder(Board b, Floor f) {
+        b.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
+        b.buildRectRoom(4,7,6,7,6,9,4,9,-1,-1,Direction.NONE);
+
+        for (int y = 1; y <= 8; y++) {
+            b.addNode(0, y, f);
+        }
+        ArrayList<Chest> chestList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Chest chest = new Chest();
+            chestList.add(chest);
+        }
+        b.addNode(1,8,chestList.get(0));
+        b.addNode(2,5,chestList.get(1));
+        b.addNode(3,2,chestList.get(2));
+        b.addNode(8,2,chestList.get(3));
+        b.addNode(4,6,chestList.get(4));
+
+        Item key = new Item("Key", "A small key used to unlock doors.");
+        Chest keyChest = new Chest(key);
+        b.addNode(7,5,keyChest);
+
+        Item blobox = new Item("Roblox", "This refers to all the Roblox games we have played together. To be honest, I always hated on Roblox since my sisters played it, but ever since playing with you I really enjoy it :), you make everything better, thank you <3");
+        Chest robChest = new Chest(blobox);
+        b.addNode(5,3,robChest);
+
+        Door keyDoor = new Door(false, true, key);
+        b.addNode(5,7,keyDoor);
+
+        b.addNode(5,9,f);
     }
     public void addHeart(Board heart, Space space) {
         Heart heartPiece = new Heart();
@@ -1228,29 +1362,36 @@ public class Game {
         Space space = new Space();
         River river = new River();
         addHeart(heart, space);
-
+        WindyTree f = new  WindyTree("F", "Windy Tree");
 
 
         HeartTerminal terminal = new HeartTerminal();
         heart.addNode(7,8, terminal);
 
         //design left
-        designLeftLung(leftLung, space, floor);
+        designLeftLung(leftLung, space, floor, f);
         designLeftShoulderConnector(leftShoulderConnector, space, floor);
         designLeftShoulder(leftShoulder, floor);
         designLeftArm(leftArm, space, floor, river);
         designLeftHand(leftHand, space, floor, river);
 
+        //design right
+        designRightLung(rightLung, space, floor, f);
+        designRightShoulderConnector(rightShoulderConnector, floor);
+        designRightShoulder(rightShoulder, floor);
+
 
         Player toriPlayer = new Player("T", "Tori", floor);
         heart.addNode(2, 7, toriPlayer);
         currentPlayer = toriPlayer;
-
+        /*
         toriGameActZero(toriMap);
         toriPlayer.moveWest(currentBoard, this);
+
         toriGameActOne(toriMap);
-
-
+        currentPlayer.moveEast(currentBoard, this);
+*/      rightDoor.performAction("Unlock Door", currentBoard, this);
+        toriGameActTwo(toriMap);
     }
 
 
