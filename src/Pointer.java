@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Pointer implements Nodeable{
+public class Pointer implements Nodeable {
     private String displayid;
     private String inGameid;
     private boolean canMoveTo;
@@ -40,12 +40,11 @@ public class Pointer implements Nodeable{
 
     public boolean[] performAction(String response, Board board, Game game) {
         boolean[] returnArray = {true, false};
-        if (response.equals("Use")){
+        if (response.equals("Use")) {
             game.getPlayer().teleport(board, game, ref.getX(), ref.getY());
             return returnArray;
-        }
-        else {
-            returnArray[0]=false;
+        } else {
+            returnArray[0] = false;
             return returnArray;
         }
     }

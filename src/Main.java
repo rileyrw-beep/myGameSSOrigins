@@ -5,19 +5,17 @@ public class Main {
     public static void main(String[] args) {
 
 
-
         Game game = new Game();
 
         boolean x = game.askPlayerName();
         game.startGame(x);
 
-        if (game.getCurrentChapter()==99) {
+        if (game.getCurrentChapter() == 99) {
             game.toriGame();
         }
-        if (game.getCurrentChapter()==1){
+        if (game.getCurrentChapter() == 1) {
             game.chapterOne();
         }
-
 
 
         System.out.println("bozo");
@@ -57,12 +55,6 @@ public class Main {
          * repeat
          *
          */
-
-
-
-
-
-
 
 
     }

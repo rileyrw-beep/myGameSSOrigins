@@ -24,7 +24,7 @@ public class Game {
     private int timeNumber;
 
     //constructor
-    public Game () {
+    public Game() {
 
         playerName = "";
         input = new Scanner(System.in);
@@ -48,18 +48,23 @@ public class Game {
     public void setPlayerName(String newName) {
         playerName = newName;
     }
+
     public String getPlayerName() {
         return playerName;
     }
+
     public void setPlayer(Player player) {
         currentPlayer = player;
     }
+
     public Player getPlayer() {
         return currentPlayer;
     }
+
     public void setBoard(Board board) {
         currentBoard = board;
     }
+
     public Board getBoard() {
         return currentBoard;
     }
@@ -68,12 +73,15 @@ public class Game {
     public int getCurrentChapter() {
         return currentChapter;
     }
+
     public int[] getCurrentAct() {
         return currentAct;
     }
+
     public int getLatestChapter() {
         return latestChapter;
     }
+
     public int[] getLatestAct() {
         return latestActs;
     }
@@ -82,19 +90,22 @@ public class Game {
     public void setCurrentChapter(int newChapter) {
         currentChapter = newChapter;
     }
+
     public void setCurrentAct(int newAct, int chapter) {
-        currentAct[chapter-1] = newAct;
+        currentAct[chapter - 1] = newAct;
     }
 
     //some random convenient methods to make things easier
     public void setTimeNumber(int newTimeNumber) {
         timeNumber = newTimeNumber;
     }
+
     public void endText() {
         System.out.println();
         System.out.println();
 
     }
+
     public void startFromSpecificAct() {
         while (true) {
             System.out.println();
@@ -106,12 +117,10 @@ public class Game {
                 if (desiredChapter >= 1 && desiredChapter <= latestChapter) {
                     currentChapter = desiredChapter;
                     break;
-                }
-                else {
+                } else {
                     System.out.println("That is not a valid Chapter number, please try again.");
                 }
-            }
-            catch (Exception InputMismatchException) {
+            } catch (Exception InputMismatchException) {
                 System.out.println("Please enter a valid integer.");
             }
         }
@@ -123,20 +132,19 @@ public class Game {
                 int desiredAct = input.nextInt();
                 System.out.println();
                 if (desiredAct >= 1 && desiredAct <= latestActs[currentChapter - 1]) {
-                    currentAct[currentChapter-1] = desiredAct;
+                    currentAct[currentChapter - 1] = desiredAct;
                     break;
-                }
-                else {
+                } else {
                     System.out.println("That is not a valid Act number, please try again.");
                 }
-            }
-            catch (Exception InputMismatchException) {
+            } catch (Exception InputMismatchException) {
                 System.out.println("Please enter a valid integer.");
             }
         }
     }
+
     public void time(int sec) {
-        if (timeNumber==200) {
+        if (timeNumber == 200) {
             return;
         }
         try {
@@ -147,7 +155,7 @@ public class Game {
     }
 
     //the beginning and end of game methods
-    public boolean[] gameOver (String deathText, boolean inBattle, Ending ending) {
+    public boolean[] gameOver(String deathText, boolean inBattle, Ending ending) {
         boolean[] returnArray = {false, true};
         System.out.println(deathText);
         this.time(3);
@@ -157,10 +165,10 @@ public class Game {
         System.out.println("GAME OVER");
         System.out.println();
         time(2);
-        if (ending==Ending.BAD_ENDING) System.out.println("BAD ENDING");
-        if (ending==Ending.GOOD_ENDING) System.out.println("GOOD ENDING");
-        if (ending==Ending.SPECIAL_ENDING) System.out.println("SPECIAL ENDING");
-        if (ending==Ending.TRUE_ENDING) System.out.println("TRUE ENDING");
+        if (ending == Ending.BAD_ENDING) System.out.println("BAD ENDING");
+        if (ending == Ending.GOOD_ENDING) System.out.println("GOOD ENDING");
+        if (ending == Ending.SPECIAL_ENDING) System.out.println("SPECIAL ENDING");
+        if (ending == Ending.TRUE_ENDING) System.out.println("TRUE ENDING");
         this.time(2);
 
         System.out.println();
@@ -185,12 +193,13 @@ public class Game {
             returnArray[1] = false;
             return returnArray;
         }
-        if (response.equals("End Game")){
+        if (response.equals("End Game")) {
             System.exit(0);
         }
         returnArray[1] = false;
         return returnArray;
     }
+
     public boolean askPlayerName() {
         this.endText();
         System.out.println("Welcome to S.S. Origins");
@@ -200,7 +209,9 @@ public class Game {
         this.setPlayerName(get);
         System.out.println();
         if (get.equals("Tori")) System.out.println("Hi hi my love <3");
-        else {System.out.println("Hello, " + playerName);}
+        else {
+            System.out.println("Hello, " + playerName);
+        }
         if (get.equals("fast")) {
             timeNumber = 200;
             return true;
@@ -211,6 +222,7 @@ public class Game {
         this.endText();
         return false;
     }
+
     public void startGame(boolean x) {
         System.out.println("Enter the word 'begin' below to start the game.");
         String get = "";
@@ -226,14 +238,13 @@ public class Game {
         if (get.equals("begin")) {
             System.out.println("Starting game...");
             currentChapter = 1;
-            currentAct[currentChapter-1] = 1;
+            currentAct[currentChapter - 1] = 1;
             latestChapter = 1;
-            latestActs[latestChapter-1] = 1;
+            latestActs[latestChapter - 1] = 1;
             if (x) {
                 currentChapter = 99;
             }
-        }
-        else {
+        } else {
             System.out.println("Interesting, we must have an OG fan on our hands.");
             System.out.println();
             System.out.println("Choose your desired Chapter and Act below: ");
@@ -247,8 +258,7 @@ public class Game {
                     if (chap >= 1 && chap <= 8) {
                         currentChapter = chap;
                         break;
-                    }
-                    else {
+                    } else {
                         System.out.println("Try Again");
                     }
                 } catch (InputMismatchException e) {
@@ -262,11 +272,10 @@ public class Game {
                 try {
                     System.out.print("Act: ");
                     act = input.nextInt();
-                    if (act >= 1 && act <= totalActs[currentChapter-1]) {
-                        currentAct[currentChapter-1] = act;
+                    if (act >= 1 && act <= totalActs[currentChapter - 1]) {
+                        currentAct[currentChapter - 1] = act;
                         break;
-                    }
-                    else {
+                    } else {
                         System.out.println("Try Again");
                     }
                 } catch (InputMismatchException e) {
@@ -312,6 +321,7 @@ public class Game {
         }
         return userInput;
     }
+
     public boolean advancedGameLoop(Map map, Player player, int messageCounter, String message, int endBoardX, int endBoardY, int endX, int endY, int battleX, int battleY) {
         Board thisBoard = map.getCurrentBoard();
         String get = "";
@@ -325,7 +335,7 @@ public class Game {
         // false true -> retart from last act
         while (true) {
             Board board = map.getCurrentBoard();
-            if ((board.getCharPosX()==battleX && board.getCharPosY()==battleY) || (battleX==-1 && board.getCharPosY()==battleY) || (battleY==1 && board.getCharPosX()==battleX)) {
+            if ((board.getCharPosX() == battleX && board.getCharPosY() == battleY) || (battleX == -1 && board.getCharPosY() == battleY) || (battleY == 1 && board.getCharPosX() == battleX)) {
                 boolArray = prompt.displayBattleActions(board, player, this);
                 if (boolArray[1]) {
                     return false;
@@ -336,7 +346,7 @@ public class Game {
                 System.out.println(message);
                 System.out.println();
             }
-            prompt.displayActions(map, player,this);
+            prompt.displayActions(map, player, this);
             System.out.println();
 
             get = input.nextLine();
@@ -348,22 +358,20 @@ public class Game {
                     return false;
                 }
                 canPrintBoard = false;
-                if(get.length()>4) {
+                if (get.length() > 4) {
                     if (get.startsWith("Move")) {
                         System.out.println("You cannot move to that spot! Try again.");
-                    }
-                    else {
+                    } else {
                         System.out.println("I don't know that one right now, try again.");
                     }
-                }
-                else {
+                } else {
                     System.out.println("I don't know that one right now, try again.");
                 }
                 System.out.println();
             }
 
-            if (map.getCurrentBoardX()==endBoardX && map.getCurrentBoardY()==endBoardY) {
-                if ((board.getCharPosX() == endX && board.getCharPosY() == endY) || (endX==-1 && board.getCharPosY()==endY) || (endY==-1 && board.getCharPosX()==endX)) {
+            if (map.getCurrentBoardX() == endBoardX && map.getCurrentBoardY() == endBoardY) {
+                if ((board.getCharPosX() == endX && board.getCharPosY() == endY) || (endX == -1 && board.getCharPosY() == endY) || (endY == -1 && board.getCharPosX() == endX)) {
                     break;
                 }
             }
@@ -422,12 +430,13 @@ public class Game {
         System.out.println("- Wake Up");
         System.out.println();
         String firstGet = "";
-        while(true) {
+        while (true) {
             firstGet = input.nextLine();
             if (firstGet.equals("Wake Up")) {
                 break;
+            } else {
+                System.out.println("Game Tip: Not quite, you need to type each action *word for word* and without the '-', try again.");
             }
-            else {System.out.println("Game Tip: Not quite, you need to type each action *word for word* and without the '-', try again.");}
         }
         System.out.println();
         System.out.println("...");
@@ -443,7 +452,7 @@ public class Game {
         this.time(3);
         System.out.println();
 
-        ArrayList<String> optionList = new  ArrayList<>();
+        ArrayList<String> optionList = new ArrayList<>();
         optionList.add("Wake Up");
         basicGameLoop("", optionList);
         System.out.println();
@@ -465,7 +474,6 @@ public class Game {
         boardDaltonRoom.addNode(2, 6, floor);
         boardDaltonRoom.printLegend();
         boardDaltonRoom.printBoard();
-
 
 
         this.time(4);
@@ -509,16 +517,15 @@ public class Game {
 
 
         setBoard(boardDaltonHall);
-        boardDaltonHall.buildRectRoom(3,0,6,0,6,9,3,9,3,7,Direction.WEST);
+        boardDaltonHall.buildRectRoom(3, 0, 6, 0, 6, 9, 3, 9, 3, 7, Direction.WEST);
         Door doorApartment = new Door(false, true);
         Hobo hobo = new Hobo(floor, 5, 5);
         player.setHobo(hobo);
         boardDaltonHall.addNode(5, 5, hobo);
         boardDaltonHall.addNode(5, 2, player);
         boardDaltonHall.addNode(2, 7, floor);
-        boardDaltonHall.addNode(6,2,doorApartment);
-        boardDaltonHall.addNode(3,2,doorApartment);
-
+        boardDaltonHall.addNode(6, 2, doorApartment);
+        boardDaltonHall.addNode(3, 2, doorApartment);
 
 
         boardDaltonHall.printLegend();
@@ -553,13 +560,14 @@ public class Game {
 
         System.out.println("Go there now.");
 
-        if (!advancedGameLoop(moop, player, -1, "", 5, 5, 2, 7, -1, hobo.currentY-1)) return;
+        if (!advancedGameLoop(moop, player, -1, "", 5, 5, 2, 7, -1, hobo.currentY - 1)) return;
         player.setHobo(null);
         if (!advancedGameLoop(moop, player, -1, "", 5, 5, 2, 7, -1, -1)) return;
         //finish the battle stuff
-        currentAct[currentChapter-1]++;
+        currentAct[currentChapter - 1]++;
         endText();
     }
+
     public void chapOneActTwo() {
 
         System.out.println();
@@ -598,7 +606,8 @@ public class Game {
 
         // make the map now
 
-        currentAct[currentChapter-1]++;}
+        currentAct[currentChapter - 1]++;
+    }
 
     //chapter 1 method
     public void chapterOne() {
@@ -607,10 +616,10 @@ public class Game {
         System.out.println();
 
 
-        while (currentChapter == 1 && currentAct[currentChapter-1]==1) {
+        while (currentChapter == 1 && currentAct[currentChapter - 1] == 1) {
             chapOneActOne();
         }
-        while (currentChapter == 1 && currentAct[currentChapter-1]==2) {
+        while (currentChapter == 1 && currentAct[currentChapter - 1] == 2) {
             chapOneActTwo();
         }
 
@@ -649,12 +658,13 @@ public class Game {
         System.out.println("- Get Up");
         System.out.println();
         String firstGet = "";
-        while(true) {
+        while (true) {
             firstGet = input.nextLine();
             if (firstGet.equals("Get Up")) {
                 break;
+            } else {
+                System.out.println("Game Tip: Not quite, you need to type each action *word for word* and without the '-', try again.");
             }
-            else {System.out.println("Game Tip: Not quite, you need to type each action *word for word* and without the '-', try again.");}
         }
         System.out.println();
         System.out.println("...");
@@ -674,6 +684,7 @@ public class Game {
         advancedGameLoop(map, currentPlayer, 0, message, 5, 3, 0, 6, -1, -1);
 
     }
+
     public void toriGameActOne(Map map) {
         System.out.println();
         System.out.println("...");
@@ -767,7 +778,7 @@ public class Game {
         time(3);
 
         currentBoard.printLegend();
-        advancedGameLoop(map, currentPlayer, 0, "", 2 , 4, 4, 9, -1 , -1);
+        advancedGameLoop(map, currentPlayer, 0, "", 2, 4, 4, 9, -1, -1);
         currentPlayer.moveSouth(currentBoard, this);
 
         System.out.println("You step off your raft and move to the next room.");
@@ -780,9 +791,6 @@ public class Game {
 
         currentBoard.printLegend();
         advancedGameLoop(map, currentPlayer, 0, "", 2, 5, 4, 6, -1, -1);
-
-
-
 
 
         System.out.println("Upon entering the shrine, you could feel the world around you shake a bit, in the center of the shrine there was a small container.");
@@ -803,7 +811,7 @@ public class Game {
         System.out.println();
         time(4);
 
-        advancedGameLoop(map, currentPlayer, 0, "", 5,3,1,6,-1,-1);
+        advancedGameLoop(map, currentPlayer, 0, "", 5, 3, 1, 6, -1, -1);
 
         System.out.println();
         System.out.println("...");
@@ -825,6 +833,7 @@ public class Game {
 
         advancedGameLoop(map, currentPlayer, 0, "", 5, 3, 9, 6, -1, -1);
     }
+
     public void toriGameActTwo(Map map) {
         System.out.println();
         System.out.println("Act 2: The Search Continues");
@@ -848,7 +857,7 @@ public class Game {
         time(3);
 
         currentBoard.printLegend();
-        advancedGameLoop(map, currentPlayer, 0, "", 6,3,9,5,-1,-1);
+        advancedGameLoop(map, currentPlayer, 0, "", 6, 3, 9, 5, -1, -1);
         currentPlayer.moveEast(currentBoard, this);
 
         System.out.println("You move to the next room to find yourself in a small room with a door.");
@@ -916,92 +925,101 @@ public class Game {
         currentBoard.printLegend();
         advancedGameLoop(map, currentPlayer, 0, "", 8, 4, 5, 9, -1, -1);
         currentPlayer.moveSouth(currentBoard, this);
+
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        time(3);
+
+        //add exposition + game loop for right hand floating iles
+
     }
 
     public void designLeftLung(Board leftLung, Space space, Floor floor, WindyTree f) {
         leftLung.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
-        leftLung.addNode(8,5,f);
-        leftLung.addNode(7,5,f);
-        leftLung.addNode(4,5,f);
-        leftLung.addNode(3,5,f);
-        leftLung.addNode(2,5,f);
-        leftLung.addNode(1,1,f);
-        leftLung.addNode(2,1,space);
-        leftLung.addNode(3,1,space);
-        leftLung.addNode(4,1,space);
-        leftLung.addNode(5,1,f);
-        leftLung.addNode(6,1,f);
-        leftLung.addNode(7,1,space);
-        leftLung.addNode(8,1,space);
-        leftLung.addNode(0,2,floor);
-        leftLung.addNode(1,2,floor);
-        leftLung.addNode(2,2,f);
-        leftLung.addNode(3,2,f);
-        leftLung.addNode(4,2,f);
-        leftLung.addNode(5,2,floor);
-        leftLung.addNode(6,2,floor);
-        leftLung.addNode(7,2,f);
-        leftLung.addNode(8,2,space);
-        leftLung.addNode(1,3,floor);
-        leftLung.addNode(2,3,floor);
-        leftLung.addNode(3,3,floor);
-        leftLung.addNode(4,3,floor);
-        leftLung.addNode(5,3,floor);
-        leftLung.addNode(6,3,f);
-        leftLung.addNode(7,3,space);
-        leftLung.addNode(8,3,space);
-        leftLung.addNode(1,4,f);
-        leftLung.addNode(2,4,floor);
-        leftLung.addNode(3,4,floor);
-        leftLung.addNode(4,4,f);
-        leftLung.addNode(5,4,floor);
-        leftLung.addNode(6,4,f);
-        leftLung.addNode(7,4,space);
-        leftLung.addNode(8,4,space);
-        leftLung.addNode(1,5,floor);
-        leftLung.addNode(2,5,f);
-        leftLung.addNode(3,5,f);
-        leftLung.addNode(4,5,f);
-        leftLung.addNode(5,5,floor);
-        leftLung.addNode(6,5,floor);
-        leftLung.addNode(7,5,f);
-        leftLung.addNode(8,5,f);
-        leftLung.addNode(1,6,floor);
-        leftLung.addNode(2,6,floor);
-        leftLung.addNode(3,6,floor);
-        leftLung.addNode(4,6,floor);
-        leftLung.addNode(5,6,floor);
-        leftLung.addNode(6,6,floor);
-        leftLung.addNode(7,6,floor);
-        leftLung.addNode(8,6,floor);
-        leftLung.addNode(9,6,floor);
-        leftLung.addNode(1,7,f);
-        leftLung.addNode(2,7,floor);
-        leftLung.addNode(3,7,floor);
-        leftLung.addNode(4,7,f);
-        leftLung.addNode(5,7,f);
-        leftLung.addNode(6,7,f);
-        leftLung.addNode(7,7,f);
-        leftLung.addNode(8,7,f);
-        leftLung.addNode(1,8,space);
-        leftLung.addNode(2,8,f);
-        leftLung.addNode(3,8,f);
-        leftLung.addNode(4,8,space);
-        leftLung.addNode(5,8,space);
-        leftLung.addNode(6,8,space);
-        leftLung.addNode(7,8,space);
-        leftLung.addNode(8,8,space);
+        leftLung.addNode(8, 5, f);
+        leftLung.addNode(7, 5, f);
+        leftLung.addNode(4, 5, f);
+        leftLung.addNode(3, 5, f);
+        leftLung.addNode(2, 5, f);
+        leftLung.addNode(1, 1, f);
+        leftLung.addNode(2, 1, space);
+        leftLung.addNode(3, 1, space);
+        leftLung.addNode(4, 1, space);
+        leftLung.addNode(5, 1, f);
+        leftLung.addNode(6, 1, f);
+        leftLung.addNode(7, 1, space);
+        leftLung.addNode(8, 1, space);
+        leftLung.addNode(0, 2, floor);
+        leftLung.addNode(1, 2, floor);
+        leftLung.addNode(2, 2, f);
+        leftLung.addNode(3, 2, f);
+        leftLung.addNode(4, 2, f);
+        leftLung.addNode(5, 2, floor);
+        leftLung.addNode(6, 2, floor);
+        leftLung.addNode(7, 2, f);
+        leftLung.addNode(8, 2, space);
+        leftLung.addNode(1, 3, floor);
+        leftLung.addNode(2, 3, floor);
+        leftLung.addNode(3, 3, floor);
+        leftLung.addNode(4, 3, floor);
+        leftLung.addNode(5, 3, floor);
+        leftLung.addNode(6, 3, f);
+        leftLung.addNode(7, 3, space);
+        leftLung.addNode(8, 3, space);
+        leftLung.addNode(1, 4, f);
+        leftLung.addNode(2, 4, floor);
+        leftLung.addNode(3, 4, floor);
+        leftLung.addNode(4, 4, f);
+        leftLung.addNode(5, 4, floor);
+        leftLung.addNode(6, 4, f);
+        leftLung.addNode(7, 4, space);
+        leftLung.addNode(8, 4, space);
+        leftLung.addNode(1, 5, floor);
+        leftLung.addNode(2, 5, f);
+        leftLung.addNode(3, 5, f);
+        leftLung.addNode(4, 5, f);
+        leftLung.addNode(5, 5, floor);
+        leftLung.addNode(6, 5, floor);
+        leftLung.addNode(7, 5, f);
+        leftLung.addNode(8, 5, f);
+        leftLung.addNode(1, 6, floor);
+        leftLung.addNode(2, 6, floor);
+        leftLung.addNode(3, 6, floor);
+        leftLung.addNode(4, 6, floor);
+        leftLung.addNode(5, 6, floor);
+        leftLung.addNode(6, 6, floor);
+        leftLung.addNode(7, 6, floor);
+        leftLung.addNode(8, 6, floor);
+        leftLung.addNode(9, 6, floor);
+        leftLung.addNode(1, 7, f);
+        leftLung.addNode(2, 7, floor);
+        leftLung.addNode(3, 7, floor);
+        leftLung.addNode(4, 7, f);
+        leftLung.addNode(5, 7, f);
+        leftLung.addNode(6, 7, f);
+        leftLung.addNode(7, 7, f);
+        leftLung.addNode(8, 7, f);
+        leftLung.addNode(1, 8, space);
+        leftLung.addNode(2, 8, f);
+        leftLung.addNode(3, 8, f);
+        leftLung.addNode(4, 8, space);
+        leftLung.addNode(5, 8, space);
+        leftLung.addNode(6, 8, space);
+        leftLung.addNode(7, 8, space);
+        leftLung.addNode(8, 8, space);
         //6, 2
         Item previewDinnerItem = new Item("Preview Dinner", "This was the day that I got to see you after a long summer of you being at UF without me!. Thank you for making my preview special by showing up and cooking us a yummy dinner. I loved seeing you then and I love seeing you now !");
         ToriObject previewDinner = new ToriObject("S", "A Steak Dinner", previewDinnerItem, 6, 2);
-        leftLung.addNode(6,2,previewDinner);
+        leftLung.addNode(6, 2, previewDinner);
         Item wallEItem = new Item("Movie Disk", "This movie disk is to WallE, and this was the movie we watched in bed that one night, its my favorite Pixar movie but you made it even more amazing in my eyes. My eeeeeva <3. ");
         ToriObject wallE = new ToriObject("W", "A Movie Disk", wallEItem, 1, 5);
         leftLung.addNode(1, 5, wallE);
     }
+
     public void designLeftShoulderConnector(Board leftShoulderConnector, Space space, Floor floor) {
         leftShoulderConnector.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
-        leftShoulderConnector.buildRectRoom(4, 5, 6 ,5, 6, 7, 4 ,7, 5, 5, Direction.NORTH);
+        leftShoulderConnector.buildRectRoom(4, 5, 6, 5, 6, 7, 4, 7, 5, 5, Direction.NORTH);
         leftShoulderConnector.addNode(9, 2, floor);
         leftShoulderConnector.addNode(0, 5, floor);
         Item bobertaItem = new Item("Boberta", "The character made by the girl that I fell in love with. Ever since then I would smile each time I saw one on a whiteboard around the school :)");
@@ -1009,40 +1027,41 @@ public class Game {
         leftShoulderConnector.addNode(5, 6, boberta);
         WindyTree tree = new WindyTree("Y", "Tall Tree");
         leftShoulderConnector.addNode(2, 2, tree);
-        leftShoulderConnector.addNode(4, 3,tree);
+        leftShoulderConnector.addNode(4, 3, tree);
         leftShoulderConnector.addNode(7, 4, tree);
         leftShoulderConnector.addNode(2, 6, tree);
         leftShoulderConnector.addNode(7, 8, tree);
         leftShoulderConnector.addNode(6, 1, tree);
         leftShoulderConnector.addNode(1, 8, tree);
-        Item drawingItem = new Item("Drawings", "The drawings of us that you made and drew at the beginning of our relationship that are so funny and I love so much. Thank you for giving our relationship personality and I am not that round >:O (JK I am, I am eating orange chicken as I write this)." );
-        ToriObject  drawing = new ToriObject("O", "Some Drawings", drawingItem, 4,8);
+        Item drawingItem = new Item("Drawings", "The drawings of us that you made and drew at the beginning of our relationship that are so funny and I love so much. Thank you for giving our relationship personality and I am not that round >:O (JK I am, I am eating orange chicken as I write this).");
+        ToriObject drawing = new ToriObject("O", "Some Drawings", drawingItem, 4, 8);
         leftShoulderConnector.addNode(4, 8, drawing);
 
 
-
     }
+
     public void designLeftShoulder(Board leftShoulder, Floor floor) {
         leftShoulder.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
-        leftShoulder.buildRectRoom(0,0,3,0,3,9,0,9,3,2,Direction.EAST);
-        leftShoulder.buildRectRoom(0,0,9,0,9,3,0,3,4,3,Direction.SOUTH);
-        leftShoulder.buildRectRoom(5,6, 9,6,9,9,5,9,-1,-1,Direction.NONE);
+        leftShoulder.buildRectRoom(0, 0, 3, 0, 3, 9, 0, 9, 3, 2, Direction.EAST);
+        leftShoulder.buildRectRoom(0, 0, 9, 0, 9, 3, 0, 3, 4, 3, Direction.SOUTH);
+        leftShoulder.buildRectRoom(5, 6, 9, 6, 9, 9, 5, 9, -1, -1, Direction.NONE);
         Door dooor = new Door(false, false);
         Door doior = new Door(false, false);
-        leftShoulder.addNode(3,5,dooor);
+        leftShoulder.addNode(3, 5, dooor);
         Wall wall = new Wall();
-        leftShoulder.addNode(6,1,wall);
-        leftShoulder.addNode(6,2,doior);
-        leftShoulder.addNode(9,5,floor);
-        leftShoulder.addNode(4,9,floor);
+        leftShoulder.addNode(6, 1, wall);
+        leftShoulder.addNode(6, 2, doior);
+        leftShoulder.addNode(9, 5, floor);
+        leftShoulder.addNode(4, 9, floor);
         Item kikiItem = new Item("Movie Ticket", "This movie ticket is to Kiki's Delivery Service, and this was the first Studio Ghibli movie that we saw in theatres that I loved so much. Not only did I begin to see why so many people liked Studio Ghibli movies, but also it brought me closer to you :}. Also I like the cat :)");
         ToriObject kiki = new ToriObject("K", "A Movie Ticket", kikiItem, 1, 5);
-        leftShoulder.addNode(1,5,kiki);
+        leftShoulder.addNode(1, 5, kiki);
         Item puddles = new Item("Puddles!", "The lovable first ducky!. Puddles, the funny, protective, round, squishible, lazy, and bestest ducky anyone could ever ask for! I love Puddles so so so so so so so so so much and I love the way he has worked his way into our relationship. Thank you for loving plushies like him, it makes our relationship, and most importantly YOU, special :)");
         ToriObject puddle = new ToriObject("P", "A Duck Plush", puddles, 8, 1);
-        leftShoulder.addNode(8,1,puddle);
+        leftShoulder.addNode(8, 1, puddle);
 
     }
+
     public void designLeftArm(Board a, Space s, Floor f, River r) {
         Item promFotoItem = new Item("2025 Prom Photo", "This is our first real photo together [unfortunately Shane and Thomas were in it]. But it was then when I realized how pretty you were and I began to have more of a crush on you waaaahhhh.");
         ToriObject promFoto = new ToriObject("P", "A Photograph", promFotoItem, 2, 4);
@@ -1058,23 +1077,23 @@ public class Game {
         a.addNode(7, y, s);
         a.addNode(8, y, s);
         y++;//2
-        a.addNode(1, y,s);
-        a.addNode(2, y,r);
-        a.addNode(3, y,r);
-        a.addNode(4, y,r);
-        a.addNode(5, y,r);
-        a.addNode(6, y,s);
-        a.addNode(7, y,s);
-        a.addNode(8, y,s);
+        a.addNode(1, y, s);
+        a.addNode(2, y, r);
+        a.addNode(3, y, r);
+        a.addNode(4, y, r);
+        a.addNode(5, y, r);
+        a.addNode(6, y, s);
+        a.addNode(7, y, s);
+        a.addNode(8, y, s);
         y++;//3
-        a.addNode(1, y,r);
-        a.addNode(2, y,r);
-        a.addNode(3, y,r);
-        a.addNode(4, y,s);
-        a.addNode(5, y,r);
-        a.addNode(6, y,r);
-        a.addNode(7, y,s);
-        a.addNode(8, y,s);
+        a.addNode(1, y, r);
+        a.addNode(2, y, r);
+        a.addNode(3, y, r);
+        a.addNode(4, y, s);
+        a.addNode(5, y, r);
+        a.addNode(6, y, r);
+        a.addNode(7, y, s);
+        a.addNode(8, y, s);
         y++;//4
         a.addNode(1, y, r);
         a.addNode(2, y, promFoto);
@@ -1121,12 +1140,12 @@ public class Game {
         a.addNode(7, y, s);
         a.addNode(8, y, s);
 
-        a.addNode(4,0, f);
-        a.addNode(4,9, f);
-
+        a.addNode(4, 0, f);
+        a.addNode(4, 9, f);
 
 
     }
+
     public void designLeftHand(Board h, Space s, Floor f, River r) {
         Door shrineDoor = new Door(false, false);
         Wall w = new Wall();
@@ -1135,72 +1154,74 @@ public class Game {
 
         for (int y = 0; y <= 8; y++) {
             for (int x = 0; x <= 8; x++) {
-                if (y==3 && (x == 2 || x ==3 || x==5 || x==6)) h.addNode(x, y, s);
-                else if (y >= 4 && (x==0 || x==8)) h.addNode(x, y, r);
-                else if (x!=4) h.addNode(x, y, r);
+                if (y == 3 && (x == 2 || x == 3 || x == 5 || x == 6)) h.addNode(x, y, s);
+                else if (y >= 4 && (x == 0 || x == 8)) h.addNode(x, y, r);
+                else if (x != 4) h.addNode(x, y, r);
             }
         }
         for (int y = 1; y <= 8; y++) {
-            if (y==4 || y==7) continue;
+            if (y == 4 || y == 7) continue;
             h.addNode(4, y, f);
         }
 
         h.addNode(4, 0, f);
         int y = 4; //4
-        h.addNode(1,y, s);
-        h.addNode(2,y, s);
-        h.addNode(3,y, s);
-        h.addNode(4,y, shrineDoor);
-        h.addNode(5,y, s);
-        h.addNode(6,y, s);
-        h.addNode(7,y, s);
+        h.addNode(1, y, s);
+        h.addNode(2, y, s);
+        h.addNode(3, y, s);
+        h.addNode(4, y, shrineDoor);
+        h.addNode(5, y, s);
+        h.addNode(6, y, s);
+        h.addNode(7, y, s);
         y++; //5
-        h.addNode(1,y, s);
-        h.addNode(2,y, s);
-        h.addNode(3,y, w);
-        h.addNode(5,y, w);
-        h.addNode(6,y, s);
-        h.addNode(7,y, s);
+        h.addNode(1, y, s);
+        h.addNode(2, y, s);
+        h.addNode(3, y, w);
+        h.addNode(5, y, w);
+        h.addNode(6, y, s);
+        h.addNode(7, y, s);
         y++; //6
-        h.addNode(1,y, s);
-        h.addNode(2,y, w);
-        h.addNode(3,y, f);
-        h.addNode(5,y, f);
-        h.addNode(6,y, w);
-        h.addNode(7,y, s);
+        h.addNode(1, y, s);
+        h.addNode(2, y, w);
+        h.addNode(3, y, f);
+        h.addNode(5, y, f);
+        h.addNode(6, y, w);
+        h.addNode(7, y, s);
         y++; //7
-        h.addNode(1,y, s);
-        h.addNode(2,y, w);
-        h.addNode(3,y, f);
-        h.addNode(4,y, memoryContainer1);
-        h.addNode(5,y, f);
-        h.addNode(6,y, w);
-        h.addNode(7,y, s);
+        h.addNode(1, y, s);
+        h.addNode(2, y, w);
+        h.addNode(3, y, f);
+        h.addNode(4, y, memoryContainer1);
+        h.addNode(5, y, f);
+        h.addNode(6, y, w);
+        h.addNode(7, y, s);
         y++; //8
-        h.addNode(1,y, r);
-        h.addNode(2,y, s);
-        h.addNode(3,y, w);
-        h.addNode(5,y, w);
-        h.addNode(6,y, s);
-        h.addNode(7,y, r);
+        h.addNode(1, y, r);
+        h.addNode(2, y, s);
+        h.addNode(3, y, w);
+        h.addNode(5, y, w);
+        h.addNode(6, y, s);
+        h.addNode(7, y, r);
     }
 
     public void designRightLung(Board l, Space s, Floor f, WindyTree t) {
         l.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
         for (int y = 1; y <= 8; y++) {
             for (int x = 1; x <= 8; x++) {
-                if ((y==1 && x >= 3) || (y==3 && (x==2 || (x >=4 && x <7))) || (y==4 && (x==2 || x==4 || x==8)) || (y==5 && (x==1 || x==2 || x==5 || x==7)) || (y==6 && (x==2 || x==3 || x==5 || x==7)) || (y==7 && (x==3 || x==5 || x==7)) || (y==8 && (x==1 || x==5))) l.addNode(x,y,t);
+                if ((y == 1 && x >= 3) || (y == 3 && (x == 2 || (x >= 4 && x < 7))) || (y == 4 && (x == 2 || x == 4 || x == 8)) || (y == 5 && (x == 1 || x == 2 || x == 5 || x == 7)) || (y == 6 && (x == 2 || x == 3 || x == 5 || x == 7)) || (y == 7 && (x == 3 || x == 5 || x == 7)) || (y == 8 && (x == 1 || x == 5)))
+                    l.addNode(x, y, t);
             }
         }
-        Item noopCupItem = new Item("Snoopy Cup", "This was the cup I gave you for your very first Valentine's Day with a significant other. I told you at the beginning that I promised to be your first Valentine and I am so happy that I was :}, and thank you for making it the best Valentine's Day ever! P.S. With many more to come ;)" );
+        Item noopCupItem = new Item("Snoopy Cup", "This was the cup I gave you for your very first Valentine's Day with a significant other. I told you at the beginning that I promised to be your first Valentine and I am so happy that I was :}, and thank you for making it the best Valentine's Day ever! P.S. With many more to come ;)");
         ToriObject noopCup = new ToriObject("C", "A Cup", noopCupItem, 5, 4);
         Item notebookItem = new Item("Biology Notebook", "This was the notebook we had to make in 9th grade biology. While I could do with never stepping foot in that class again, it is notable because that is the first time we met :), And I am so glad we did :)))))");
         ToriObject notebook = new ToriObject("N", "A Notebook", notebookItem, 1, 4);
-        l.addNode(1,4,notebook);
+        l.addNode(1, 4, notebook);
         l.addNode(5, 4, noopCup);
-        l.addNode(0,6,f);
-        l.addNode(9,5,f);
+        l.addNode(0, 6, f);
+        l.addNode(9, 5, f);
     }
+
     public void designRightShoulderConnector(Board s, Floor f) {
         WindyTree c = new WindyTree("f", "Cactus");
         s.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
@@ -1209,30 +1230,48 @@ public class Game {
         int b = -1;
         int d = -1;
         for (int y = 1; y <= 8; y++) {
-            if (y==1) a=7;
-            if (y==2) {a=3; b=8;}
-            if (y==3) {a=1; b=6;}
-            if (y==4) {a=4; b=-1;}
-            if (y==5) a=5;
-            if (y==6) a=-1;
-            if (y==7) {a=4; b=6; d=8;}
-            if (y==8) {a=-1; b=7; d=3;}
+            if (y == 1) a = 7;
+            if (y == 2) {
+                a = 3;
+                b = 8;
+            }
+            if (y == 3) {
+                a = 1;
+                b = 6;
+            }
+            if (y == 4) {
+                a = 4;
+                b = -1;
+            }
+            if (y == 5) a = 5;
+            if (y == 6) a = -1;
+            if (y == 7) {
+                a = 4;
+                b = 6;
+                d = 8;
+            }
+            if (y == 8) {
+                a = -1;
+                b = 7;
+                d = 3;
+            }
 
             for (int x = 1; x <= 9; x++) {
-                if (x==a || x==b || x==d) s.addNode(x,y,c);
-                if (x == 9) s.addNode(x,y,f);
+                if (x == a || x == b || x == d) s.addNode(x, y, c);
+                if (x == 9) s.addNode(x, y, f);
             }
         }
 
-        s.buildRectRoom(0,4,2,4,2,6,0,6,2,5,Direction.EAST);
-        s.addNode(0,5,f);
+        s.buildRectRoom(0, 4, 2, 4, 2, 6, 0, 6, 2, 5, Direction.EAST);
+        s.addNode(0, 5, f);
         Item buttersItem = new Item("Butters", "This rectangular, delicious-looking, bounceable, butthole-having dog is the first stuffed animal I bought you from my trip to Universal. Even though that trip was one of my favorite days of my life, I was still thinking of you during the whole time. I love you <3");
-        ToriObject butter = new ToriObject("B", "A Slab of Butter", buttersItem, 7,7);
-        s.addNode(7,7,butter);
+        ToriObject butter = new ToriObject("B", "A Slab of Butter", buttersItem, 7, 7);
+        s.addNode(7, 7, butter);
     }
+
     public void designRightShoulder(Board b, Floor f) {
         b.buildRectRoom(0, 0, 9, 0, 9, 9, 0, 9, -1, -1, Direction.NONE);
-        b.buildRectRoom(4,7,6,7,6,9,4,9,-1,-1,Direction.NONE);
+        b.buildRectRoom(4, 7, 6, 7, 6, 9, 4, 9, -1, -1, Direction.NONE);
 
         for (int y = 1; y <= 8; y++) {
             b.addNode(0, y, f);
@@ -1242,52 +1281,53 @@ public class Game {
             Chest chest = new Chest();
             chestList.add(chest);
         }
-        b.addNode(1,8,chestList.get(0));
-        b.addNode(2,5,chestList.get(1));
-        b.addNode(3,2,chestList.get(2));
-        b.addNode(8,2,chestList.get(3));
-        b.addNode(4,6,chestList.get(4));
+        b.addNode(1, 8, chestList.get(0));
+        b.addNode(2, 5, chestList.get(1));
+        b.addNode(3, 2, chestList.get(2));
+        b.addNode(8, 2, chestList.get(3));
+        b.addNode(4, 6, chestList.get(4));
 
         Item key = new Item("Key", "A small key used to unlock doors.");
         Chest keyChest = new Chest(key);
-        b.addNode(7,5,keyChest);
+        b.addNode(7, 5, keyChest);
 
         Item blobox = new Item("Roblox", "This refers to all the Roblox games we have played together. To be honest, I always hated on Roblox since my sisters played it, but ever since playing with you I really enjoy it :), you make everything better, thank you <3");
         Chest robChest = new Chest(blobox);
-        b.addNode(5,3,robChest);
+        b.addNode(5, 3, robChest);
 
         Door keyDoor = new Door(false, true, key);
-        b.addNode(5,7,keyDoor);
+        b.addNode(5, 7, keyDoor);
 
-        b.addNode(5,9,f);
+        b.addNode(5, 9, f);
     }
-    public void designRightArm(Board b,  Floor f, Wall w) {
-        b.buildRectRoom(6,0,9,0,9,3,6,3,6,1,Direction.WEST);
-        b.buildRectRoom(6,3,9,3,9,6,6,6,-1,-1,Direction.NONE);
-        b.buildRectRoom(6,6,9,6,9,9,6,9,6,8,Direction.WEST);
-        b.buildRectRoom(0,0,4,0,4,3,0,3,-1,-1,Direction.NONE);
-        b.buildRectRoom(0,3,4,3,4,6,0,6,-1,-1,Direction.NONE);
-        b.buildRectRoom(0,6,4,6,4,9,0,9,2,6,Direction.NORTH);
+
+    public void designRightArm(Board b, Floor f, Wall w) {
+        b.buildRectRoom(6, 0, 9, 0, 9, 3, 6, 3, 6, 1, Direction.WEST);
+        b.buildRectRoom(6, 3, 9, 3, 9, 6, 6, 6, -1, -1, Direction.NONE);
+        b.buildRectRoom(6, 6, 9, 6, 9, 9, 6, 9, 6, 8, Direction.WEST);
+        b.buildRectRoom(0, 0, 4, 0, 4, 3, 0, 3, -1, -1, Direction.NONE);
+        b.buildRectRoom(0, 3, 4, 3, 4, 6, 0, 6, -1, -1, Direction.NONE);
+        b.buildRectRoom(0, 6, 4, 6, 4, 9, 0, 9, 2, 6, Direction.NORTH);
         for (int y = 0; y <= 9; y++) {
-            if (y==3 || y==6) b.addNode(5,y,w);
-            else b.addNode(5,y,f);
+            if (y == 3 || y == 6) b.addNode(5, y, w);
+            else b.addNode(5, y, f);
         }
-        Reference r1 = new Reference(1,8);
-        Reference r2 = new Reference(8,1);
-        Reference r3 = new Reference(8,5);
-        Reference r4 = new Reference(2,1);
-        Reference r5 = new Reference(5,2);
-        Reference r6 = new Reference(5,4);
-        Reference r7 = new Reference(8,7);
-        Reference r8 = new Reference(1,5);
-        b.addNode(1,8,r1);
-        b.addNode(8,1,r2);
-        b.addNode(8,5,r3);
-        b.addNode(2,1,r4);
-        b.addNode(5,2,r5);
-        b.addNode(5,4,r6);
-        b.addNode(8,7,r7);
-        b.addNode(1,5,r8);
+        Reference r1 = new Reference(1, 8);
+        Reference r2 = new Reference(8, 1);
+        Reference r3 = new Reference(8, 5);
+        Reference r4 = new Reference(2, 1);
+        Reference r5 = new Reference(5, 2);
+        Reference r6 = new Reference(5, 4);
+        Reference r7 = new Reference(8, 7);
+        Reference r8 = new Reference(1, 5);
+        b.addNode(1, 8, r1);
+        b.addNode(8, 1, r2);
+        b.addNode(8, 5, r3);
+        b.addNode(2, 1, r4);
+        b.addNode(5, 2, r5);
+        b.addNode(5, 4, r6);
+        b.addNode(8, 7, r7);
+        b.addNode(1, 5, r8);
 
         Pointer p1 = new Pointer(r1);
         Pointer p2 = new Pointer(r2);
@@ -1298,47 +1338,100 @@ public class Game {
         Pointer p7 = new Pointer(r7);
         Pointer p8 = new Pointer(r1);
         Pointer p9 = new Pointer(r8);
-        b.addNode(8,2,p1);
-        b.addNode(3,5,p2);
-        b.addNode(1,4,p3);
-        b.addNode(7,4,p4);
-        b.addNode(5,5,p5);
-        b.addNode(3,1,p6);
-        b.addNode(1,2,p7);
-        b.addNode(3,8,p8);
-        b.addNode(5,7,p9);
+        b.addNode(8, 2, p1);
+        b.addNode(3, 5, p2);
+        b.addNode(1, 4, p3);
+        b.addNode(7, 4, p4);
+        b.addNode(5, 5, p5);
+        b.addNode(3, 1, p6);
+        b.addNode(1, 2, p7);
+        b.addNode(3, 8, p8);
+        b.addNode(5, 7, p9);
 
         Item braceItem = new Item("Bracelets", "These are the bracelets you gave to me, one you made and the other was from the pack you gave to your color guard friends, and I love these bracelets because they make me think of you :)");
-        ToriObject brace = new ToriObject("O", "A Pair of Bracelets", braceItem, 3,4);
+        ToriObject brace = new ToriObject("O", "A Pair of Bracelets", braceItem, 3, 4);
         Item bottl = new Item("The Beatles", "This is the very first band we listened to on that first fateful day of ribbon making, and it is the band we have bonded over. With songs like 'I Will' and 'When I'm Sixty-Four' the Beatles have been our favorite and I love them even more because of you. Thank you for making every aspect of my life better :D ");
         ToriObject beatl = new ToriObject("B", "THE BEATLES", bottl, 7, 7);
 
-        b.addNode(3,4,brace);
-        b.addNode(7,7,beatl);
+        b.addNode(3, 4, brace);
+        b.addNode(7, 7, beatl);
 
     }
+
+    public void designRightHand(Board b, Floor f) {
+        for (int y = 0; y <= 9; y++) {
+            for (int x = 0; x <= 9; x++) {
+                if (y == 0) {
+                    if (x == 5) b.addNode(x, y, f);
+                } else if (y == 1) {
+                    if (x == 4 || x == 5) b.addNode(x, y, f);
+                } else if (y == 2) {
+                    if (x == 4 || x == 5) b.addNode(x, y, f);
+                } else if (y == 4) {
+                    if (x == 1 || x == 2 || x >= 8) b.addNode(x, y, f);
+                } else if (y == 5) {
+                    if (x == 1 || x == 3) b.addNode(x, y, f);
+                } else if (y == 6 && x == 2) b.addNode(x, y, f);
+                else if (y == 8) {
+                    if (x == 4 || x == 6) b.addNode(x, y, f);
+                } else if (y == 9) {
+                    if (x > 3 && x < 7) b.addNode(x, y, f);
+                }
+            }
+        }
+        Reference r1 = new Reference(2, 5);
+        Reference r2 = new Reference(9, 3);
+        Reference r3 = new Reference(5, 7);
+        Reference r4 = new Reference(6, 1);
+        b.addNode(2, 5, r1);
+        b.addNode(9, 3, r2);
+        b.addNode(5, 7, r3);
+        b.addNode(6, 1, r4);
+
+
+        Pointer p1 = new Pointer(r1);
+        Pointer p2 = new Pointer(r2);
+        Pointer p3 = new Pointer(r3);
+        Pointer p4 = new Pointer(r4);
+        b.addNode(5, 2, p1);
+        b.addNode(1, 6, p2);
+        b.addNode(9, 5, p3);
+        b.addNode(7, 9, p4);
+
+        Item paddlesItem = new Item("Paddles!", "The cute, fiery, adorable momma ducky and the bestest gift I could ever hope for. Paddles completed our relationship as now we had a ducky for you. I was so surprised and happy that day you gave me her, and once again thank you for making our relationship the most special one ever!");
+        Chest chest = new Chest(paddlesItem);
+
+        Door door = new Door(false, false);
+        b.addNode(3, 4, chest);
+        b.addNode(5,8, door);
+
+        Item memCont2 = new Item("Memory Container Two", "This Memory Container is currently locked. Please upload to the Brain and access on the Terminal.");
+        ToriObject memoryContainer2 = new ToriObject("M", "Memory Container", memCont2, 3, 9);
+        b.addNode(3,9, memoryContainer2);
+    }
+
     public void addHeart(Board heart, Space space) {
         Heart heartPiece = new Heart();
-        heart.addNode(3,2, heartPiece);
-        heart.addNode(4,3, heartPiece);
-        heart.addNode(5,3, heartPiece);
-        heart.addNode(6,2, heartPiece);
-        heart.addNode(7,3, heartPiece);
-        heart.addNode(7,4, heartPiece);
-        heart.addNode(6,5, heartPiece);
-        heart.addNode(5,6, heartPiece);
-        heart.addNode(4,6, heartPiece);
-        heart.addNode(3,5, heartPiece);
-        heart.addNode(2,4, heartPiece);
-        heart.addNode(2,3, heartPiece);
-        heart.addNode(3,3,space);
-        heart.addNode(3,4,space);
-        heart.addNode(4,4,space);
-        heart.addNode(5,4,space);
-        heart.addNode(6,4,space);
-        heart.addNode(6,3,space);
-        heart.addNode(4,5,space);
-        heart.addNode(5,5,space);
+        heart.addNode(3, 2, heartPiece);
+        heart.addNode(4, 3, heartPiece);
+        heart.addNode(5, 3, heartPiece);
+        heart.addNode(6, 2, heartPiece);
+        heart.addNode(7, 3, heartPiece);
+        heart.addNode(7, 4, heartPiece);
+        heart.addNode(6, 5, heartPiece);
+        heart.addNode(5, 6, heartPiece);
+        heart.addNode(4, 6, heartPiece);
+        heart.addNode(3, 5, heartPiece);
+        heart.addNode(2, 4, heartPiece);
+        heart.addNode(2, 3, heartPiece);
+        heart.addNode(3, 3, space);
+        heart.addNode(3, 4, space);
+        heart.addNode(4, 4, space);
+        heart.addNode(5, 4, space);
+        heart.addNode(6, 4, space);
+        heart.addNode(6, 3, space);
+        heart.addNode(4, 5, space);
+        heart.addNode(5, 5, space);
     }
 
     public void toriGame() {
@@ -1354,19 +1447,19 @@ public class Game {
         Board leftHand = new Board("[", toriMap, "Ocean Shrine");
         Board leftArm = new Board("|", toriMap, "Space River");
         Board leftShoulder = new Board("|", toriMap, "Tech Sector Hall");
-        Board leftShoulderConnector = new  Board("|", toriMap, "Flat Field");
-        Board leftLung = new  Board("|", toriMap, "Windy Forest Left");
+        Board leftShoulderConnector = new Board("|", toriMap, "Flat Field");
+        Board leftLung = new Board("|", toriMap, "Windy Forest Left");
         toriMap.addBoard(leftHand, 2, 5);
         toriMap.addBoard(leftArm, 2, 4);
         toriMap.addBoard(leftShoulder, 2, 3);
         toriMap.addBoard(leftShoulderConnector, 3, 3);
         toriMap.addBoard(leftLung, 4, 3);
 
-        Board rightHand = new Board("]", toriMap, "Right Corridor");
-        Board rightArm = new Board("|", toriMap, "Right Hallway Two");
-        Board rightShoulder = new Board("|", toriMap, "Right Bend");
-        Board rightShoulderConnector = new  Board("|", toriMap, "Right Hallway One");
-        Board rightLung = new  Board("|", toriMap, "Windy Forest Right");
+        Board rightHand = new Board("]", toriMap, "Floating Isle");
+        Board rightArm = new Board("|", toriMap, "Convoluted Hall");
+        Board rightShoulder = new Board("|", toriMap, "Treasure Cove");
+        Board rightShoulderConnector = new Board("|", toriMap, "Cactus City");
+        Board rightLung = new Board("|", toriMap, "Windy Forest Right");
         toriMap.addBoard(rightHand, 8, 5);
         toriMap.addBoard(rightArm, 8, 4);
         toriMap.addBoard(rightShoulder, 8, 3);
@@ -1381,7 +1474,7 @@ public class Game {
         Board mouth = new Board("|", toriMap, "Docking Bay");
         Board brainCenter = new Board("|", toriMap, "Central Processing Unit");
         Board brainLeft = new Board("|", toriMap, "Left Processing Unit");
-        Board brainRight = new  Board("|", toriMap, "Right Processing Unit");
+        Board brainRight = new Board("|", toriMap, "Right Processing Unit");
         Board leftEye = new Board("0", toriMap, "Left Window");
         Board rightEye = new Board("0", toriMap, "Right Window");
         toriMap.addBoard(neck, 5, 2);
@@ -1394,7 +1487,7 @@ public class Game {
 
         Board ribCage = new Board("|", toriMap, "Protected Passagway");
         Board stomach = new Board("|", toriMap, "Storage Warehouse");
-        Board lowerStomach =  new Board("|", toriMap, "Delivery Bay");
+        Board lowerStomach = new Board("|", toriMap, "Delivery Bay");
         toriMap.addBoard(ribCage, 5, 4);
         toriMap.addBoard(stomach, 5, 5);
         toriMap.addBoard(lowerStomach, 5, 6);
@@ -1407,15 +1500,15 @@ public class Game {
         toriMap.addBoard(hipRight, 6, 7);
 
         Board rightKnee = new Board("|", toriMap, "Lower Lands Bend Right");
-        Board rightLeg = new  Board("|", toriMap, "Lower Lands Hallway Right");
-        Board rightFoot = new  Board("[", toriMap, "Lower Lands Corridor Right");
+        Board rightLeg = new Board("|", toriMap, "Lower Lands Hallway Right");
+        Board rightFoot = new Board("[", toriMap, "Lower Lands Corridor Right");
         toriMap.addBoard(rightKnee, 7, 7);
         toriMap.addBoard(rightLeg, 7, 8);
         toriMap.addBoard(rightFoot, 7, 9);
 
         Board leftKnee = new Board("|", toriMap, "Lower Lands Bend Left");
-        Board leftLeg = new  Board("|", toriMap, "Lower Lands Hallway Left");
-        Board leftFoot = new  Board("]", toriMap, "Lower Lands Corridor Left");
+        Board leftLeg = new Board("|", toriMap, "Lower Lands Hallway Left");
+        Board leftFoot = new Board("]", toriMap, "Lower Lands Corridor Left");
         toriMap.addBoard(leftKnee, 3, 7);
         toriMap.addBoard(leftLeg, 3, 8);
         toriMap.addBoard(leftFoot, 3, 9);
@@ -1439,11 +1532,11 @@ public class Game {
         Space space = new Space();
         River river = new River();
         addHeart(heart, space);
-        WindyTree f = new  WindyTree("F", "Windy Tree");
+        WindyTree f = new WindyTree("F", "Windy Tree");
 
 
         HeartTerminal terminal = new HeartTerminal();
-        heart.addNode(7,8, terminal);
+        heart.addNode(7, 8, terminal);
 
         //design left
         designLeftLung(leftLung, space, floor, f);
@@ -1457,6 +1550,7 @@ public class Game {
         designRightShoulderConnector(rightShoulderConnector, floor);
         designRightShoulder(rightShoulder, floor);
         designRightArm(rightArm, floor, new Wall());
+        designRightHand(rightHand, floor);
 
 
         Player toriPlayer = new Player("T", "Tori", floor);
@@ -1468,7 +1562,8 @@ public class Game {
 
         toriGameActOne(toriMap);
         currentPlayer.moveEast(currentBoard, this);
-*/      rightDoor.performAction("Unlock Door", currentBoard, this);
+*/
+        rightDoor.performAction("Unlock Door", currentBoard, this);
         toriGameActTwo(toriMap);
     }
 

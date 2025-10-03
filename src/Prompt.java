@@ -17,7 +17,6 @@ public class Prompt {
     private ArrayList<Nodeable> npcList;
 
 
-
     public Prompt() {
         currentNorth = null;
         currentEast = null;
@@ -35,6 +34,7 @@ public class Prompt {
     public void enterBattle() {
         inBattle = true;
     }
+
     public void exitBattle() {
         inBattle = false;
     }
@@ -59,7 +59,7 @@ public class Prompt {
         ArrayList<ArrayList<Nodeable>> nodeList = board.getBoard();
         for (int i = 0; i < nodeList.size(); i++) {
             for (int k = 0; k < nodeList.get(i).size(); k++) {
-                if (nodeList.get(i).get(k).getType()==ListOfNodes.NPC) {
+                if (nodeList.get(i).get(k).getType() == ListOfNodes.NPC) {
                     npcList.add(nodeList.get(i).get(k));
                 }
             }
@@ -67,6 +67,7 @@ public class Prompt {
 
 
     }
+
     //different prompts:
     public void displayActions(Map map, Player player, Game game) {
         Board board = map.getCurrentBoard();
@@ -76,30 +77,30 @@ public class Prompt {
         ArrayList<ArrayList<Nodeable>> boardList = board.getBoard();
 
         Wall wall = new Wall();
-        if (y!=0) currentNorth = boardList.get(y-1).get(x);
+        if (y != 0) currentNorth = boardList.get(y - 1).get(x);
         else {
-            Board desiredBoard = mapList.get(map.getCurrentBoardY()-1).get(map.getCurrentBoardX());
+            Board desiredBoard = mapList.get(map.getCurrentBoardY() - 1).get(map.getCurrentBoardX());
             ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
             currentNorth = desiredBoardList.get(9).get(x);
         }
 
-        if (x!=9) currentEast = boardList.get(y).get(x+1);
+        if (x != 9) currentEast = boardList.get(y).get(x + 1);
         else {
-            Board desiredBoard = mapList.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()+1);
+            Board desiredBoard = mapList.get(map.getCurrentBoardY()).get(map.getCurrentBoardX() + 1);
             ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
             currentEast = desiredBoardList.get(y).get(0);
         }
 
-        if (y!=9) currentSouth = boardList.get(y+1).get(x);
+        if (y != 9) currentSouth = boardList.get(y + 1).get(x);
         else {
-            Board desiredBoard = mapList.get(map.getCurrentBoardY()+1).get(map.getCurrentBoardX());
+            Board desiredBoard = mapList.get(map.getCurrentBoardY() + 1).get(map.getCurrentBoardX());
             ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
             currentSouth = desiredBoardList.get(0).get(x);
         }
 
-        if (x!=0) currentWest = boardList.get(y).get(x-1);
+        if (x != 0) currentWest = boardList.get(y).get(x - 1);
         else {
-            Board desiredBoard = mapList.get(map.getCurrentBoardY()).get(map.getCurrentBoardX()-1);
+            Board desiredBoard = mapList.get(map.getCurrentBoardY()).get(map.getCurrentBoardX() - 1);
             ArrayList<ArrayList<Nodeable>> desiredBoardList = desiredBoard.getBoard();
             currentWest = desiredBoardList.get(y).get(9);
         }
@@ -109,8 +110,6 @@ public class Prompt {
         eastActionList = currentEast.getActionList();
         southActionList = currentSouth.getActionList();
         westActionList = currentWest.getActionList();
-
-
 
 
         if (!northActionList.isEmpty()) {
@@ -126,7 +125,7 @@ public class Prompt {
         }
 
 
-        if(!eastActionList.isEmpty()) {
+        if (!eastActionList.isEmpty()) {
             for (int i = 0; i < eastActionList.size(); i++) {
                 System.out.println("- " + eastActionList.get(i));
             }
@@ -165,17 +164,16 @@ public class Prompt {
         }
 
 
-
-
     }
+
     public boolean[] doAction(String response, Map map, Player player, Game game) {
         Board board = map.getCurrentBoard();
-        if(response.length()>4) {
-            if (response.substring(0,4).equals("Move")) {
-                return(player.performAction(response, board, game));
+        if (response.length() > 4) {
+            if (response.substring(0, 4).equals("Move")) {
+                return (player.performAction(response, board, game));
             }
         }
-        if (response.length()==1) return player.performAction(response, board, game);
+        if (response.length() == 1) return player.performAction(response, board, game);
         if (response.equals("No Fast")) {
             game.setTimeNumber(10000);
         }
@@ -224,8 +222,7 @@ public class Prompt {
                     player.getInventory().printInventory();
                     System.out.println();
                 }
-            }
-            else {
+            } else {
                 System.out.println("Your inventory is currently empty.");
                 game.time(3);
             }
@@ -248,23 +245,23 @@ public class Prompt {
         for (int i = 0; i < longest; i++) {
             if (i < northActionList.size()) {
                 if (northActionList.get(i).equals(response)) {
-                    return(currentNorth.performAction(response, board, game));
+                    return (currentNorth.performAction(response, board, game));
                 }
             }
             if (i < eastActionList.size()) {
                 if (eastActionList.get(i).equals(response)) {
-                    return(currentEast.performAction(response, board, game));
+                    return (currentEast.performAction(response, board, game));
                 }
             }
             if (i < southActionList.size()) {
                 if (southActionList.get(i).equals(response)) {
-                    return(currentSouth.performAction(response, board, game));
+                    return (currentSouth.performAction(response, board, game));
 
                 }
             }
             if (i < westActionList.size()) {
                 if (westActionList.get(i).equals(response)) {
-                    return(currentWest.performAction(response, board, game));
+                    return (currentWest.performAction(response, board, game));
 
                 }
             }
@@ -272,17 +269,17 @@ public class Prompt {
 
         return new boolean[]{false, false};
     }
+
     public boolean[] displayBattleActions(Board board, Player player, Game game) {
         boolean[] returnArray = {false, true};
         //default return array, only runs to end stuff because if it is run and not changed, something went wrong.
         boolean startFromBattle = false;
-        while (game.getCurrentChapter()==1 && game.getCurrentAct()[game.getCurrentChapter()-1]==1) {
+        while (game.getCurrentChapter() == 1 && game.getCurrentAct()[game.getCurrentChapter() - 1] == 1) {
             returnArray = battleOneOne(game, player, board, startFromBattle);
-            if (returnArray[0]==false && returnArray[1]==false) {
+            if (returnArray[0] == false && returnArray[1] == false) {
                 //aka restart battle , it won't run the return statement
                 startFromBattle = true;
-            }
-            else {
+            } else {
                 //two options: false true : restart the act
                 // or true false, we all good.
                 return returnArray;
@@ -506,8 +503,7 @@ public class Prompt {
                 game.time(3);
 
                 return game.gameOver("The explosion kills the both of you and you never get to go to the Tech Fair or make the next Hype 2 update.", true, Ending.BAD_ENDING);
-            }
-            else if (response.equals(".22 Magnum")) {
+            } else if (response.equals(".22 Magnum")) {
                 System.out.println();
                 System.out.println("...");
                 System.out.println();
@@ -535,8 +531,7 @@ public class Prompt {
                 game.time(3);
 
                 return game.gameOver("Realizing this, the hobo lunges at you and knocks you out. You wake up several hours later without your shoes, having missed the tech fair", true, Ending.BAD_ENDING);
-            }
-            else if (response.equals("A Bucket of KFC?")) {
+            } else if (response.equals("A Bucket of KFC?")) {
                 System.out.println();
                 System.out.println("...");
                 System.out.println();
@@ -562,8 +557,7 @@ public class Prompt {
                 System.out.println("But, he slips on the slippery crumbs and falls head first into the wall, knocking himself out.");
                 System.out.println();
                 game.time(3);
-            }
-            else if (player.getInventory().containsItem(null, "Crazy Soda") && response.equals("Crazy Soda")) {
+            } else if (player.getInventory().containsItem(null, "Crazy Soda") && response.equals("Crazy Soda")) {
                 System.out.println();
                 System.out.println("...");
                 System.out.println();
