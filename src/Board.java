@@ -37,6 +37,71 @@ public class Board {
         }
     }
 
+    public void setBoardFromString(String boardString) {
+        ArrayList<String> splicedStrings = new ArrayList<>();
+        int start = 0;
+        int end = 19;
+        do {
+            String temp = boardString.substring(start, end);
+            splicedStrings.add(temp);
+            start += 20;
+            end += 20;
+        } while (splicedStrings.size() != 10);
+
+
+        for (int y = 0; y < splicedStrings.size(); y++) {
+            for (int x = 0; x < splicedStrings.get(y).length(); x++) {
+                if (x % 2 == 1) {
+                    continue;
+                }
+                String current = String.valueOf(splicedStrings.get(y).charAt(x));
+                Nodeable node;
+                if (current.equals(" ")) {
+                    node = new Space();
+                }
+                else if (current.equals("-")) {
+                    node = new Floor();
+                }
+                else if (current.equals("P")) {
+                    node = new Placeholder();
+                }
+                else if (current.equals("/")) {
+                    node = new Wall();
+                }
+                else if (current.equals("[")) {
+                    node = new Door(false, false);
+                }
+                else if (current.equals("]")) {
+                    node = new Door(true, false);
+                }
+                else if (current.equals("~")) {
+                    node = new River();
+                }
+                else {
+                    node = new Placeholder();
+                }
+                addNode(x/2, y, node);
+            }
+        }
+    }
+
+    public void fillPlaceholders(ArrayList<Nodeable> fillList) {
+        for (int y = 0; y < boardList.size(); y++) {
+            for (int x = 0; x < boardList.size(); x++) {
+                Nodeable currentNode = boardList.get(y).get(x);
+                if (currentNode.getDisplayid().equals("P")) {
+                    if (!fillList.isEmpty()) {
+                        addNode(x, y, fillList.getFirst());
+                        fillList.remove(fillList.getFirst());
+                    }
+                    else {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     public void setAllFloor() {
         for (int i = 0; i < boardList.size(); i++) {
             for (int j = 0; j < boardList.get(i).size(); j++) {

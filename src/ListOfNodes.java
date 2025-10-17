@@ -7,5 +7,6 @@ public enum ListOfNodes {
     DESK,
     PLAYER,
     SPACE,
-    NPC;
+    NPC,
+    PLACEHOLDER;
 }

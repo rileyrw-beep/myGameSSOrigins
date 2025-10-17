@@ -933,6 +933,12 @@ public class Game {
 
         //add exposition + game loop for right hand floating iles
 
+        System.out.println("You walk into the next room and find the edge of the world.");
+        System.out.println();
+        time(4);
+
+        System.out.println("You look beyond and see a series of floating islands.");
+
     }
 
     public void designLeftLung(Board leftLung, Space space, Floor floor, WindyTree f) {
