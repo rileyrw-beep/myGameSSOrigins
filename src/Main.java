@@ -3,44 +3,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-
-        Map testMap = new Map(1, 1);
-        Board test = new Board("D", testMap, "Test");
-        test.setBoardFromString("/ / / / / / / / / / " +
-                "/ - - - - - - f - - " +
-                "/ - - f - - - - f - " +
-                "/ f - - - - f - - - " +
-                "/ / / - f - - - - - " +
-                "- - [ - - f - - - - " +
-                "/ / / - - - - - - - " +
-                "/ - - - f - f B f - " +
-                "/ - - f - - - f - - " +
-                "/ / / / / / / / / / ");
-
-
-        ArrayList<Nodeable> fillList = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            WindyTree f = new WindyTree("f", "Cactus");
-            fillList.add(f);
-        }
-        Item but = new Item("BUttters", "you're sixteen you're beautiful and you're mine");
-        ToriObject b = new ToriObject("B", "butters", but, 7,7);
-        fillList.add(b);
-
-        for (int i = 0; i < 3; i++) {
-            WindyTree f = new WindyTree("f", "Cactus");
-            fillList.add(f);
-        }
-
-        test.fillPlaceholders(fillList);
-        test.printBoard();
-
-
-
-
-
-
-/*
         Game game = new Game();
 
         boolean x = game.askPlayerName();
@@ -76,9 +38,7 @@ public class Main {
         boardOne.printBoard();
 
         prompt.displayActions(boardOne, playerOne);
-        */
 
-        /*w
          * the game loop:
          * print board / legend
          *
@@ -94,6 +54,40 @@ public class Main {
 
 
 
+
+
+
+
+        Map testMap = new Map(1, 1);
+        Board test = new Board("D", testMap, "Test");
+        test.setBoardFromString("/ / / / / / / / / / " +
+                "/ - - - - - - f - - " +
+                "/ - - f - - - - f - " +
+                "/ f - - - - f - - - " +
+                "/ / / - f - - - - - " +
+                "- - [ - - f - - - - " +
+                "/ / / - - - - - - - " +
+                "/ - - - f - f B f - " +
+                "/ - - f - - - f - - " +
+                "/ / / / / / / / / / ");
+
+
+        ArrayList<Nodeable> fillList = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            WindyTree f = new WindyTree("f", "Cactus");
+            fillList.add(f);
+        }
+        Item but = new Item("BUttters", "you're sixteen you're beautiful and you're mine");
+        ToriObject b = new ToriObject("B", "butters", but, 7,7);
+        fillList.add(b);
+
+        for (int i = 0; i < 3; i++) {
+            WindyTree f = new WindyTree("f", "Cactus");
+            fillList.add(f);
+        }
+
+        test.fillPlaceholders(fillList);
+        test.printBoard();
         */
     }
 }
