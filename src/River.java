@@ -8,9 +8,9 @@ public class River implements Nodeable{
     private ArrayList<String> actionList;
 
 
-    public River() {
+    public River(String inGameid) {
         displayid = "~";
-        inGameid = "River";
+        this.inGameid = inGameid;
         canMoveTo = true;
         type = ListOfNodes.FLOOR;
         actionList = new ArrayList<String>();

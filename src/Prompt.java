@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Prompt {
 
@@ -539,24 +541,24 @@ public class Prompt {
 
                 System.out.println("Well, I certainly did not expect you to have a whole bucket of KFC just sitting in your pocket.");
                 System.out.println();
-                game.time(3);
+                game.time(5);
 
                 System.out.println("Not knowing what else to do with it, you begin to eat it at a pace never seen before.");
                 System.out.println();
-                game.time(3);
+                game.time(5);
 
                 System.out.println("You finish the whole bucket, leaving a bunch of greasy, slippery crumbs all over the ground.");
                 System.out.println();
-                game.time(3);
+                game.time(5);
                 System.out.println();
 
                 System.out.println("The hobo, who hasn't eaten for days, proceeds to charge at you furiously for taking a snack break in the middle of the fight.");
                 System.out.println();
-                game.time(4);
+                game.time(7);
 
                 System.out.println("But, he slips on the slippery crumbs and falls head first into the wall, knocking himself out.");
                 System.out.println();
-                game.time(3);
+                game.time(5);
             } else if (player.getInventory().containsItem(null, "Crazy Soda") && response.equals("Crazy Soda")) {
                 System.out.println();
                 System.out.println("...");
@@ -569,39 +571,39 @@ public class Prompt {
 
                 System.out.println("Holding the rancid, half drunken, probably moldy, nostril destroying, eye watering, radioactive, crazy soda in your hand you freeze, not knowing what to do.");
                 System.out.println();
-                game.time(4);
+                game.time(7);
 
                 ArrayList<String> drink = new ArrayList<>(List.of("Drink It"));
                 game.basicGameLoop("", drink);
 
                 System.out.println("You try to raise the can to your lips, but before it gets too close you falter. I kinda agree, this may not be the best battle plan against the hobo.");
                 System.out.println();
-                game.time(4);
+                game.time(6);
 
                 game.basicGameLoop("", drink);
 
                 System.out.println("Again, you make a feeble attempt to down the forbidden beverage, but you accidentally get a whiff of it and you almost spill the drink. Maybe you should try and do something else.");
                 System.out.println();
-                game.time(5);
+                game.time(8);
 
                 game.basicGameLoop("", drink);
 
                 System.out.println("Okay, you really want to do this? I mean, it is fine by me, but personally I would try any other option. Regardless you bring the musty, dusty, crusty can of cursed liquid to your lips, hold your nose and dump it down the hatch.");
                 System.out.println();
-                game.time(6);
+                game.time(10);
 
                 System.out.println("It has an odd lemony flavor, but out side of that it was the most disgusting thing you had ever drank in your life.");
                 System.out.println();
                 System.out.println();
-                game.time(4);
+                game.time(5);
 
                 System.out.println("But suddenly, you begin to feel better, better than you had ever felt before.");
                 System.out.println();
-                game.time(3);
+                game.time(4);
 
                 System.out.println("You begin to levitate as you reconcile the fact that that *Crazy Soda* gave you such godly powers.");
                 System.out.println();
-                game.time(4);
+                game.time(5);
 
                 String crazyEnd = "You evaporate the hobo with your lazer vision, then swing out the building, and go on to be the greatest superhero of the world";
                 return game.gameOver(crazyEnd, true, Ending.SPECIAL_ENDING);
@@ -609,7 +611,7 @@ public class Prompt {
         }
         System.out.println("Astonished that the KFC bucket had worked, you brush yourself off, and continue on your way. You feel quite proud you just beat up a poor, old hobo.");
         System.out.println();
-        game.time(4);
+        game.time(5);
 
         Floor floor = new Floor();
         board.addNode(4, 5, floor);

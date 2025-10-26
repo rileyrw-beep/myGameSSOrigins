@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
-public class WindyTree implements Nodeable {
+public class StaticNode implements Nodeable {
     private String displayid;
     private String inGameid;
     private boolean canMoveTo;
     private ListOfNodes type;
     private ArrayList<String> actionList;
 
-    public WindyTree(String dis, String gam) {
+    public StaticNode(String dis, String gam) {
         displayid = dis;
         inGameid = gam;
         type = ListOfNodes.WALL;

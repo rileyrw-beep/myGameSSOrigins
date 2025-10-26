@@ -73,7 +73,7 @@ public class ToriObject implements Nodeable {
 
             actionList.clear();
             if (isInWater) {
-                River river = new River();
+                River river = new River("River");
                 board.addNode(x, y, river);
 
             }

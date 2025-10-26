@@ -11,4 +11,5 @@ public interface Moveable {
     public void moveWest(Board board, Game game);
     public void teleport(Board board, Game game, int x, int y);
 
+    public void mapTeleport(Board currentBoard, Map newMap, Game game, int boardX, int boardY, int x, int y);
 }

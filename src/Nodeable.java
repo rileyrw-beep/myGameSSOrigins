@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.ArrayList;
 
 public interface Nodeable {
 
@@ -11,7 +11,7 @@ public interface Nodeable {
 
     ListOfNodes getType();
 
-    public ArrayList<String> getActionList();
+    ArrayList<String> getActionList();
 
     boolean[] performAction(String response, Board board, Game game);
 

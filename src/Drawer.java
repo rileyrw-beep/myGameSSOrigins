@@ -1,5 +1,5 @@
-import java.sql.SQLOutput;
-import java.util.*;
+
+import java.util.ArrayList;
 
 public class Drawer implements Nodeable{
     private String displayid;
@@ -46,15 +46,16 @@ public class Drawer implements Nodeable{
 
             System.out.println("You open it and a wave of dust flies into your face. After a coughing fit and a breath from your inhaler you look inside.");
             System.out.println();
-            game.time(3);
+            game.time(5);
 
             System.out.println("Inside there is an opened, half drunken can of soda. You put it in your pocket");
             System.out.println();
-            game.time(2);
+            game.time(4);
 
             game.getPlayer().getInventory().addItem(inventory.getItems().getFirst());
             System.out.println("Added 'Crazy Soda' to Inventory");
             System.out.println();
+            game.time(3);
 
             actionList.clear();
             return returnArray;

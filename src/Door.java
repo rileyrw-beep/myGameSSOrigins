@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.ArrayList;
 
 public class Door implements Nodeable {
     private String displayid;
@@ -67,52 +67,55 @@ public class Door implements Nodeable {
 
     public boolean[] performAction(String response, Board board, Game game) {
         boolean[] returnArray = {true, false};
-        if (response.equals("Open Door")) {
-            if (isLocked) {
-                System.out.println("This door is locked, you cannot do that.");
-                return returnArray;
+        switch (response) {
+            case "Open Door" -> {
+                if (isLocked) {
+                    System.out.println("This door is locked, you cannot do that.");
+                    return returnArray;
+                } else if (!isLocked) {
+                    canMoveTo = true;
+                    displayid = "]";
+                    inGameid = "Opened Door";
+                    actionList.clear();
+                    actionList.add("Close Door");
+                    return returnArray;
+                }
             }
-            else if (!isLocked) {
-                canMoveTo = true;
-                displayid = "]";
-                inGameid = "Opened Door";
+            case "Close Door" -> {
+                if (isLocked) {
+                    System.out.println("You cannot close this door.");
+                    return returnArray;
+                }
+                canMoveTo = false;
+                inGameid = "Closed Door";
+                displayid = "[";
                 actionList.clear();
-                actionList.add("Close Door");
+                actionList.add("Open Door");
                 return returnArray;
             }
-        }
-        else if (response.equals("Close Door")) {
-            canMoveTo = false;
-            inGameid = "Closed Door";
-            displayid = "[";
-            actionList.clear();
-            actionList.add("Open Door");
-            return returnArray;
-        }
-        else if (response.equals("Lock Door")) {
-            lockDoor();
-            return returnArray;
-        }
-        else if (response.equals("Unlock Door")) {
-            if (key!=null) {
-                if ((game.getPlayer().getInventory().containsItem(key, "Key"))) {
+            case "Lock Door" -> {
+                lockDoor();
+                return returnArray;
+            }
+            case "Unlock Door" -> {
+                if (key != null) {
+                    if ((game.getPlayer().getInventory().containsItem(key, "Key"))) {
+                        unlockDoor();
+                        actionList.remove("Unlock Door");
+                        game.getPlayer().getInventory().removeItem(key);
+                        System.out.println("Door Unlocked!");
+                    } else {
+                        System.out.println("You need a key to unlock the door.");
+                    }
+                } else {
                     unlockDoor();
-                    actionList.remove("Unlock Door");
-                    game.getPlayer().getInventory().removeItem(key);
-                    System.out.println("Door Unlocked!");
                 }
-                else {
-                    System.out.println("You need a key to unlock the door.");
-                }
+                return returnArray;
             }
-            else {
-                unlockDoor();
+            default -> {
+                returnArray[0] = false;
+                return returnArray;
             }
-            return returnArray;
-        }
-        else {
-            returnArray[0] = false;
-            return returnArray;
         }
         return returnArray;
     }

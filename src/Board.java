@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.ArrayList;
+
 
 public class Board {
 
@@ -8,6 +9,7 @@ public class Board {
     private String boardChar;
     private String boardName;
     private Map map;
+
 
 
     public Board(String boardChar, Map map, String boardName) {
@@ -27,6 +29,7 @@ public class Board {
         this.charPosX = -1;
         this.charPosY = -1;
         this.map = map;
+
     }
 
     public void addNode(int x, int y, Nodeable node) {
@@ -75,7 +78,16 @@ public class Board {
                     node = new Door(true, false);
                 }
                 else if (current.equals("~")) {
-                    node = new River();
+                    node = new River("Grass");
+                }
+                else if (current.equals("=")) {
+                    node = new StaticNode("=","Road");
+                }
+                else if (current.equals("L")) {
+                    node = new StaticNode("L", "Lamppost");
+                }
+                else if (current.equals("T")) {
+                    node = new StaticNode("T", "Table");
                 }
                 else {
                     node = new Placeholder();
@@ -85,14 +97,15 @@ public class Board {
         }
     }
 
-    public void fillPlaceholders(ArrayList<Nodeable> fillList) {
+    public void fillPlaceholders(Nodeable[] fillList) {
+        int i = 0;
         for (int y = 0; y < boardList.size(); y++) {
             for (int x = 0; x < boardList.size(); x++) {
                 Nodeable currentNode = boardList.get(y).get(x);
                 if (currentNode.getDisplayid().equals("P")) {
-                    if (!fillList.isEmpty()) {
-                        addNode(x, y, fillList.getFirst());
-                        fillList.remove(fillList.getFirst());
+                    if (fillList.length != 0) {
+                        addNode(x, y, fillList[i]);
+                        i++;
                     }
                     else {
                         return;
@@ -293,6 +306,17 @@ public class Board {
             }
         }
 
+    }
+
+    public void stepBoard(Game game) {
+        for (int y = 0; y < boardList.size(); y++) {
+            for (int x = 0; x < boardList.get(y).size(); x++) {
+                Nodeable node = boardList.get(y).get(x);
+                if (node.getType() == ListOfNodes.CIVILIAN) {
+                    node.performAction("", this, game);
+                }
+            }
+        }
     }
 
 

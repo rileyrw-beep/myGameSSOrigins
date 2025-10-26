@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.ArrayList;
 
 public class Hobo implements Nodeable, Moveable {
     private String displayid;
@@ -175,6 +175,10 @@ public class Hobo implements Nodeable, Moveable {
     }
 
     public void teleport(Board board, Game game, int x, int y) {
+        return;
+    }
+
+    public void mapTeleport(Board board, Map newMap, Game g, int boardX, int boardY, int x, int y) {
         return;
     }
 

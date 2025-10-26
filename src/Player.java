@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.ArrayList;
 
 public class Player implements Nodeable, Moveable {
     private String displayid;
@@ -291,5 +291,88 @@ public class Player implements Nodeable, Moveable {
         }
     }
 
+    public void mapTeleport(Board currentBoard, Map newMap, Game game, int boardX, int boardY, int x, int y) {
+        if (x < 0 || x > 9 || y < 0 || y > 9) {
+            System.out.println("Wrong x or y.");
+            return;
+        }
+        if (boardX < 0 || boardX > 9 || boardY < 0 || boardY > 9) {
+            System.out.println("Wrong boardX or boardY.");
+            return;
+        }
+        Nodeable desiredNode = newMap.getMapBoard().get(y).get(x).getBoard().get(y).get(x);
+        if (desiredNode.getCanMoveTo()) {
+            currentBoard.addNode(currentBoard.getCharPosX(), currentBoard.getCharPosY(), previousNode);
+            previousNode = desiredNode;
+            newMap.getMapBoard().get(boardY).get(boardX).addNode(x, y, this);
+            newMap.getMapBoard().get(boardY).get(boardX).setCharPosX(x);
+            newMap.getMapBoard().get(boardY).get(boardX).setCharPosY(y);
+            game.setBoard(newMap.getMapBoard().get(boardY).get(boardX));
+            game.setCurrentMap(newMap);
+            newMap.setCurrentBoardX(boardX);
+            newMap.setCurrentBoardY(boardY);
+            newMap.boardChanged();
+        }
+        else {
+            System.out.println("You cannot teleport there.");
+        }
+    }
+
+    public void withinMapTeleport(Board board, Game game, int boardX, int boardY, int x, int y) {
+        if (x < 0 || x > 9 || y < 0 || y > 9) {
+            System.out.println("Wrong x or y.");
+            return;
+        }
+        if (boardX < 0 || boardX > 9 || boardY < 0 || boardY > 9) {
+            System.out.println("Wrong boardX or boardY.");
+            return;
+        }
+        Map map = board.getMap();
+        Board newBoard = map.getMapBoard().get(boardY).get(boardX);
+        if (!newBoard.getBoard().get(y).get(x).getCanMoveTo()) {
+            System.out.println("You cannot teleport there.");
+            return;
+        }
+        board.addNode(board.getCharPosX(), board.getCharPosY(), previousNode);
+        previousNode = newBoard.getBoard().get(y).get(x);
+        newBoard.addNode(x, y, this);
+        newBoard.setCharPosX(x);
+        newBoard.setCharPosY(y);
+        game.setBoard(newBoard);
+        map.setCurrentBoardX(boardX);
+        map.setCurrentBoardY(boardY);
+        map.boardChanged();
+    }
+
+    public Nodeable getPreviousNode() {
+        return previousNode;
+    }
+
+    public void setPreviousNode(Nodeable node) {
+        previousNode = node;
+    }
+
+    public void setDisplayid(String x) {
+        displayid = x;
+    }
+
+
+    public void setInGameid(String x) {
+        inGameid = x;
+    }
+
+    public void resetPlayer(String displayId, String inGameId, String startNode) {
+        displayid =  displayId;
+        inGameid = inGameId;
+        if (startNode.equals("floor")) {
+            Floor florr = new Floor();
+            previousNode = florr;
+        }
+        else if (startNode.equals("bed")) {
+            Bed bed = new Bed();
+            previousNode = bed;
+        }
+        hobo = null;
+    }
 
 }

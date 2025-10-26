@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.ArrayList;
 
 public class Desk implements Nodeable{
     private String displayid;
@@ -47,23 +47,23 @@ public class Desk implements Nodeable{
 
                 System.out.println("You look over at your desk, and on it your prized possessions: your PS6 and your gaming PC.");
                 System.out.println();
-                game.time(3);
+                game.time(4);
 
                 System.out.println("The desk and chair itself were a little musty. The desk was filled with empty containers from Raising Cane's, and the chair's back was breaking a little.");
                 System.out.println();
-                game.time(4);
+                game.time(7);
 
                 System.out.println("While you exclusively play on the PS6, you use the PC to build Hype 2 updates and stream.");
                 System.out.println();
-                game.time(3);
+                game.time(4);
 
                 System.out.println("Speaking of Hype 2, you remember that you did not finish the update you were working on last night, and you have the urge to finish it.");
                 System.out.println();
-                game.time(4);
+                game.time(6);
 
                 System.out.println("But you cannot do that right now, you need to get to the tech fair. You should head there now.");
                 System.out.println();
-                game.time(2);
+                game.time(4);
 
                 optionList.add("Sit Down at Desk");
                 optionList.add("Continue to the Fair");
@@ -86,15 +86,15 @@ public class Desk implements Nodeable{
 
                 System.out.println("Like I said, you can absolutely do this another time, but alas you decide to sit down.");
                 System.out.println();
-                game.time(2);
+                game.time(4);
 
                 System.out.println("Be warned, if you sit down at your desk, there is a high likelihood that you do not get up.");
                 System.out.println();
-                game.time(2);
+                game.time(4);
 
                 System.out.println("Are you sure?");
                 System.out.println();
-                game.time(1);
+                game.time(2);
 
                 String get = game.basicGameLoop("", optionList);
                 System.out.println();
@@ -131,11 +131,11 @@ public class Desk implements Nodeable{
 
                 System.out.println("Ok buddy, if you really, and I mean REALLY want to sit at the desk I guess I will let you.");
                 System.out.println();
-                game.time(3);
+                game.time(4);
 
                 System.out.println("You sit your fatass down and boot up the PC.");
                 System.out.println();
-                game.time(2);
+                game.time(3);
 
                 System.out.println("You open UEFN and find some left over toast in a Raising Cane's container.");
                 System.out.println();

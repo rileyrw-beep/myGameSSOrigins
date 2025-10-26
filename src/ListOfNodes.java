@@ -8,5 +8,6 @@ public enum ListOfNodes {
     PLAYER,
     SPACE,
     NPC,
-    PLACEHOLDER;
+    PLACEHOLDER,
+    CIVILIAN;
 }

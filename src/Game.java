@@ -1,7 +1,7 @@
-import java.security.spec.RSAOtherPrimeInfo;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.InputMismatchException;
 
 public class Game {
     //keep track of player
@@ -19,9 +19,17 @@ public class Game {
     private int[] latestActs;
     private final int[] totalActs;
     private Board currentBoard;
+    private boolean intendedRoute;
+
+    //all the different maps so they can be held outside the scope of the act methods
+    static Map NYC = new Map(7,5);
+    static Map daltonApartmentComplex = new Map(5, 5);
+    static Map nelsonLabs = new Map(4, 7);
+    static Map currentMap;
 
     //convenience.
     private int timeNumber;
+    private Hobo hobo;
 
     //constructor
     public Game() {
@@ -33,7 +41,7 @@ public class Game {
         latestChapter = 0;
         currentAct = new int[8];
         latestActs = new int[8];
-        totalActs = new int[]{2, 0, 0, 0, 0, 0, 0, 0};
+        totalActs = new int[]{3, 0, 0, 0, 0, 0, 0, 0};
         timeNumber = 0;
 
     }
@@ -69,6 +77,13 @@ public class Game {
         return currentBoard;
     }
 
+    public void setCurrentMap(Map map) {
+        currentMap = map;
+    }
+
+    public Map getCurrentMap() {
+        return currentMap;
+    }
     //getters for chapters and acts
     public int getCurrentChapter() {
         return currentChapter;
@@ -106,13 +121,15 @@ public class Game {
 
     }
 
-    public void startFromSpecificAct() {
+    public int[] startFromSpecificAct() {
+        int[] x = {currentChapter, currentAct[currentChapter-1]};
         while (true) {
             System.out.println();
             System.out.print("Enter your desired Chapter number:");
             try {
                 System.out.println();
                 int desiredChapter = input.nextInt();
+                input.nextLine();
                 System.out.println();
                 if (desiredChapter >= 1 && desiredChapter <= latestChapter) {
                     currentChapter = desiredChapter;
@@ -130,6 +147,7 @@ public class Game {
             try {
                 System.out.println();
                 int desiredAct = input.nextInt();
+                input.nextLine();
                 System.out.println();
                 if (desiredAct >= 1 && desiredAct <= latestActs[currentChapter - 1]) {
                     currentAct[currentChapter - 1] = desiredAct;
@@ -141,6 +159,8 @@ public class Game {
                 System.out.println("Please enter a valid integer.");
             }
         }
+        intendedRoute = false;
+        return x;
     }
 
     public void time(int sec) {
@@ -176,24 +196,29 @@ public class Game {
         System.out.println();
 
         ArrayList<String> optionList = new ArrayList<String>();
-        optionList.add("Restart From Last Act");
-        optionList.add("Restart From Specific Act");
+        optionList.add("Respawn From Last Act");
+        optionList.add("Respawn From Specific Act");
         optionList.add("End Game");
         if (inBattle) optionList.add("Restart Battle");
 
-        String response = this.basicGameLoop("", optionList);
-        if (response.equals("Restart From Last Act")) {
+        int  response = this.basicGameLoop(optionList);
+        if (response == 1) {
+            currentPlayer.getInventory().revertInventory();
             return returnArray;
         }
-        if (response.equals("Restart From Specific Act")) {
-            startFromSpecificAct();
+        if (response == 2) {
+            currentPlayer.getInventory().revertInventory();
+            int[] arr = startFromSpecificAct();
+            if (currentChapter == arr[0] && currentAct[currentChapter - 1] == arr[1]) {
+                intendedRoute = true;
+            }
             return returnArray;
         }
-        if (response.equals("Restart Battle")) {
+        if (inBattle && response == 4) {
             returnArray[1] = false;
             return returnArray;
         }
-        if (response.equals("End Game")) {
+        if (response == 3) {
             System.exit(0);
         }
         returnArray[1] = false;
@@ -214,13 +239,17 @@ public class Game {
         }
         if (get.equals("fast")) {
             timeNumber = 200;
-            return true;
+            return false;
         }
         if (get.equals("Tori")) {
             return true;
         }
         this.endText();
         return false;
+    }
+
+    private void resetPlayer() {
+        currentBoard.addNode(currentBoard.getCharPosX(), currentBoard.getCharPosY(), currentPlayer.getPreviousNode());
     }
 
     public void startGame(boolean x) {
@@ -251,10 +280,12 @@ public class Game {
             System.out.println();
             int chap = -1;
             int act = -1;
+
             while (true) {
                 try {
                     System.out.print("Chapter: ");
                     chap = input.nextInt();
+                    input.nextLine();
                     if (chap >= 1 && chap <= 8) {
                         currentChapter = chap;
                         break;
@@ -272,6 +303,7 @@ public class Game {
                 try {
                     System.out.print("Act: ");
                     act = input.nextInt();
+                    input.nextLine();
                     if (act >= 1 && act <= totalActs[currentChapter - 1]) {
                         currentAct[currentChapter - 1] = act;
                         break;
@@ -289,6 +321,12 @@ public class Game {
         System.out.println();
         System.out.println();
         time(2);
+        if (currentAct[0] != 1 || currentChapter != 1) {
+            intendedRoute = false;
+        }
+        Floor floor = new Floor();
+        Player player = new Player("D", "Dalton Young", floor);
+        this.setPlayer(player);
     }
 
     //the game loops
@@ -322,10 +360,42 @@ public class Game {
         return userInput;
     }
 
-    public boolean advancedGameLoop(Map map, Player player, int messageCounter, String message, int endBoardX, int endBoardY, int endX, int endY, int battleX, int battleY) {
-        Board thisBoard = map.getCurrentBoard();
+    public int basicGameLoop(ArrayList<String> optionList) {
+
+        for (int i = 0; i < optionList.size(); i++) {
+            if (!optionList.get(i).isEmpty()) {
+                int j = i+1;
+                System.out.println(" " + j + " " + optionList.get(i));
+            }
+        }
+        System.out.println();
+
+        int userInput;
+        while (true) {
+            try {
+                userInput = input.nextInt();
+                input.nextLine();
+            }
+            catch (InputMismatchException e) {
+                System.out.println("Be sure to enter in a number, not words.");
+                continue;
+            }
+            System.out.println();
+            if (userInput >= 0 && userInput <= optionList.size()) {
+                return userInput;
+            }
+            else {
+                System.out.println("I don't know that one, try again.");
+                System.out.println();
+            }
+        }
+
+    }
+
+    public boolean advancedGameLoop(Player player, Map endMap, int messageCounter, String message, int endBoardX, int endBoardY, int endX, int endY, int battleX, int battleY) {
+        Board thisBoard = currentMap.getCurrentBoard();
         String get = "";
-        boolean[] boolArray = new boolean[2];
+        boolean[] boolArray = {true, false};
         thisBoard.printBoard();
         boolean canPrintBoard = true;
         int counter = 0;
@@ -334,7 +404,80 @@ public class Game {
         // true false -> good, continue
         // false true -> retart from last act
         while (true) {
-            Board board = map.getCurrentBoard();
+            Board board = currentMap.getCurrentBoard();
+            if (!(battleX==-1 && battleY==-1)) {
+                if ((board.getCharPosX() == battleX && board.getCharPosY() == battleY) || (battleX == -1 && board.getCharPosY() == battleY) || (battleY == 1 && board.getCharPosX() == battleX)) {
+                    boolArray = prompt.displayBattleActions(board, player, this);
+                    if (boolArray[1]) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            if (counter == messageCounter) {
+                System.out.println(message);
+                System.out.println();
+            }
+            prompt.displayActions(currentMap, player, this);
+            System.out.println();
+
+            get = input.nextLine();
+            System.out.println();
+            boardCounter = currentMap.getBoardChangeCounter();
+            boolArray = prompt.doAction(get, currentMap, player, this);
+            if (!boolArray[0]) {
+                if (boolArray[1]) {
+                    return false;
+                }
+                canPrintBoard = false;
+
+                if (get.length() > 4) {
+                    System.out.println(get.startsWith("Move") ? "You cannot move to that spot! Try again." : "I don't know that one right now, try again.");
+                } else {
+                    System.out.println("I don't know that one right now, try again.");
+                }
+                System.out.println();
+
+            }
+
+            if (currentMap == endMap){
+                if (currentMap.getCurrentBoardX() == endBoardX && currentMap.getCurrentBoardY() == endBoardY) {
+                    if ((board.getCharPosX() == endX && board.getCharPosY() == endY) || (endX == -1 && board.getCharPosY() == endY) || (endY == -1 && board.getCharPosX() == endX)) {
+                        return true;
+                    }
+                }
+            }
+            if (canPrintBoard) {
+                board = currentMap.getCurrentBoard();
+                board.printBoard();
+                if (currentMap.getBoardChangeCounter() != boardCounter) {
+                    System.out.println();
+                    System.out.println("Entering... " + board.getBoardName());
+                    System.out.println();
+
+                }
+            }
+            canPrintBoard = true;
+            counter++;
+        }
+        //return true;
+    }
+
+
+    public boolean advancedGameLoop(Player player, Map endMap, int endBoardX, int endBoardY, int endX, int endY, int battleX, int battleY) {
+        Board thisBoard = currentMap.getCurrentBoard();
+        String get = "";
+        boolean[] boolArray = {true, false};
+        thisBoard.printBoard();
+        boolean canPrintBoard = true;
+        int counter = 0;
+        int boardCounter;
+        // false false -> battle again
+        // true false -> good, continue
+        // false true -> retart from last act
+        // true true -> end loop but continue story
+        while (true) {
+            Board board = currentMap.getCurrentBoard();
             if ((board.getCharPosX() == battleX && board.getCharPosY() == battleY) || (battleX == -1 && board.getCharPosY() == battleY) || (battleY == 1 && board.getCharPosX() == battleX)) {
                 boolArray = prompt.displayBattleActions(board, player, this);
                 if (boolArray[1]) {
@@ -342,22 +485,19 @@ public class Game {
                 }
                 return true;
             }
-            if (counter == messageCounter) {
-                System.out.println(message);
-                System.out.println();
-            }
-            prompt.displayActions(map, player, this);
+            prompt.displayActions(currentMap, player, this);
             System.out.println();
 
             get = input.nextLine();
             System.out.println();
-            boardCounter = map.getBoardChangeCounter();
-            boolArray = prompt.doAction(get, map, player, this);
+            boardCounter = currentMap.getBoardChangeCounter();
+            boolArray = prompt.doAction(get, currentMap, player, this);
             if (!boolArray[0]) {
                 if (boolArray[1]) {
                     return false;
                 }
                 canPrintBoard = false;
+
                 if (get.length() > 4) {
                     if (get.startsWith("Move")) {
                         System.out.println("You cannot move to that spot! Try again.");
@@ -368,141 +508,174 @@ public class Game {
                     System.out.println("I don't know that one right now, try again.");
                 }
                 System.out.println();
+
+            }
+            if (boolArray[1]) {
+                return true;
             }
 
-            if (map.getCurrentBoardX() == endBoardX && map.getCurrentBoardY() == endBoardY) {
-                if ((board.getCharPosX() == endX && board.getCharPosY() == endY) || (endX == -1 && board.getCharPosY() == endY) || (endY == -1 && board.getCharPosX() == endX)) {
-                    break;
+
+            if (currentMap == endMap){
+                if (currentMap.getCurrentBoardX() == endBoardX && currentMap.getCurrentBoardY() == endBoardY) {
+                    if ((board.getCharPosX() == endX && board.getCharPosY() == endY) || (endX == -1 && board.getCharPosY() == endY) || (endY == -1 && board.getCharPosX() == endX)) {
+                        break;
+                    }
                 }
             }
             if (canPrintBoard) {
-                board = map.getCurrentBoard();
+                board = currentMap.getCurrentBoard();
                 board.printBoard();
-                if (map.getBoardChangeCounter() != boardCounter) {
+                board.stepBoard(this);
+                if (currentMap.getBoardChangeCounter() != boardCounter) {
                     System.out.println();
                     System.out.println("Entering... " + board.getBoardName());
                     System.out.println();
-
                 }
             }
             canPrintBoard = true;
             counter++;
         }
         return true;
+
+
+    }
+
+    private void buildMaps(int chap) {
+        if (chap == 1) {
+            buildDaltonApartmentComplexMap();
+            buildNYCMapPt1();
+            buildNelsonLabsMapPt1();
+        }
+        if (chap == 2) {
+            //chap 2 stuff
+        }
+
+        //and so on and so on
     }
 
     //Chapter 1 acts.
-    public void chapOneActOne() {
-        Map moop = new Map(5, 5);
+    public boolean chapOneActOne(boolean firstTime) {
+        currentMap = daltonApartmentComplex;
+        Board easyAccessR = daltonApartmentComplex.getMapBoard().get(5).get(5);
+        setBoard(easyAccessR);
+        currentMap.setCurrentBoardX(5);
+        currentMap.setCurrentBoardY(5);
+        easyAccessR.addNode(7, 4, getPlayer());
+        Board emptyBoard = new Board("E", daltonApartmentComplex, "Empty");
 
-        Map meep = new Map(5, 5);
-        Board boardDaltonHall = new Board("a", moop, "Apartment Hallway");
-        Board boardDaltonRoom = new Board("a", meep, "Dalton's Room");
-        moop.addBoard(boardDaltonHall, 5, 5);
-        meep.addBoard(boardDaltonRoom, 5, 5);
 
-        setBoard(boardDaltonRoom);
+
+        //create the daltonApartmentComplex map in the constructor so we can put things everywhere.
+
         System.out.println();
         System.out.println("Act 1: Dalton's Apartment");
         endText();
         time(3);
 
-        System.out.println("You are Dalton Young.");
-        System.out.println();
-        this.time(3);
+        if (firstTime) {
+            System.out.println("You are Dalton Young.");
+            System.out.println();
+            this.time(4);
 
-        System.out.println("Billionaire. Playboy. World Famous.");
-        System.out.println();
-        this.time(3);
+            System.out.print("Billionaire. ");
+            time(2);
+            System.out.print("Playboy. ");
+            time(2);
+            System.out.println("World Famous.");
+            System.out.println();
+            this.time(3);
 
-        System.out.println("You had just finished filming your latest Hype movie and are taking a relaxing retreat to the Bahamas. There, one of your servants reminds you of your 3:00 with Post Malone, to which you begin to hum the melody of 'Texas Tea.'");
-        this.time(5);
-        System.out.println();
+            System.out.println("You had just finished filming your latest Hype movie and are taking a relaxing retreat to the Bahamas. There, one of your servants reminds you of your 3:00 with Post Malone, to which you begin to hum the melody of 'Texas Tea.'");
+            this.time(10);
+            System.out.println();
 
-        System.out.println("But the humming did not sound like hit artist Post Malone's 'Texas Tea.' Instead it sounded sort of like a BEEP! BEEP! BEEP!");
-        this.time(4);
-        System.out.println();
+            System.out.println("But the humming did not sound like hit artist Post Malone's 'Texas Tea.' Instead it sounded sort of like a BEEP! BEEP! BEEP!");
+            this.time(7);
+            System.out.println();
 
-        boardDaltonRoom.printBoard();
-        this.time(1);
-        System.out.println("Game Tip: When you see words following the '-' symbol, it means it is an ACTION. Type in the following action word for word to do it.");
-        System.out.println();
-        System.out.println("- Wake Up");
-        System.out.println();
-        String firstGet = "";
-        while (true) {
-            firstGet = input.nextLine();
-            if (firstGet.equals("Wake Up")) {
-                break;
-            } else {
-                System.out.println("Game Tip: Not quite, you need to type each action *word for word* and without the '-', try again.");
+            emptyBoard.printBoard();
+            this.time(2);
+            System.out.println("Game Tip: When you see words following the '-' symbol, it means it is an ACTION. Type in the following action word for word to do it.");
+            System.out.println();
+            System.out.println("- Wake Up");
+            System.out.println();
+            String firstGet = "";
+            while (true) {
+                firstGet = input.nextLine();
+                if (firstGet.equals("Wake Up")) {
+                    break;
+                } else {
+                    System.out.println("Game Tip: Not quite, you need to type each action *word for word* and without the '-', try again.");
+                }
             }
+            System.out.println();
+            System.out.println("...");
+            System.out.println();
+            this.time(3);
+            System.out.println("You groggily fish around and shut off the timer on the phone.");
+            this.time(4);
+            System.out.println();
+            System.out.println("You are Dalton Young.");
+            this.time(4);
+            System.out.println();
+
+
+            System.out.print("Broke. ");
+            time(2);
+            System.out.print("Single. ");
+            time(2);
+            System.out.println("Known by Nobody Except Your Few Hundred Fans of Your Creative Maps.");
+            System.out.println();
+            this.time(3);
+
+            ArrayList<String> optionList = new ArrayList<>();
+            optionList.add("Wake Up");
+            basicGameLoop("", optionList);
+            System.out.println();
+
+            //build dalton room
+
+
+            //build dalton hall
+
+
+            //print dalton room
+            easyAccessR.printLegend();
+            easyAccessR.printBoard();
+
+
+            this.time(4);
+            System.out.println("Instead of a beachy resort, you find yourself in a dimly lit room. As you try to remember who you are and why you are here, you have an urge to go back into the covers and sleep a while.");
+            this.time(6);
+            System.out.println();
+            System.out.println("But no, you need to get up out of bed. Clearly you are NOT a morning person but this game has to start somehow.");
+            this.time(4);
+            System.out.println();
+            optionList.clear();
+            optionList.add("Get Up");
+            basicGameLoop("", optionList);
+            getPlayer().moveSouth(easyAccessR, this);
+            System.out.println();
+            System.out.println("...");
+            this.time(3);
+            System.out.println();
+            easyAccessR.printLegend();
+            easyAccessR.printBoard();
+
+            System.out.println("You look around your musty, dusty, crusty one room apartment and see your bed, desk, and your faithful cat Kelly. Looking at your desk you remember you were just in the middle of making the latest hype update to Hype 2.");
+            System.out.println();
+            this.time(10);
+            System.out.println("Ever since the success of Hype 1 you had moved out to live on your own. But unfortunately UEFN is dominated by basic Red V Blues and other brainrot maps, so it seems you need to get a job to pay the rent.");
+            System.out.println();
+            this.time(10);
         }
-        System.out.println();
-        System.out.println("...");
-        System.out.println();
-        this.time(3);
-        System.out.println("You groggily fish around and shut off the timer on the phone.");
-        this.time(3);
-        System.out.println();
-        System.out.println("You are Dalton Young.");
-        this.time(3);
-        System.out.println();
-        System.out.println("Broke. Single. Known by Nobody Except Your Few Hundred Fans of Your Creative Maps.");
-        this.time(3);
-        System.out.println();
-
-        ArrayList<String> optionList = new ArrayList<>();
-        optionList.add("Wake Up");
-        basicGameLoop("", optionList);
-        System.out.println();
-
-        boardDaltonRoom.buildRectRoom(3, 3, 8, 3, 8, 7, 3, 7, 3, 6, Direction.WEST);
-        Bed daltonBed = new Bed();
-        Desk daltonDesk = new Desk();
-        Kelly kellyCat = new Kelly();
-        Floor floor = new Floor();
-        Item crazySoda = new Item("Crazy Soda", "");
-        Drawer daltonDrawer = new Drawer("Dalton's Desk", crazySoda);
-
-        Player player = new Player("D", "Dalton Young", daltonBed);
-        this.setPlayer(player);
-        boardDaltonRoom.addNode(7, 4, player);
-        boardDaltonRoom.addNode(4, 4, daltonDrawer);
-        boardDaltonRoom.addNode(6, 4, daltonDesk);
-        boardDaltonRoom.addNode(7, 6, kellyCat);
-        boardDaltonRoom.addNode(2, 6, floor);
-        boardDaltonRoom.printLegend();
-        boardDaltonRoom.printBoard();
+        getPlayer().moveSouth(easyAccessR, this);
 
 
-        this.time(4);
-        System.out.println("Instead of a beachy resort, you find yourself in a dimly lit room. As you try to remember who you are and why you are here, you have an urge to go back into the covers and sleep a while.");
-        this.time(4);
-        System.out.println();
-        System.out.println("But no, you need to get up out of bed. Clearly you are NOT a morning person but this game has to start somehow.");
-        this.time(3);
-        System.out.println();
-        optionList.clear();
-        optionList.add("Get Up");
-        basicGameLoop("", optionList);
-        player.moveSouth(boardDaltonRoom, this);
-        System.out.println();
-        System.out.println("...");
-        this.time(3);
-        System.out.println();
-        boardDaltonRoom.printLegend();
-        boardDaltonRoom.printBoard();
 
-        System.out.println("You look around your musty, dusty, crusty one room apartment and see your bed, desk, and your faithful cat Kelly. Looking at your desk you remember you were just in the middle of making the latest hype update to Hype 2.");
-        System.out.println();
-        this.time(4);
-        System.out.println("Ever since the success of Hype 1 you had moved out to live on your own. But unfortunately UEFN is dominated by basic Red V Blues and other brainrot maps, so it seems you need to get a job to pay the rent.");
-        System.out.println();
-        this.time(4);
         System.out.println("You turn to go back into bed but then you remember why you set your alarm to wake you so early. Today was the big Tech Fair at Nelson's Labs and they had open job positions that you wanted to check out.");
         System.out.println();
-        this.time(4);
+        this.time(10);
         System.out.println("You should head there now.");
         this.time(3);
 
@@ -510,26 +683,27 @@ public class Game {
 
         String message = "Game Tip: You always have access to the 'Help' action. This can tell you the universal actions you always have at your disposal.";
         String message2 = "I don't have all day and neither do you. You should probably get going to the Tech Fair!";
-        if (!advancedGameLoop(meep, player, 0, message, 5, 5, 6, 5, -1, -1)) return;
-        if (!advancedGameLoop(meep, player, 9, message2, 5, 5, 2, 6, -1, -1)) return;
+        if (!advancedGameLoop(getPlayer(), daltonApartmentComplex, 0, message, 5, 5, 6, 5, -1, -1)) return true;
+        if (!advancedGameLoop(currentPlayer, daltonApartmentComplex, 9, message2, 5, 4, 5, 2, -1, -1)) return true;
+        //5, 2, player
+
+
+
+
+
 
         //-----------------------board change------------------------
 
 
-        setBoard(boardDaltonHall);
-        boardDaltonHall.buildRectRoom(3, 0, 6, 0, 6, 9, 3, 9, 3, 7, Direction.WEST);
-        Door doorApartment = new Door(false, true);
-        Hobo hobo = new Hobo(floor, 5, 5);
-        player.setHobo(hobo);
-        boardDaltonHall.addNode(5, 5, hobo);
-        boardDaltonHall.addNode(5, 2, player);
-        boardDaltonHall.addNode(2, 7, floor);
-        boardDaltonHall.addNode(6, 2, doorApartment);
-        boardDaltonHall.addNode(3, 2, doorApartment);
 
 
-        boardDaltonHall.printLegend();
-        boardDaltonHall.printBoard();
+
+        currentPlayer.setHobo(hobo);
+        currentBoard.getBoard().get(2).get(6).performAction("Close Door", currentBoard, this);
+        currentBoard.getBoard().get(2).get(6).performAction("Lock Door", currentBoard, this);
+        Board easyAccessH = daltonApartmentComplex.getMapBoard().get(4).get(5);
+        easyAccessH.printLegend();
+        easyAccessH.printBoard();
 
         System.out.println();
         System.out.println("...");
@@ -543,12 +717,12 @@ public class Game {
 
         System.out.println("You check your pockets to see if you have any change for breakfast, but you come up empty handed.");
         System.out.println();
-        time(3);
+        time(4);
 
         System.out.println("You look up to see a hobo wandering aimlessly in the halls. He had on a purple and black uniform with a name tag reading 'J. Young.'");
         System.out.println();
         System.out.println();
-        time(5);
+        time(6);
 
         System.out.println("As you walk closer he seems to be mimicking your movements.");
         System.out.println();
@@ -560,53 +734,94 @@ public class Game {
 
         System.out.println("Go there now.");
 
-        if (!advancedGameLoop(moop, player, -1, "", 5, 5, 2, 7, -1, hobo.currentY - 1)) return;
-        player.setHobo(null);
-        if (!advancedGameLoop(moop, player, -1, "", 5, 5, 2, 7, -1, -1)) return;
+        if (!advancedGameLoop(currentPlayer,daltonApartmentComplex, -1, "", 5, 4, 2, 7, -1, hobo.currentY - 1)) return true;
+        currentPlayer.setHobo(null);
+        currentBoard.getBoard().get(2).get(6).performAction("Unlock Door", currentBoard, this);
+        if (!advancedGameLoop(currentPlayer, NYC, -1, "", 7, 5, 6, 5, -1, -1)) return true;
         //finish the battle stuff
-        currentAct[currentChapter - 1]++;
+
+        currentAct[currentChapter - 1] = 2;
+        currentPlayer.getInventory().saveInventory();
         endText();
+        return true;
     }
 
-    public void chapOneActTwo() {
+    public void chapOneActTwo(boolean firstTime) {
 
         System.out.println();
         System.out.println("Act 2: Dalton's Trip");
         endText();
         time(3);
 
-        System.out.println("As you leave the apartment complex doors the sun shines in your eyes as you are greeted by the noisy traffic of Brumeshire City.");
-        System.out.println();
-        time(5);
+        if (firstTime) {
+            System.out.println("As you leave the apartment complex doors the sun shines in your eyes as you are greeted by the noisy traffic of New York City.");
+            System.out.println();
+            time(5);
 
-        System.out.println("Brumeshire City, once a historical, major port of the United States, is now one of the world leaders of cutting edge technology.");
-        System.out.println();
-        time(5);
+            System.out.println("New York City, once a historical, major port of the United States, is now one of the world leaders of cutting edge technology.");
+            System.out.println();
+            time(5);
 
-        System.out.println("With skyscrapers taller than the cloudline and automated machines left and right, Brumeshire City is the go to spot for innovators of all types.");
-        System.out.println();
-        time(5);
+            System.out.println("With skyscrapers taller than the cloudline and automated machines left and right, New York City is the go to spot for innovators of all types.");
+            System.out.println();
+            time(5);
 
-        System.out.println();
-        System.out.println("You walk past a manhole cover with steam bellowing out of it. It was a common sight as all manhole covers throughout the city do so.");
-        System.out.println();
-        time(5);
+            System.out.println();
+            System.out.println("You walk past a manhole cover with steam bellowing out of it. It was a common sight as all manhole covers throughout the city do so.");
+            System.out.println();
+            time(5);
 
-        System.out.println("There are many speculations why, but the city always chalks it up to the heating system of the city.");
-        System.out.println();
-        time(4);
+            System.out.println("There are many speculations why, but the city always chalks it up to the heating system of the city.");
+            System.out.println();
+            time(4);
 
-        System.out.println("You, however, have no time to dwell on that now. You need to get to the Tech Fair at Nelson's Labs.");
-        System.out.println();
-        time(4);
+            System.out.println("You, however, have no time to dwell on that now. You need to get to the Tech Fair at Nelson's Labs.");
+            System.out.println();
+            time(4);
+        }
+        else {
+            System.out.println("You need to go to the Tech Fair at Nelson's Labs.");
+            System.out.println();
+            time(3);
+        }
 
         System.out.println("It is to the West. Go there now.");
         System.out.println();
         time(3);
 
-        // make the map now
+        if (!advancedGameLoop(getPlayer(), nelsonLabs, 70, "Don't forget the Fair won't last all day!", 4, 6, -1, 7, -1, -1)) {
+            return;
+        }
 
-        currentAct[currentChapter - 1]++;
+        currentAct[currentChapter - 1] = 3;
+        latestActs[latestChapter - 1] = 2;
+        currentPlayer.getInventory().saveInventory();
+        endText();
+    }
+
+    public void chapOneActThree() {
+        System.out.println();
+        System.out.println("Act 3: The Tech Fair");
+        endText();
+        time(3);
+
+        //timeNumber = 67;
+
+        print("You did it! You actually did it! You made it to the Tech Fair without getting distracted or dying! I'm so proud of you!", 5);
+        print("You walk through the double doors to find a massive room filled with people and scientists in lab coats.", 4);
+        print("You see a total of 10 scientists you need to listen to and get tickets from to get your free Cane's.", 4);
+        System.out.println();
+        print("In the back right, you also see the hiring manager. Don't forget to go to him because that is why we are here.", 5);
+        print("Alright, get going then.",3);
+
+
+        if (!advancedGameLoop(currentPlayer, nelsonLabs, 1, 1, 1, 1, -1, -1)) {
+            return;
+        }
+
+        currentChapter = 2;
+        currentPlayer.getInventory().saveInventory();
+        endText();
     }
 
     //chapter 1 method
@@ -614,19 +829,548 @@ public class Game {
         System.out.println("Chapter 1: Dalton's Beginning");
         time(3);
         System.out.println();
+        boolean completedChapter1 = false;
+        boolean abnormalStartRan = false;
 
+        boolean diedInA2 = false;
+        boolean diedInA3 = false;
+
+        boolean A1S = true;
+        boolean A2S = true;
+
+        //you need to make the Dalton apartment early too.
 
         while (currentChapter == 1 && currentAct[currentChapter - 1] == 1) {
-            chapOneActOne();
+            currentPlayer.resetPlayer("D", "Dalton Young", "bed");
+            buildDaltonApartmentComplexMap();
+            buildNYCMapPt1();
+            completedChapter1 = chapOneActOne(A1S);
+            A1S = false;
+        }
+        if (completedChapter1) {
+            intendedRoute = true;
         }
         while (currentChapter == 1 && currentAct[currentChapter - 1] == 2) {
-            chapOneActTwo();
+            buildNelsonLabsMapPt1();
+            if (!intendedRoute || diedInA2) {
+                currentPlayer.resetPlayer("D", "Dalton Young", "floor");
+                buildNYCMapPt1();
+                currentMap = NYC;
+                NYC.setCurrentBoardX(7);
+                NYC.setCurrentBoardY(5);
+                currentBoard = NYC.getMapBoard().get(5).get(7);
+                NYC.getMapBoard().get(5).get(7).addNode(6, 5, getPlayer());
+                if (!completedChapter1){
+                    currentBoard.getBoard().get(5).get(7).performAction("Close Door", currentBoard, this);
+                    currentBoard.getBoard().get(5).get(7).performAction("Lock Door", currentBoard, this);
+                }
+                abnormalStartRan = true;
+            }
+            chapOneActTwo(A2S);
+            diedInA2 = true;
+            A2S = false;
+        }
+        if (abnormalStartRan) {
+            abnormalStartRan = false;
+            intendedRoute = true;
+        }
+        while (currentChapter == 1 && currentAct[currentChapter - 1] == 3) {
+            if (!intendedRoute || diedInA3) {
+                currentPlayer.resetPlayer("D", "Dalton Young", "floor");
+                //System.out.println("entered abnormal start");
+                buildNelsonLabsMapPt1();
+                buildNYCMapPt1();
+                currentMap = nelsonLabs;
+                currentMap.setCurrentBoardY(6);
+                currentBoard = nelsonLabs.getMapBoard().get(6).get(4);
+                nelsonLabs.getMapBoard().get(6).get(4).addNode(5, 9, getPlayer());
+                if (!completedChapter1){
+                    NYC.getMapBoard().get(5).get(7).getBoard().get(5).get(7).performAction("Close Door", currentBoard, this);
+                    NYC.getMapBoard().get(5).get(7).getBoard().get(5).get(7).performAction("Lock Door", currentBoard, this);
+                }
+                abnormalStartRan = true;
+            }
+            chapOneActThree();
+            diedInA3 = true;
+        }
+        if (abnormalStartRan) {
+            abnormalStartRan = false;
+            intendedRoute = true;
         }
 
     }
 
-    //---------------------------------------
+    private void buildNelsonLabsMapPt1() {
+        Board lobby = new Board("L", nelsonLabs, "Nelson Lab's Lobby");
+        Board B36 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
+        Board B46 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
+        Board B56 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
+        Board B35 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
+        Board B45 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
+        Board B55 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
+        nelsonLabs.addBoard(lobby, 4, 7);
+        nelsonLabs.addBoard(B36, 3, 6);
+        nelsonLabs.addBoard(B46, 4, 6);
+        nelsonLabs.addBoard(B56, 5, 6);
+        nelsonLabs.addBoard(B35, 3, 5);
+        nelsonLabs.addBoard(B45, 4, 5);
+        nelsonLabs.addBoard(B55, 5, 5);
 
+        //floor for the civilians
+        Floor floor = new Floor();
+
+
+        lobby.setBoardFromString("      / - - /       " +
+                "      / - - /       " +
+                "    / - - - - /     " +
+                "    / - P - - /     " +
+                "    / - - - - /     " +
+                "    / - - - - /     " +
+                "      / P P /       " +
+                "        P P         " +
+                "                    " +
+                "                    ");
+
+        InteractableNode attendant = new InteractableNode("Lobby Attendant", "A", "Talk to Attendant");
+        Entrance NLEXIT1 = new Entrance("Exit", "Exit", NYC, 3, 5, 4, 1, true);
+        Entrance NLEXIT2 = new Entrance("Exit", "Exit", NYC, 3, 5, 5, 1, true);
+        Door NLEXITD1 = new Door(true, true);
+        Door NLEXITD2 = new Door(true, true);
+        Nodeable[] nodeArray = {attendant, NLEXITD1, NLEXITD2, NLEXIT1, NLEXIT2};
+        lobby.fillPlaceholders(nodeArray);
+
+
+        B36.setBoardFromString("/ - - - - - - - - - " +
+                "/ - P - - - - - - - " +
+                "/ - T T - - - - - - " +
+                "/ - - - - - - - - - " +
+                "/ - P - - - - - - - " +
+                "/ - T T - - - - - - " +
+                "/ - - - - - - - / / " +
+                "/ - P P P P - /     " +
+                "  / P - - - /       " +
+                "    / / / /         ");
+
+        Nodeable[] B36Array = new Nodeable[7];
+        Scientist B36a = new Scientist(2,1);
+        Scientist B36b = new Scientist(2,4);
+        InteractableNode B36c = new InteractableNode("Food Court Worker", "F", "Talk to Food Court Worker");
+        B36Array[0] = B36a;
+        B36Array[1] = B36b;
+        B36Array[6] = B36c;
+        for (int i = 2; i < 6; i++) {
+            StaticNode foodCourt = new StaticNode("=", "Food Court Table");
+            B36Array[i] = foodCourt;
+        }
+        B36.fillPlaceholders(B36Array);
+
+        Civilian civ1 = new Civilian(8, 3, floor);
+        B36.addNode(8, 3,civ1);
+        Civilian civ2 = new Civilian(6, 1, floor);
+        B36.addNode(6,1,civ2);
+        Civilian civ3 = new Civilian(6, 6, floor);
+        B36.addNode(6,6,civ3);
+
+
+        B46.setBoardFromString("- - - - - - - - - - " +
+                "- - - - - - - - - - " +
+                "- P - - - - - - P - " +
+                "- T T - - - - T T - " +
+                "- - - - - - - - - - " +
+                "- - - - - - - - - - " +
+                "/ / - - - - - - / / " +
+                "    / - - - - /     " +
+                "      / [ [ /       " +
+                "      / - - /       ");
+        Scientist B46a = new Scientist(1,2);
+        Scientist B46b = new Scientist(8,2);
+        B46.addNode(1, 2, B46a);
+        B46.addNode(8, 2, B46b);
+
+        Civilian civ4 = new Civilian(3, 5, floor);
+        B46.addNode(3,5,civ4);
+        Civilian civ5 = new Civilian(5, 2, floor);
+        B46.addNode(5,2,civ5);
+        Civilian civ6 = new Civilian(7, 6, floor);
+        B46.addNode(7,6,civ6);
+
+        B56.setBoardFromString("- - - - - - - - - / " +
+                "- - - - - - P - - / " +
+                "- - - - - - T T - / " +
+                "- - - - - - - - - / " +
+                "- - - - - - P - - / " +
+                "- - - - - - T T - / " +
+                "/ / - - - - - - - / " +
+                "    / - - - - - - / " +
+                "      / - - - - /   " +
+                "        / / / /     ");
+
+        Scientist B56a = new Scientist(6,1);
+        Scientist B56b = new Scientist(6,4);
+        B56.addNode(6, 1, B56a);
+        B56.addNode(6, 4, B56b);
+
+        Civilian civ7 = new Civilian(2, 1, floor);
+        B56.addNode(2,1,civ7);
+        Civilian civ8 = new Civilian(5, 7, floor);
+        B56.addNode(5,7,civ8);
+        Civilian civ9 = new Civilian(4, 3, floor);
+        B56.addNode(4,3,civ9);
+
+        B35.setBoardFromString("    / / / /         " +
+                "  / - - - - /       " +
+                "/ - - - - - - /     " +
+                "/ - P - - - - - / / " +
+                "/ - T T - - - - - - " +
+                "/ - - - - - - - - - " +
+                "/ - - - - - - - - - " +
+                "/ - P - - - - - - - " +
+                "/ - T T - - - - - - " +
+                "/ - - - - - - - - - ");
+
+        Scientist B35a = new Scientist(2,3);
+        Scientist B35b = new Scientist(2,7);
+        B35.addNode(2, 3, B35a);
+        B35.addNode(2, 7, B35b);
+
+        Civilian civ10 = new Civilian(3, 6, floor);
+        B35.addNode(3,6,civ10);
+        Civilian civ11 = new Civilian(5, 2, floor);
+        B35.addNode(5,2,civ11);
+        Civilian civ12 = new Civilian(7, 7, floor);
+        B35.addNode(7,7,civ12);
+
+        B45.setBoardFromString("      / - - /       " +
+                "      / [ [ /       " +
+                "    / - - - - /     " +
+                "/ / - - - - - - / / " +
+                "- - - - - - - - - - " +
+                "- - - - - - - - - - " +
+                "- - - - - - - - - - " +
+                "- - - - - - - - - - " +
+                "- - - - - - - - - - " +
+                "- - - - - - - - - - ");
+
+        Civilian civ13 = new Civilian(4, 6, floor);
+        B45.addNode(4,6,civ13);
+        Civilian civ14 = new Civilian(6, 7, floor);
+        B45.addNode(6,7,civ14);
+        Civilian civ15 = new Civilian(2, 4, floor);
+        B45.addNode(2,4,civ15);
+
+        B55.setBoardFromString("        / / / /     " +
+                "      / - P J P /   " +
+                "    / - - P - P - / " +
+                "/ / - - - - - - - / " +
+                "- - - - - - - - - / " +
+                "- - - - - - G S - / " +
+                "- - - - - - - - - / " +
+                "- - - - - - - - - / " +
+                "- - - - - - V S - / " +
+                "- - - - - - - - - / ");
+        InteractableNode hMan = new InteractableNode("Hiring Manager", "H", "Talk to Hiring Manager");
+        StaticNode jobTable = new StaticNode("=", "Hiring Manager's Desk");
+        StaticNode generator = new StaticNode("G", "Golden Electricity Generator");
+        Scientist B55a = new Scientist(7, 5);
+        Scientist B55b = new Scientist(7, 8);
+        StaticNode vr = new StaticNode("V", "Virtual Reality Goggles");
+        Nodeable[] B55array = {jobTable, hMan, jobTable, jobTable, jobTable, generator, B55a, vr, B55b};
+        B55.fillPlaceholders(B55array);
+
+        Civilian civ16 = new Civilian(2, 6, floor);
+        B55.addNode(2,6,civ16);
+        Civilian civ17 = new Civilian(4, 3, floor);
+        B55.addNode(4,3,civ17);
+        Civilian civ18 = new Civilian(6, 7, floor);
+        B55.addNode(6,7,civ18);
+
+    }
+
+    private void buildNYCMapPt1() {
+        Board daltonApartmentOutside = new Board("A", NYC, "Apartment Complex Outside");
+        NYC.addBoard(daltonApartmentOutside, 7, 5);
+        daltonApartmentOutside.setBoardFromString("~ ~ - = = = - /     " +
+                "~ ~ - = = = - /     " +
+                "- - - - - - - /     " +
+                "= = - = = = - /     " +
+                "= = - = = = - /     " +
+                "= = - = = = - ] P   " +
+                "= = - = = = - /     " +
+                "- - - - - - - /     " +
+                "~ ~ - = = = - /     " +
+                "~ ~ - = = = - /     ");
+        Entrance daltonApartmentEntrance = new Entrance("Entrance", "Enter", daltonApartmentComplex, 5, 4, 3, 7, true);
+        daltonApartmentOutside.addNode(8, 5, daltonApartmentEntrance);
+
+
+
+        Board road65 = new Board("-", NYC, "Road"); NYC.addBoard(road65, 6, 5);
+        road65.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+        MysteriousMan mm = new  MysteriousMan();
+        road65.addNode(5, 9, mm);
+
+
+
+        Board road55 = new Board("-", NYC, "Road"); NYC.addBoard(road55, 5, 5);
+        road55.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+
+
+        Board road45 = new Board("-", NYC, "Road"); NYC.addBoard(road45, 4, 5);
+        road45.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+        MysteriousMan mima = new  MysteriousMan();
+        InteractableNode sign = new InteractableNode("Sign", "S", "Read Sign");
+        road45.addNode(5, 9, mima);
+        road45.addNode(1, 1, sign);
+
+
+        Board nelsonLabsOutside = new Board("N", NYC, "Nelson Labs Outside");
+        NYC.addBoard(nelsonLabsOutside, 3, 5);
+        nelsonLabsOutside.setBoardFromString("/ /     P P     / / " +
+                "~ ~ / / P P / / ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+
+        Entrance NLE1 = new Entrance("Entrance", "Enter", nelsonLabs, 4, 7, 4, 6, true);
+        Entrance NLE2 = new Entrance("Entrance", "Enter", nelsonLabs, 4, 7, 5, 6, true);
+        Door NLED1 = new Door(true, true);
+        Door NLED2 = new Door(true, true);
+        Nodeable[] nodeArray = {NLE1, NLE2, NLED1, NLED2};
+        nelsonLabsOutside.fillPlaceholders(nodeArray);
+
+
+
+    }
+
+
+    private void buildNYCMap() {
+        Board ShopRow1 = new Board("R", NYC, "Shop Row 1"); NYC.addBoard(ShopRow1, 7, 2);
+        Board ShopRow2 = new Board("R", NYC, "Shop Row 2"); NYC.addBoard(ShopRow2, 7, 3);
+        Board ShopRow3 = new Board("R", NYC, "Shop Row 3"); NYC.addBoard(ShopRow3, 7, 4);
+        Board ShopRow4 = new Board("R", NYC, "Shop Row 4"); NYC.addBoard(ShopRow4, 7, 6);
+        Board ShopRow5 = new Board("R", NYC, "Shop Row 5"); NYC.addBoard(ShopRow5, 7, 7);
+
+        Board ShopCorner1 = new Board("C", NYC, "Shop Corner 1"); NYC.addBoard(ShopCorner1, 2, 1);
+        Board ShopCorner2 = new Board("C", NYC, "Shop Corner 2"); NYC.addBoard(ShopCorner2, 1, 1);
+        Board ShopCorner3 = new Board("C", NYC, "Shop Corner 3"); NYC.addBoard(ShopCorner3, 1, 2);
+        Board ShopCorner4 = new Board("C", NYC, "Shop Corner 4"); NYC.addBoard(ShopCorner4, 1, 3);
+        Board ShopCorner5 = new Board("C", NYC, "Shop Corner 5"); NYC.addBoard(ShopCorner5, 1, 4);
+        Board ShopCorner6 = new Board("C", NYC, "Shop Corner 6"); NYC.addBoard(ShopCorner6, 1, 5);
+
+        Board road65 = new Board("-", NYC, "Road"); NYC.addBoard(road65, 6, 5);
+        Board road55 = new Board("-", NYC, "Road"); NYC.addBoard(road55, 5, 5);
+        Board road45 = new Board("-", NYC, "Road"); NYC.addBoard(road45, 4, 5);
+        Board road44 = new Board("-", NYC, "Road"); NYC.addBoard(road44, 4, 4);
+        Board road43 = new Board("-", NYC, "Road"); NYC.addBoard(road43, 4, 3);
+        Board road33 = new Board("-", NYC, "Road"); NYC.addBoard(road33, 3, 3);
+        Board road23 = new Board("-", NYC, "Road"); NYC.addBoard(road23, 2, 3);
+        Board road24 = new Board("-", NYC, "Road"); NYC.addBoard(road24, 2, 4);
+        Board road25 = new Board("-", NYC, "Road"); NYC.addBoard(road25, 2, 5);
+        Board road26 = new Board("-", NYC, "Road"); NYC.addBoard(road26, 2, 6);
+        Board road36 = new Board("-", NYC, "Road"); NYC.addBoard(road36, 3, 6);
+        Board road37 = new Board("-", NYC, "Road"); NYC.addBoard(road37, 3, 7);
+        Board road38 = new Board("-", NYC, "Road"); NYC.addBoard(road38, 3, 8);
+        Board road48 = new Board("-", NYC, "Road"); NYC.addBoard(road48, 4, 8);
+        Board road57 = new Board("-", NYC, "Road"); NYC.addBoard(road57, 5, 7);
+        Board road67 = new Board("-", NYC, "Road"); NYC.addBoard(road67, 6, 7);
+        Board road68 = new Board("-", NYC, "Road"); NYC.addBoard(road68, 6, 8);
+        Board road78 = new Board("-", NYC, "Road"); NYC.addBoard(road78, 7, 8);
+        Board road32 = new Board("-", NYC, "Road"); NYC.addBoard(road32, 3, 2);
+        Board road52 = new Board("-", NYC, "Road"); NYC.addBoard(road52, 5, 2);
+        Board road53 = new Board("-", NYC, "Road"); NYC.addBoard(road53, 5, 3);
+        Board road63 = new Board("-", NYC, "Road"); NYC.addBoard(road63, 6, 3);
+        Board road31 = new Board("-", NYC, "Road"); NYC.addBoard(road31, 3, 1);
+        Board road41 = new Board("-", NYC, "Road"); NYC.addBoard(road41, 4, 1);
+        Board road61 = new Board("-", NYC, "Road"); NYC.addBoard(road61, 6, 1);
+        Board road71 = new Board("-", NYC, "Road"); NYC.addBoard(road71, 7, 1);
+
+        Board daltonApartmentOutside = new Board("A", NYC, "Apartment Complex Outside");
+        NYC.addBoard(daltonApartmentOutside, 7, 5);
+        Board nelsonLabsOutside = new Board("N", NYC, "Nelson Labs Outside");
+        NYC.addBoard(nelsonLabsOutside, 3, 5);
+        Board nelsonLabsBack = new Board("0", NYC, "Nelson Labs Back");
+        NYC.addBoard(nelsonLabsBack, 3, 4);
+        Board otherLabsOutside = new Board("O", NYC, "O.T.H.E.R. Labs Outside");
+        NYC.addBoard(otherLabsOutside, 5, 8);
+        Board otherLabsBack = new Board("0", NYC,  "O.T.H.E.R. Labs Back");
+        NYC.addBoard(otherLabsBack, 5, 9);
+        Board tCorpOutside = new Board("T", NYC, "T-Corp Outside");
+        NYC.addBoard(tCorpOutside, 5, 1);
+        Board tCorpBack = new Board("0", NYC, "T-Corp Back");
+        NYC.addBoard(tCorpBack, 5, 0);
+
+        daltonApartmentOutside.setBoardFromString("~ ~ - = = = - /     " +
+                "~ ~ - = = = - /     " +
+                "- - - - - - - /     " +
+                "= = - = = = - /     " +
+                "= = - = = = - /     " +
+                "= = - = = = - ] P   " +
+                "= = - = = = - /     " +
+                "- - - - - - - /     " +
+                "~ ~ - = = = - /     " +
+                "~ ~ - = = = - /     ");
+        Entrance daltonApartmentEntrance = new Entrance("Entrance", "Enter", daltonApartmentComplex, 5, 4, 3, 7, true);
+        daltonApartmentOutside.addNode(8, 5, daltonApartmentEntrance);
+
+        road65.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+        MysteriousMan mm = new  MysteriousMan();
+        road65.addNode(5, 9, mm);
+
+        road55.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+        road45.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+        MysteriousMan mima = new  MysteriousMan();
+        InteractableNode sign = new InteractableNode("Sign", "S", "Read Sign");
+        road45.addNode(5, 9, mima);
+        road45.addNode(1, 1, sign);
+
+        nelsonLabsOutside.setBoardFromString("/ /     P P     / / " +
+                "~ ~ / / P P / / ~ ~ " +
+                "- - - - - - - - - - " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "= = = = - - = = = = " +
+                "- - - - - - - - - - " +
+                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+
+        Entrance NLE1 = new Entrance("Entrance", "Enter", nelsonLabs, 4, 7, 4, 6, true);
+        Entrance NLE2 = new Entrance("Entrance", "Enter", nelsonLabs, 4, 7, 5, 6, true);
+        Door NLED1 = new Door(true, true);
+        Door NLED2 = new Door(true, true);
+        Nodeable[] nodeArray = {NLE1, NLE2, NLED1, NLED2};
+        nelsonLabsOutside.fillPlaceholders(nodeArray);
+
+
+    }
+
+    private void buildDaltonApartmentComplexMap() {
+        //make overall map
+        Board boardDaltonHall = new Board("a", daltonApartmentComplex, "Apartment Hallway");
+        Board boardDaltonRoom = new Board("a", daltonApartmentComplex, "Dalton's Room");
+        daltonApartmentComplex.addBoard(boardDaltonRoom, 5, 5);
+        daltonApartmentComplex.addBoard(boardDaltonHall, 5, 4);
+
+        //design dalton room
+        boardDaltonRoom.buildRectRoom(3, 3, 8, 3, 8, 7, 3, 7, 3, 6, Direction.WEST);
+        Desk daltonDesk = new Desk();
+        Kelly kellyCat = new Kelly();
+        Floor floor = new Floor();
+        Entrance daltonRoomExit = new Entrance("Exit", "Exit", daltonApartmentComplex, 5, 4, 6, 2, false);
+        Item crazySoda = new Item("Crazy Soda", "");
+        Drawer daltonDrawer = new Drawer("Dalton's Desk", crazySoda);
+        InteractableNode poster = new InteractableNode("Poster","P", "Look at Poster");
+
+
+        boardDaltonRoom.addNode(5, 7, poster);
+        boardDaltonRoom.addNode(4, 4, daltonDrawer);
+        boardDaltonRoom.addNode(6, 4, daltonDesk);
+        boardDaltonRoom.addNode(7, 6, kellyCat);
+        boardDaltonRoom.addNode(2, 6, daltonRoomExit);
+
+
+        //design dalton hall
+        boardDaltonHall.buildRectRoom(3, 0, 6, 0, 6, 9, 3, 9, 3, 7, Direction.WEST);
+        Door doorApartment = new Door(false, true);
+        Door daltonRoomDoor = new Door(true, false);
+        hobo = new Hobo(floor, 5, 5);
+        Entrance daltonRoomEntrance = new Entrance("Entrance", "Enter", daltonApartmentComplex, 5, 5, 3, 6, false);
+        Entrance daltonApartmentExit = new Entrance("Exit", "Exit", NYC, 7, 5, 7, 5, true);
+
+        boardDaltonHall.addNode(5, 5, hobo);
+        boardDaltonHall.addNode(2, 7, floor);
+        boardDaltonHall.addNode(6, 2, daltonRoomDoor);
+        boardDaltonHall.addNode(7, 2, daltonRoomEntrance);
+        boardDaltonHall.addNode(3, 2, doorApartment);
+        boardDaltonHall.addNode(2, 7, daltonApartmentExit);
+    }
+
+
+
+
+
+
+    public void print(String message, int time) {
+        System.out.println(message);
+        System.out.println();
+        time(time);
+    }
+
+
+    public String userInput() {
+        return input.nextLine();
+    }
+
+
+
+    //---------------------------------------
+    /*
     public void toriGameActZero(Map map) {
         System.out.println();
         System.out.println("...");
@@ -1562,17 +2306,17 @@ public class Game {
         Player toriPlayer = new Player("T", "Tori", floor);
         heart.addNode(2, 7, toriPlayer);
         currentPlayer = toriPlayer;
-        /*
+
         toriGameActZero(toriMap);
         toriPlayer.moveWest(currentBoard, this);
 
         toriGameActOne(toriMap);
         currentPlayer.moveEast(currentBoard, this);
-*/
+
         rightDoor.performAction("Unlock Door", currentBoard, this);
         toriGameActTwo(toriMap);
     }
-
+    */
 
 }
 
