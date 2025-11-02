@@ -900,6 +900,29 @@ public class Game {
 
     }
 
+    public void chapTwoActOne() {
+            //actually do chapter 2
+    }
+    /*
+    public void chapterTwo() {
+        endText();
+        time(2);
+        System.out.println("Chapter 2: Riley's Beginning");
+        time(3);
+        System.out.println();
+
+        while(currentChapter == 2 && currentAct[currentChapter - 1] == 1) {
+            buildNelsonLabsMapPt2();
+            chapTwoActOne();
+        }
+    }
+    */
+
+
+    private void buildNelsonLabsMapPt2() {
+
+    }
+
     private void buildNelsonLabsMapPt1() {
         Board lobby = new Board("L", nelsonLabs, "Nelson Lab's Lobby");
         Board B36 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
@@ -954,14 +977,16 @@ public class Game {
         Nodeable[] B36Array = new Nodeable[7];
         Scientist B36a = new Scientist(2,1);
         Scientist B36b = new Scientist(2,4);
-        InteractableNode B36c = new InteractableNode("Food Court Worker", "F", "Talk to Food Court Worker");
+        StaticNode B36c = new StaticNode("F", "Food Court Worker");
         B36Array[0] = B36a;
         B36Array[1] = B36b;
         B36Array[6] = B36c;
-        for (int i = 2; i < 6; i++) {
+        for (int i = 3; i < 6; i++) {
             StaticNode foodCourt = new StaticNode("=", "Food Court Table");
             B36Array[i] = foodCourt;
         }
+        InteractableNode B36d = new InteractableNode("Food Court Table", "=", "Talk to Food Court Worker");
+        B36Array[2] =  B36d;
         B36.fillPlaceholders(B36Array);
 
         Civilian civ1 = new Civilian(8, 3, floor);
@@ -1323,7 +1348,7 @@ public class Game {
         Kelly kellyCat = new Kelly();
         Floor floor = new Floor();
         Entrance daltonRoomExit = new Entrance("Exit", "Exit", daltonApartmentComplex, 5, 4, 6, 2, false);
-        Item crazySoda = new Item("Crazy Soda", "");
+        Item crazySoda = new Item("Crazy Soda", "The legendary origin story that started it all. Made by Dr. Riley Nelson. Consumed by Dalton Young on his skateboard.");
         Drawer daltonDrawer = new Drawer("Dalton's Desk", crazySoda);
         InteractableNode poster = new InteractableNode("Poster","P", "Look at Poster");
 
