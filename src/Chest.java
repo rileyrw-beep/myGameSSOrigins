@@ -61,12 +61,12 @@ public class Chest implements Nodeable{
                 System.out.print("You found a ");
                 game.time(2);
 
-                System.out.println(inventory.getItems().getFirst().getItemName() + "!");
+                System.out.println(inventory.getItem().getItemName() + "!");
                 System.out.println();
                 game.time(3);
 
-                game.getPlayer().getInventory().addItem(inventory.getItems().getFirst());
-                System.out.println("Added " + inventory.getItems().getFirst().getItemName() + " to your inventory.");
+                game.getPlayer().getInventory().addItem(inventory.getItem());
+                System.out.println("Added " + inventory.getItem().getItemName() + " to your inventory.");
                 System.out.println();
                 game.time(3);
             }

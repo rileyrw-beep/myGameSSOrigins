@@ -67,7 +67,7 @@ public class ToriObject implements Nodeable {
             System.out.println();
             game.time(2);
 
-            game.getPlayer().getInventory().addItem(inventory.getItems().getFirst());
+            //game.getPlayer().getInventory().addItem(inventory.getItems().getFirst());
             System.out.println("Added " + name + " to Inventory");
             System.out.println();
 

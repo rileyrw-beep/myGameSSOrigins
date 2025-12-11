@@ -52,7 +52,7 @@ public class Drawer implements Nodeable{
             System.out.println();
             game.time(4);
 
-            game.getPlayer().getInventory().addItem(inventory.getItems().getFirst());
+            game.getPlayer().getInventory().addItem(inventory.getItem());
             System.out.println("Added 'Crazy Soda' to Inventory");
             System.out.println();
             game.time(3);

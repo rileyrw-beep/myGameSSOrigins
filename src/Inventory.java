@@ -8,7 +8,24 @@ import java.io.IOException;
 
 public class Inventory {
     private Set<Item> inventoryList;
-    private static Map<String, Item> itemDictionary;
+    private static Map<String, Item> itemDictionary = Map.ofEntries(
+            Map.entry("soda", new Item("Crazy Soda", "The legendary origin story that started it all. Made by Dr. Riley Nelson. Consumed by Dalton Young on his skateboard.", "soda")),
+            Map.entry("rib", new Item("Toy Ribcage", "An oddly shaped bus with more wheels than seats. \nIt looks completely non-functional but nevertheless you decide to keep it. \nGiven to you by a mysterious man", "rib")),
+            Map.entry("t1", new Item("Ticket 1", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t1")),
+            Map.entry("t2", new Item("Ticket 2", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t2")),
+            Map.entry("t3", new Item("Ticket 3", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t3")),
+            Map.entry("t4", new Item("Ticket 4", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t4")),
+            Map.entry("t5", new Item("Ticket 5", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t5")),
+            Map.entry("t6", new Item("Ticket 6", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t6")),
+            Map.entry("t7", new Item("Ticket 7", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t7")),
+            Map.entry("t8", new Item("Ticket 8", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t8")),
+            Map.entry("t9", new Item("Ticket 9", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t9")),
+            Map.entry("t10", new Item("Ticket 10", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t10")),
+            Map.entry("t11", new Item("Ticket 11", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t11")),
+            Map.entry("t12", new Item("Ticket 12", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t12")),
+            Map.entry("t13", new Item("Ticket 13", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t13")),
+            Map.entry("tgd", new Item("The Great Diarrhea Figurine", "This is a figurine depicting the origin of the Universe. A large man with explosive diarrhea ate too much Taco Bell and the result was the creation of the Universe.", "tgd"))
+    );
     private static String filePath;
 
 
@@ -17,15 +34,6 @@ public class Inventory {
     public Inventory() {
         filePath = "../file/InventorySave.txt";
         inventoryList = new HashSet<>();
-        itemDictionary = new HashMap<>();
-        itemDictionary.put("soda", new Item("Crazy Soda", "The legendary origin story that started it all. Made by Dr. Riley Nelson. Consumed by Dalton Young on his skateboard.", "soda"));
-        itemDictionary.put("rib", new Item("Toy Ribcage", "An oddly shaped bus with more wheels than seats. \nIt looks completely non-functional but nevertheless you decide to keep it. \nGiven to you by a mysterious man", "rib"));
-        for (int i = 1; i <= 13; i++) {
-            String key = "t" + i;
-            String name = "Ticket " + i;
-            itemDictionary.put(key, new Item(name, "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", key));
-        }
-        itemDictionary.put("tgd", new Item("The Great Diarrhea Figurine", "This is a figurine depicting the origin of the Universe. A large man with explosive diarrhea ate too much Taco Bell and the result was the creation of the Universe.", "tgd"));
 
         retrieveInventory();
     }
@@ -108,6 +116,15 @@ public class Inventory {
     public Item getItem(String itemName) {
         for (Item item : inventoryList) {
             if (item.getItemName().equals(itemName)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public Item getItem() {
+        if (inventoryList.size()==1) {
+            for (Item item : inventoryList) {
                 return item;
             }
         }
