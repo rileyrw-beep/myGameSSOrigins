@@ -101,6 +101,10 @@ public class Game {
         return latestActs;
     }
 
+    public int[] getTotalActs() {
+        return totalActs;
+    }
+
     //setters for chapters and acts
     public void setCurrentChapter(int newChapter) {
         currentChapter = newChapter;
@@ -203,11 +207,9 @@ public class Game {
 
         int  response = this.basicGameLoop(optionList);
         if (response == 1) {
-            currentPlayer.getInventory().revertInventory();
             return returnArray;
         }
         if (response == 2) {
-            currentPlayer.getInventory().revertInventory();
             int[] arr = startFromSpecificAct();
             if (currentChapter == arr[0] && currentAct[currentChapter - 1] == arr[1]) {
                 intendedRoute = true;
@@ -221,6 +223,7 @@ public class Game {
         if (response == 3) {
             System.exit(0);
         }
+        currentPlayer.getInventory().saveInventory();
         returnArray[1] = false;
         return returnArray;
     }
@@ -261,21 +264,10 @@ public class Game {
             if (get.equals("begin") || get.equals("What if Dalton was a superhero?")) {
                 break;
             }
-            System.out.println("Sorry, that was not a valid name. Please try again.");
+            System.out.println("Sorry, that is incorrect. Please try again.");
             System.out.println();
         }
         if (get.equals("begin")) {
-            System.out.println("Starting game...");
-            currentChapter = 1;
-            currentAct[currentChapter - 1] = 1;
-            latestChapter = 1;
-            latestActs[latestChapter - 1] = 1;
-            if (x) {
-                currentChapter = 99;
-            }
-        } else {
-            System.out.println("Interesting, we must have an OG fan on our hands.");
-            System.out.println();
             System.out.println("Choose your desired Chapter and Act below: ");
             System.out.println();
             int chap = -1;
@@ -317,15 +309,12 @@ public class Game {
 
         }
         time(3);
-        this.endText();
+        endText();
         System.out.println();
         System.out.println();
         time(2);
-        if (currentAct[0] != 1 || currentChapter != 1) {
-            intendedRoute = false;
-        }
         Floor floor = new Floor();
-        Player player = new Player("D", "Dalton Young", floor);
+        Player player = new Player("P", "Placeholder Name", floor);
         this.setPlayer(player);
     }
 
@@ -826,6 +815,7 @@ public class Game {
 
     //chapter 1 method
     public void chapterOne() {
+        currentPlayer.resetPlayer("D", "Dalton Young", "bed");
         System.out.println("Chapter 1: Dalton's Beginning");
         time(3);
         System.out.println();
@@ -903,7 +893,7 @@ public class Game {
     public void chapTwoActOne() {
             //actually do chapter 2
     }
-    /*
+
     public void chapterTwo() {
         endText();
         time(2);
@@ -916,7 +906,7 @@ public class Game {
             chapTwoActOne();
         }
     }
-    */
+
 
 
     private void buildNelsonLabsMapPt2() {
@@ -1348,7 +1338,7 @@ public class Game {
         Kelly kellyCat = new Kelly();
         Floor floor = new Floor();
         Entrance daltonRoomExit = new Entrance("Exit", "Exit", daltonApartmentComplex, 5, 4, 6, 2, false);
-        Item crazySoda = new Item("Crazy Soda", "The legendary origin story that started it all. Made by Dr. Riley Nelson. Consumed by Dalton Young on his skateboard.");
+        Item crazySoda = Inventory.getItemFromDictionary("soda");
         Drawer daltonDrawer = new Drawer("Dalton's Desk", crazySoda);
         InteractableNode poster = new InteractableNode("Poster","P", "Look at Poster");
 

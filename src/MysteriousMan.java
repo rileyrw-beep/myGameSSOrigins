@@ -115,7 +115,7 @@ public class MysteriousMan implements Nodeable {
             System.out.println();
             game.time(4);
 
-            Item ribcage = new Item("Toy Ribcage", "An oddly shaped bus with more wheels than seats. \nIt looks completely non-functional but nevertheless you decide to keep it. \nGiven to you by a mysterious man");
+            Item ribcage = Inventory.getItemFromDictionary("rib");
             game.getPlayer().getInventory().addItem(ribcage);
 
             System.out.println("Added 'Toy Ribcage' to Inventory");

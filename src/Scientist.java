@@ -61,7 +61,7 @@ public class Scientist implements Nodeable{
             game.print("At the end, the people around you clap and you jolt awake.", 3);
             game.print("You get your ticket and you take your leave.", 3);
             System.out.println();
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t1");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             count++;
@@ -77,7 +77,7 @@ public class Scientist implements Nodeable{
             game.print("Before you know it, the group around you is clapping and you snap back to reality.", 4);
             game.print("You get your ticket and you take your leave.", 3);
             System.out.println();
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t2");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             System.out.println();
@@ -94,7 +94,7 @@ public class Scientist implements Nodeable{
             game.print("When you were done blinking, the scientist was done.", 3);
             game.print("You get your ticket, holding your nose, and take your leave.", 3);
             System.out.println();
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t3");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             System.out.println();
@@ -123,8 +123,7 @@ public class Scientist implements Nodeable{
             game.print("Dalton * 'That's gotta be the greatest thing I've heard all day.'", 4);
             game.print("Scientist * 'Hey thanks man, I don't get a lot of love for my theory. In fact, here is a little figurine to remember me by.'", 7);
             System.out.println();
-            Item TGD = new Item("The Great Diarrhea Figurine", "This is a figurine depicting the origin of the Universe. A large man with explosive diarrhea ate too much Taco Bell and the result was the creation of the Universe.");
-            game.getPlayer().getInventory().addItem(TGD);
+            game.getPlayer().getInventory().addItem(Inventory.getItemFromDictionary("tgd"));
             game.print("Added 'The Great Diarrhea Figurine' to Inventory", 3);
             System.out.println();
             game.print("All of a sudden, two security guards came bolting at the scientist yelling that the scientist was not supposed to be here.", 7);
@@ -149,7 +148,7 @@ public class Scientist implements Nodeable{
             game.print("Sandwich Eating Scientist * 'What are you still doing here? Just take the ticket.'", 4);
             game.print("You take the ticket and walk off.", 3);
             System.out.println();
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t4");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             System.out.println();
@@ -167,7 +166,7 @@ public class Scientist implements Nodeable{
             System.out.println();
             game.print("You take your ticket and take your leave", 3);
             System.out.println();
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t5");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             System.out.println();
@@ -183,7 +182,7 @@ public class Scientist implements Nodeable{
             game.print("Just then the entire crowd began giving him a standing ovation that lasted 17 minutes.", 4);
             game.print("He was so flattered he ended at that and gave everyone tickets.", 4);
             System.out.println();
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t6");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             System.out.println();
@@ -202,7 +201,7 @@ public class Scientist implements Nodeable{
             if (get == 2) {
                 game.print("You decide to take the easier option and take the ticket without listening.", 4);
                 game.print("Nice.", 1);
-                Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+                Item ticket = Inventory.getItemFromDictionary("t7");
                 game.getPlayer().getInventory().addItem(ticket);
                 game.print("Added 'Ticket' to Inventory", 3);
                 System.out.println();
@@ -219,7 +218,7 @@ public class Scientist implements Nodeable{
             if (get2.equals("No")) {
                 game.print("That's what I thought, you bypass the button and grab a ticket.", 3);
                 game.print("Nice.", 1);
-                Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+                Item ticket = Inventory.getItemFromDictionary("t8");
                 game.getPlayer().getInventory().addItem(ticket);
                 game.print("Added 'Ticket' to Inventory", 3);
                 System.out.println();
@@ -233,7 +232,7 @@ public class Scientist implements Nodeable{
             if (get3.equals("No")) {
                 game.print("That's what I thought, you bypass the button and grab a ticket.", 3);
                 game.print("Nice.", 1);
-                Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+                Item ticket = Inventory.getItemFromDictionary("t9");
                 game.getPlayer().getInventory().addItem(ticket);
                 game.print("Added 'Ticket' to Inventory", 3);
                 System.out.println();
@@ -251,7 +250,7 @@ public class Scientist implements Nodeable{
             if (get4 == 3) {
                 game.print("That's what I thought, you bypass the button and grab a ticket.", 3);
                 game.print("Nice.", 1);
-                Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+                Item ticket = Inventory.getItemFromDictionary("t10");
                 game.getPlayer().getInventory().addItem(ticket);
                 game.print("Added 'Ticket' to Inventory", 3);
                 System.out.println();
@@ -264,7 +263,7 @@ public class Scientist implements Nodeable{
             String get5 =  game.basicGameLoop("",  optionList1);
             if (get5.equals("No")) {
                 game.print("THANK YOU. You bypass the button and grab a ticket.", 3);
-                Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+                Item ticket = Inventory.getItemFromDictionary("t11");
                 game.getPlayer().getInventory().addItem(ticket);
                 game.print("Added 'Ticket' to Inventory", 3);
                 System.out.println();
@@ -700,7 +699,7 @@ public class Scientist implements Nodeable{
             game.time(10);
             game.print("I hope you are happy with yourself.", 3);
             game.print("You pick up the stupid ticket and take your leave", 3);
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t12");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             System.out.println();
@@ -751,7 +750,7 @@ public class Scientist implements Nodeable{
             game.print("Riley was upset that Dalton did not listen, but nonetheless he gave him the ticket and watched as he walked away.", 6);
             System.out.println();
 
-            Item ticket = new Item("Ticket", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.");
+            Item ticket = Inventory.getItemFromDictionary("t13");
             game.getPlayer().getInventory().addItem(ticket);
             game.print("Added 'Ticket' to Inventory", 3);
             count++;

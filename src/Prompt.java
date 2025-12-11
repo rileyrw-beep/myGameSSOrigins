@@ -176,11 +176,18 @@ public class Prompt {
             }
         }
         if (response.length() == 1) return player.performAction(response, board, game);
+        boolean[] goodReturn = new boolean[2];
+        goodReturn[0] = true;
         if (response.equals("No Fast")) {
             game.setTimeNumber(10000);
+            return goodReturn;
         }
         if (response.equals("Help")) {
             return help();
+        }
+        if (response.equals("Save")) {
+            player.getInventory().saveInventory();
+            return goodReturn;
         }
         if (response.equals("Legend")) {
             board.printLegend();
@@ -201,11 +208,13 @@ public class Prompt {
                     outerLoop:
                     while (true) {
                         get = game.getInput().nextLine();
+                        Item temp = null;
                         for (int i = 0; i < player.getInventory().getItems().size(); i++) {
-                            if (get.equals(player.getInventory().getItems().get(i).getItemName())) {
+                            temp = player.getInventory().getItem(get);
+                            if (temp != null) {
                                 System.out.println();
                                 System.out.println();
-                                System.out.println(player.getInventory().getItems().get(i).getItemDescription());
+                                System.out.println(temp.getItemDescription());
                                 System.out.println();
                                 break outerLoop;
                             }
