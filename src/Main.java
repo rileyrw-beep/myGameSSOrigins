@@ -4,93 +4,85 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         Game game = new Game();
-        Nodeable n = new Floor();
-        Player p = new Player("x", "ff", n);
-        System.out.println(p.getInventory().getItem().getItemName());
-        p.getInventory().saveInventory();
+
+        boolean x = game.askPlayerName();
+        game.startGame(x);
+
+        while (true) {
+            if (game.getCurrentChapter() == 1) {
+                game.chapterOne();
+            } else if (game.getCurrentChapter() == 2) {
+                game.chapterTwo();
+            }
 
 
+            //once a chapter ends
+            game.endText();
+            System.out.println("Would you like to proceed to the next chapter or a previous one?");
+            System.out.println();
+            ArrayList<String> optionList = new ArrayList<>();
+            optionList.add("Next Chapter");
+            optionList.add("A Previous Chapter");
+            optionList.add("End Game");
+            int get = game.basicGameLoop(optionList);
+            switch (get) {
+                case 1: {
+                    game.setCurrentChapter(game.getCurrentChapter() + 1);
+                    game.setCurrentAct(1, game.getCurrentChapter());
+                    break;
+                }
+
+                case 2: {
+                    System.out.println();
+                    int chap = -1;
+                    int act = -1;
+
+                    while (true) {
+                        try {
+                            System.out.print("Chapter: ");
+                            chap = game.getInput().nextInt();
+                            game.getInput().nextLine();
+                            if (chap >= 1 && chap <= 8) {
+                                game.setCurrentChapter(chap);
+                                break;
+                            } else {
+                                System.out.println("Try Again");
+                            }
+                        } catch (InputMismatchException e) {
+                            System.out.println("Try Again");
+                        }
+                    }
+                    System.out.println();
+
+                    // add all the other act numbers / change the current Chap 1 Act 1 number if I add more than 2.
+                    while (true) {
+                        try {
+                            System.out.print("Act: ");
+                            act = game.getInput().nextInt();
+                            game.getInput().nextLine();
+                            if (act >= 1 && act <= game.getTotalActs()[game.getCurrentChapter() - 1]) {
+                                game.setCurrentAct(act, game.getCurrentChapter());
+                                break;
+                            } else {
+                                System.out.println("Try Again");
+                            }
+                        } catch (InputMismatchException e) {
+                            System.out.println("Try Again");
+                        }
+                    }
+                    game.time(3);
+                    game.endText();
+                    System.out.println();
+                    System.out.println();
+                }
+
+                case 3: {
+                    System.exit(0);
+                }
+            }
 
 
-
-//        boolean x = game.askPlayerName();
-//        game.startGame(x);
-//
-//        while (true) {
-//            if (game.getCurrentChapter() == 1) {
-//                game.chapterOne();
-//            } else if (game.getCurrentChapter() == 2) {
-//                game.chapterTwo();
-//            }
-//
-//
-//            //once a chapter ends
-//            game.endText();
-//            System.out.println("Would you like to proceed to the next chapter or a previous one?");
-//            System.out.println();
-//            ArrayList<String> optionList = new ArrayList<>();
-//            optionList.add("Next Chapter");
-//            optionList.add("A Previous Chapter");
-//            optionList.add("End Game");
-//            int get = game.basicGameLoop(optionList);
-//            switch (get) {
-//                case 1: {
-//                    game.setCurrentChapter(game.getCurrentChapter() + 1);
-//                    game.setCurrentAct(1, game.getCurrentChapter());
-//                    break;
-//                }
-//
-//                case 2: {
-//                    System.out.println();
-//                    int chap = -1;
-//                    int act = -1;
-//
-//                    while (true) {
-//                        try {
-//                            System.out.print("Chapter: ");
-//                            chap = game.getInput().nextInt();
-//                            game.getInput().nextLine();
-//                            if (chap >= 1 && chap <= 8) {
-//                                game.setCurrentChapter(chap);
-//                                break;
-//                            } else {
-//                                System.out.println("Try Again");
-//                            }
-//                        } catch (InputMismatchException e) {
-//                            System.out.println("Try Again");
-//                        }
-//                    }
-//                    System.out.println();
-//
-//                    // add all the other act numbers / change the current Chap 1 Act 1 number if I add more than 2.
-//                    while (true) {
-//                        try {
-//                            System.out.print("Act: ");
-//                            act = game.getInput().nextInt();
-//                            game.getInput().nextLine();
-//                            if (act >= 1 && act <= game.getTotalActs()[game.getCurrentChapter() - 1]) {
-//                                game.setCurrentAct(act, game.getCurrentChapter());
-//                                break;
-//                            } else {
-//                                System.out.println("Try Again");
-//                            }
-//                        } catch (InputMismatchException e) {
-//                            System.out.println("Try Again");
-//                        }
-//                    }
-//                    game.time(3);
-//                    game.endText();
-//                    System.out.println();
-//                    System.out.println();
-//                }
-//
-//                case 3: {
-//                    System.exit(0);
-//                }
-//            }
-//
-//
-//        }
+        }
 
 
     }

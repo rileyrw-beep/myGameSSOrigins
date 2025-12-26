@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Inventory {
     private Set<Item> inventoryList;
-    private static Map<String, Item> itemDictionary = Map.ofEntries(
+    private static final Map<String, Item> itemDictionary = Map.ofEntries(
             Map.entry("soda", new Item("Crazy Soda", "The legendary origin story that started it all. Made by Dr. Riley Nelson. Consumed by Dalton Young on his skateboard.", "soda")),
             Map.entry("rib", new Item("Toy Ribcage", "An oddly shaped bus with more wheels than seats. \nIt looks completely non-functional but nevertheless you decide to keep it. \nGiven to you by a mysterious man", "rib")),
             Map.entry("t1", new Item("Ticket 1", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t1")),
@@ -33,7 +33,15 @@ public class Inventory {
 
     public Inventory() {
         filePath = "../file/InventorySave.txt";
-        inventoryList = new HashSet<>();
+        Comparator<Item> lexicographicalOrderComparator = new Comparator<Item>() {
+            public int compare(Item i1, Item i2) {
+                if (!Objects.equals(i1.getItemName(), i2.getItemName())) {
+                    return i1.getItemName().compareTo(i2.getItemName());
+                }
+                return i1.getKey().compareTo(i2.getKey());
+            }
+        };
+        inventoryList = new TreeSet<>(lexicographicalOrderComparator);
 
         retrieveInventory();
     }

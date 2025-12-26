@@ -24,6 +24,17 @@ public class Civilian implements Nodeable, Moveable {
         actionList = new ArrayList<>();
     }
 
+    public Civilian (String disp, String game, int startX, int startY, Nodeable startNode) {
+        this.displayid = disp;
+        this.inGameid = game;
+        previousNode = startNode;
+        type = ListOfNodes.CIVILIAN;
+        canMoveTo = false;
+        x = startX;
+        y = startY;
+        actionList = new ArrayList<>();
+    }
+
     public boolean[] performAction(String response, Board board, Game game) {
         boolean[] returnArray = {true, false};
 
