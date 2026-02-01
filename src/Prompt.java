@@ -182,6 +182,14 @@ public class Prompt {
             game.setTimeNumber(10000);
             return goodReturn;
         }
+        if (response.equals("Fast")) {
+            game.setTimeNumber(1);
+            return goodReturn;
+        }
+        if (response.equals("Map")) {
+            map.printMap();
+            return goodReturn;
+        }
         if (response.equals("Help")) {
             return help();
         }

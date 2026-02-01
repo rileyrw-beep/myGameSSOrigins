@@ -1,4 +1,4 @@
 @FunctionalInterface
 public interface Interactable {
-    boolean doAction(Board board);
+    boolean doAction(Board board, Game game);
 }

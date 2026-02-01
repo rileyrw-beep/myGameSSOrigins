@@ -39,12 +39,18 @@ public class Map {
     }
 
     public void printMap() {
-        for (ArrayList<Board> row : map) {
-            for (Board board : row) {
-                System.out.print(board.getBoardChar() + " ");
+        for (int row = 0; row < map.size(); row++) {
+            for (int col = 0; col < map.get(row).size(); col++) {
+                if (row == currentBoardY && col == currentBoardX) {
+                    System.out.println("P ");
+                    continue;
+                }
+                System.out.print(map.get(row).get(col).getBoardChar() + " ");
             }
             System.out.println();
         }
+        System.out.println();
+        System.out.println("You are at the board labeled P.");
     }
 
     public void boardChanged() {

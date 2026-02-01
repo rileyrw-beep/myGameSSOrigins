@@ -84,7 +84,7 @@ public class Board {
                     node = new StaticNode("=","Road");
                 }
                 else if (current.equals("L")) {
-                    node = new StaticNode("L", "Lamppost");
+                    node = new StaticNode("L", "Lab Bench");
                 }
                 else if (current.equals("T")) {
                     node = new StaticNode("T", "Table");

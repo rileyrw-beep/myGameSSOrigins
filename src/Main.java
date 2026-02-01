@@ -3,17 +3,31 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+
         Game game = new Game();
+
+
+        TurnBasedBattleManager.doBattle(new String[]{"jerry"}, new String[]{"riley"}, true);
+
+
+        int y = game.getInput().nextInt();
+
+        if (y % 2 == 0) {
+            return;
+        }
 
         boolean x = game.askPlayerName();
         game.startGame(x);
 
         while (true) {
-            if (game.getCurrentChapter() == 1) {
-                game.chapterOne();
-            } else if (game.getCurrentChapter() == 2) {
-                game.chapterTwo();
+
+            switch (game.getCurrentChapter()) {
+
+                case 1: game.chapterOne();
+                case 2: game.chapterTwo();
+
             }
+
 
 
             //once a chapter ends
@@ -24,7 +38,7 @@ public class Main {
             optionList.add("Next Chapter");
             optionList.add("A Previous Chapter");
             optionList.add("End Game");
-            int get = game.basicGameLoop(optionList);
+            int get = Game.basicGameLoop(optionList);
             switch (get) {
                 case 1: {
                     game.setCurrentChapter(game.getCurrentChapter() + 1);

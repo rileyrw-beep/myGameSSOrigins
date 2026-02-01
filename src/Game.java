@@ -119,10 +119,9 @@ public class Game {
         timeNumber = newTimeNumber;
     }
 
-    public void endText() {
+    static public void endText() {
         System.out.println();
         System.out.println();
-
     }
 
     public int[] startFromSpecificAct() {
@@ -547,7 +546,7 @@ public class Game {
         if (firstTime) {
             System.out.println("You are Dalton Young.");
             System.out.println();
-            this.time(4);
+            time(4);
 
             System.out.print("Billionaire. ");
             time(2);
@@ -874,32 +873,92 @@ public class Game {
     }
 
     public void chapTwoActOne() {
+
+        System.out.println();
+        System.out.println("Act 2: Riley's Awakening");
+        endText();
+        time(3);
+
+        print("You are Riley Nelson", 3);
+        print("Your eyes open as you hear the sound of the bell attached to the door.", 5);
+        print("Another customer walks in.", 3);
+        System.out.println();
+        print("They hear the sizzling of patties on the grill and smell the sharp smell of cheddar.", 6);
+        print("It was just another day at McRiley's.", 4);
+        print("You turn to Antonio but before you can say a thing he begins screaming at you.", 6);
+        System.out.println();
+        print("BEEP BEEP BEEP", 3);
+
+        ArrayList<String> optionList = new ArrayList<>();
+        optionList.add("Wake Up");
+        basicGameLoop("", optionList);
+        System.out.println();
+        print("...", 3);
+
+        print("You wake up and checked your alarm clock.", 5);
+        print("SIX O'CLOCK?!?!", 3);
+        print("Just as you were about to fall back into your pillows and sleep until noon, you remember that today was the big Tech Fair at Nelson Labs.", 10);
+        System.out.println();
+        print("You recalled to last night where you spent hours finishing up your greatest invention: the Golden Electricity Generator.", 8);
+        print("You couldn't wait to show it off to the world, you knew it had the capability to provide clean, renewable energy for the whole city of New York!", 10);
+        print("However, that would have to wait as the grumbly in your tummy told you to get some breakfast.", 7);
+        System.out.println();
+        print("Head to the common room for some food, it is the room on the map directly below the room you are in.", 7);
+        //do the advanced game loop until act 2.
+        //do that by having the jerry fight end with Riley standing where Jerry's spot was so that an end spot for the advanced gameloop can be set (playermovement is covered by the jerry fight it seems)
+        //have the package be a node sitting on a table that inputs an item in the inventory and then replaces itself it a table.
+        //cover the initial vial explanations in the node itself then explain more in the act 2 instructions
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 3, 2, 5, 2, -1, -1)) {
+            return;
+        }
+
+        currentAct[currentChapter - 1] = 2;
+        latestActs[latestChapter - 1] = 1;
+        currentPlayer.getInventory().saveInventory();
+        endText();
+
             //actually do chapter 2
     }
 
     public void chapterTwo() {
         endText();
+        buildNelsonLabsMap(2);
         time(2);
         System.out.println("Chapter 2: Riley's Beginning");
         time(3);
         System.out.println();
 
+        //load nelson's labs
+        currentMap = nelsonLabs;
+        currentMap.setCurrentBoardY(1);
+        currentMap.setCurrentBoardX(3);
+        setBoard(currentMap.getCurrentBoard());
+
+        //add player to correct spot
+        currentBoard.addNode(3, 4, currentPlayer);
+
+        //do act 1
         while(currentChapter == 2 && currentAct[currentChapter - 1] == 1) {
-            buildNelsonLabsMap(2);
             chapTwoActOne();
         }
+
+        //do act 2
+        //do act 3
+        //simple as that
+
     }
 
 
 
     private void buildNelsonLabsMap(int currentChapter) {
         Board lobby = new Board("L", nelsonLabs, "Nelson Lab's Lobby");
-        Board B36 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
-        Board B46 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
-        Board B56 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
-        Board B35 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
-        Board B45 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
-        Board B55 = new Board("B", nelsonLabs, "Nelson Lab's Main Room Body");
+        Board B36 = new Board("B", nelsonLabs, "Nelson Labs's Main Room Body");
+        Board B46 = new Board("B", nelsonLabs, "Nelson Labs's Main Room Body");
+        Board B56 = new Board("B", nelsonLabs, "Nelson Labs's Main Room Body");
+        Board B35 = new Board("B", nelsonLabs, "Nelson Labs's Main Room Body");
+        Board B45 = new Board("B", nelsonLabs, "Nelson Labs's Main Room Body");
+        Board B55 = new Board("B", nelsonLabs, "Nelson Labs's Main Room Body");
         Board RL40 = new Board("L", nelsonLabs, "Riley's Lab");
         Board H50 = new Board("H", nelsonLabs, "Hospital Room");
         Board B41 = new Board("O", nelsonLabs, "Common Lab Room");
@@ -907,7 +966,9 @@ public class Game {
         Board B51 = new Board("O", nelsonLabs, "Common Lab Room");
         Board B52 = new Board("O", nelsonLabs, "Common Lab Room");
         Board RR31 = new Board("R", nelsonLabs, "Riley's Room");
-        Board B32 = new Board("C", nelsonLabs, "Nelson Lab's Employee Common Room");
+        Board B32 = new Board("C", nelsonLabs, "Nelson Labs's Employee Common Room");
+        Board B43 = new Board("I", nelsonLabs, "Nelson Labs's Hallway Top");
+        Board B44 = new Board("I", nelsonLabs, "Nelson Labs's Hallway Bottom");
         nelsonLabs.addBoard(lobby, 4, 7);
         nelsonLabs.addBoard(B36, 3, 6);
         nelsonLabs.addBoard(B46, 4, 6);
@@ -923,6 +984,8 @@ public class Game {
         nelsonLabs.addBoard(B52, 5, 2);
         nelsonLabs.addBoard(RR31, 3, 1);
         nelsonLabs.addBoard(B32, 3, 2);
+        nelsonLabs.addBoard(B43, 4, 3);
+        nelsonLabs.addBoard(B44, 4, 4);
         //floor for the civilians
         Floor floor = new Floor();
 
@@ -1137,19 +1200,19 @@ public class Game {
                 "- - - - - - - - - / " +
                 "- - - - - - V S - / " +
                 "- - - - - - - - - / ");
-        
+
         InteractableNode hMan = new InteractableNode("Hiring Manager", "H", "Talk to Hiring Manager");
         StaticNode jobTable = new StaticNode("=", "Hiring Manager's Desk");
         StaticNode generator = new StaticNode("G", "Golden Electricity Generator");
         Scientist B55a = new Scientist(7, 5);
-        
+
         Scientist B55b = new Scientist(7, 8);
         if (currentChapter == 3 || currentChapter == 2) {
             B55b.getActionList().clear();
         }
         StaticNode vr = new StaticNode("V", "Virtual Reality Goggles");
-        
-        
+
+
         Nodeable[] B55array = {jobTable, hMan, jobTable, jobTable, jobTable, generator, B55a, vr, B55b};
         if (currentChapter == 2) {
             for (int i = 0; i <= 6; i++) {
@@ -1179,7 +1242,7 @@ public class Game {
                 "  / T - - - - B /   " +
                 "  / T - G - - P /   " +
                 "  / C - - - - 2 /   " +
-                "  / T - - - - P /   " +
+                "  / A - - - - P /   " +
                 "  / / / [ / / / /   " +
                 "      / - /         " +
                 "      / - /         ");
@@ -1191,14 +1254,15 @@ public class Game {
         InteractableNode pants = new InteractableNode("Portal Pocket Pants", "P", "Inspect");
         InteractableNode gen = new InteractableNode("Golden Electricity Generator", "G", "Pick Up");
         InteractableNode cast = new InteractableNode("Generator Cast", "C", "Inspect");
-        Nodeable[] RL40arr = {sunlightChamber, burger, gen, love, cast, pancake, pants};
+        InteractableNode addiction = new InteractableNode("Riley's Addiction Relief Pills", "A", "Inspect"); // get an item from these
+        Nodeable[] RL40arr = {sunlightChamber, burger, gen, love, cast, pancake, addiction, pants};
         RL40.fillPlaceholders(RL40arr);
 
         H50.setBoardFromString("                    " +
                 "                    " +
                 "  / / / / / /       " +
                 "  / - M - - /       " +
-                "  / M = - - /       " +
+                "  / M P - - /       " +
                 "  / - - - V /       " +
                 "  / D - - T /       " +
                 "  / / / [ / /       " +
@@ -1207,8 +1271,153 @@ public class Game {
 
         StaticNode medical = new StaticNode("M", "Medical Machine");
         StaticNode bed = new StaticNode("=", "Hospital Bed");
-        InteractableNode doc = new InteractableNode("Doctor Robot", "D");
-        StaticNode
+        InteractableNode doc = new InteractableNode("Doctor Robot", "D", "Talk");
+        InteractableNode vialTable = new InteractableNode("Table to Put Vial On", "O", "Place Vial");
+        Nodeable[] H50arr = {medical, medical, bed, vialTable, doc};
+        H50.fillPlaceholders(H50arr);
+
+        RR31.setBoardFromString("                    " +
+                "                    " +
+                "  / / W / / /       " +
+                "  / - - | - /       " +
+                "  / P - - + /       " +
+                "  / - - - - / / / / " +
+                "  / N J - - [ - - - " +
+                "  / / / / / / / / / " +
+                "                    " +
+                "                    " +
+                "                    ");
+
+        InteractableNode boStaff = new InteractableNode("Bo Staff", "|", "Inspect");
+        //bed
+        StaticNode desk = new  StaticNode("+", "Desk");
+        InteractableNode nightstand = new InteractableNode("Nightstand", "N", "Inspect");
+        InteractableNode jukebox = new InteractableNode("Jukebox", "J", "Inspect"); //rickrools you
+        InteractableNode photos = new InteractableNode("Photo Wall", "W", "Inspect");
+        Nodeable[] RR31arr = {photos, boStaff, bed, desk, nightstand, jukebox};
+        RR31.fillPlaceholders(RR31arr);
+
+
+        B32.setBoardFromString("  / / / / / / / / / " +
+                "/ - - - - - - - - / " +
+                "/ - B - - J - - - / " +
+                "/ - B - - T T - - / " +
+                "/ - B - - T P - / / " +
+                "/ - B - - - - - [ - " +
+                "/ - B - - - - - / / " +
+                "/ - B - - C C - - / " +
+                "/ - - - - - - - - / " +
+                "  / / / / / / / /   ");
+        InteractableNode breakfastBar = new InteractableNode("Breakfast Bar", "B", "Eat"); //recursive formula to take out the action lists
+        InteractableNode jerry = new InteractableNode("Jerry", "J", "Talk");
+        StaticNode couch = new StaticNode("C", "Couch");
+        InteractableNode pack = new InteractableNode("Package", "P", "Inspect");
+        Nodeable[] B32arr = {breakfastBar, jerry, breakfastBar, breakfastBar, pack, breakfastBar, breakfastBar, breakfastBar, couch, couch};
+        B32.fillPlaceholders(B32arr);
+
+        B41.setBoardFromString("      / - /         " +
+                "    / / [ / / / / / " +
+                "  / - - - - - - - - " +
+                "  / - - - - - - - - " +
+                "  / - - L L - L L - " +
+                "/ / - - - - - - - - " +
+                "- [ - - L L - L L - " +
+                "/ / - - - - - - - - " +
+                "  / - - L L - L L - " +
+                "  / - - - - - - - - ");
+
+        //adding movable scientists
+        Civilian sci1 = new Civilian("S", "Scientist",3, 6, floor);
+        B41.addNode( 3, 6, sci1);
+        Civilian sci2 = new Civilian("S", "Scientist",5, 2, floor);
+        B41.addNode(5, 2, sci2);
+        Civilian sci3 = new Civilian("S", "Scientist",7, 7, floor);
+        B41.addNode(7, 7, sci3);
+
+        B42.setBoardFromString("  / - - - - - - - - " +
+                "  / - - - - - - - - " +
+                "  / - - L L L - - - " +
+                "  / - - L - L - - - " +
+                "/ / - - - - - - - - " +
+                "- [ - - L - L - - - " +
+                "/ / - - L L L - - - " +
+                "  / - - - - - - - - " +
+                "    / / / [ [ / / / " +
+                "        / - - /     ");
+
+
+        Civilian sci4 = new Civilian("S", "Scientist",3, 6, floor);
+        B42.addNode(3, 6, sci4);
+        Civilian sci5 = new Civilian("S", "Scientist",5, 4, floor);
+        B42.addNode(5, 4, sci5);
+        Civilian sci6 = new Civilian("S", "Scientist",7, 7, floor);
+        B42.addNode(7, 7, sci6);
+
+        B51.setBoardFromString("      / - /         " +
+                "/ / / / [ / / /     " +
+                "- - - - - - - - /   " +
+                "- - - - - - - - - S " +
+                "- L L - L L - - - [ " +
+                "- - - - - - - - - / " +
+                "- L L - L L - - - S " +
+                "- - - - - - - - - [ " +
+                "- L L - L L - - - / " +
+                "- - - - - - - - /   ");
+
+        InteractableNode sign1 = new InteractableNode("Lab Sign 1", "S", "Read");
+        InteractableNode sign2 = new InteractableNode("Lab Sign 2", "S", "Read");
+        Nodeable[] B51arr = {sign1, sign2};
+        B51.fillPlaceholders(B51arr);
+        B51.getBoard().get(4).get(9).performAction("Lock Door", B51, this);
+        B51.getBoard().get(7).get(9).performAction("Lock Door", B51, this);
+        Civilian sci7 = new Civilian("S", "Scientist",3, 6, floor);
+        B51.addNode(3, 6, sci7);
+        Civilian sci8 = new Civilian("S", "Scientist",5, 5, floor);
+        B51.addNode(5, 5, sci8);
+        Civilian sci9 = new Civilian("S", "Scientist",7, 7, floor);
+        B51.addNode(7, 7, sci9);
+
+        B52.setBoardFromString("- - - - - - - - /   " +
+                "- - - - - - - - - / " +
+                "- - - - L L L - - / " +
+                "- - - - L - L - - S " +
+                "- - - - - - - - - [ " +
+                "- - - - L - L - - / " +
+                "- - - - L L L - - / " +
+                "- - - - - - - - /   " +
+                "/ / / / / / / /     " +
+                "                    ");
+        InteractableNode sign3 = new InteractableNode("Lab Sign 3", "S", "Read");
+        B52.addNode(9,3, sign3);
+        B52.getBoard().get(4).get(9).performAction("Lock Door", B52, this);
+        Civilian sci10 = new Civilian("S", "Scientist",3, 6, floor);
+        B52.addNode(3, 6, sci10);
+        Civilian sci11 = new Civilian("S", "Scientist",5, 5, floor);
+        B52.addNode(5, 5, sci11);
+
+
+
+        B43.setBoardFromString("        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     ");
+
+        B43.setBoardFromString("        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / - - /     " +
+                "        / ? ? /     " +
+                "        / - - /     " +
+                "        / - - /     ");
 
 
     }
@@ -1229,20 +1438,23 @@ public class Game {
         Entrance daltonApartmentEntrance = new Entrance("Entrance", "Enter", daltonApartmentComplex, 5, 4, 3, 7, true);
         daltonApartmentOutside.addNode(8, 5, daltonApartmentEntrance);
 
-
+        StaticNode lamp = new StaticNode("L", "Lamppost");
+        Nodeable[] lampArr = new Nodeable[4];
+        for (int i = 0; i < 4; i++) lampArr[i] = lamp;
 
         Board road65 = new Board("-", NYC, "Road"); NYC.addBoard(road65, 6, 5);
         road65.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
-                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ P ~ ~ ~ ~ P ~ ~ " +
                 "- - - - - - - - - - " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "- - - - - - - - - - " +
-                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ P ~ ~ ~ ~ P ~ ~ " +
                 "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
 
+        road65.fillPlaceholders(lampArr);
         if (currentChapter == 1){
             MysteriousMan mm = new MysteriousMan();
             road65.addNode(5, 9, mm);
@@ -1250,37 +1462,42 @@ public class Game {
 
 
 
+
+
         Board road55 = new Board("-", NYC, "Road"); NYC.addBoard(road55, 5, 5);
         road55.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
-                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ P ~ ~ ~ ~ P ~ ~ " +
                 "- - - - - - - - - - " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "- - - - - - - - - - " +
-                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ P ~ ~ ~ ~ P ~ ~ " +
                 "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+
+        road55.fillPlaceholders(lampArr);
 
 
 
         Board road45 = new Board("-", NYC, "Road"); NYC.addBoard(road45, 4, 5);
         road45.setBoardFromString("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ " +
-                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ P ~ ~ ~ ~ P ~ ~ " +
                 "- - - - - - - - - - " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "- - - - - - - - - - " +
-                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ P ~ ~ ~ ~ P ~ ~ " +
                 "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
 
+        road45.fillPlaceholders(lampArr);
         if (currentChapter == 1) {
             MysteriousMan mima = new MysteriousMan();
             road45.addNode(5, 9, mima);
         }
-        InteractableNode sign = new InteractableNode("Sign", "S", "Read Sign");
+        InteractableNode sign = new InteractableNode("Nelson Labs Sign", "S", "Read Sign");
         road45.addNode(1, 1, sign);
 
 
@@ -1294,7 +1511,7 @@ public class Game {
                 "= = = = - - = = = = " +
                 "= = = = - - = = = = " +
                 "- - - - - - - - - - " +
-                "~ ~ L ~ ~ ~ ~ L ~ ~ " +
+                "~ ~ P ~ ~ ~ ~ P ~ ~ " +
                 "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
 
 
@@ -1302,7 +1519,7 @@ public class Game {
         Entrance NLE2 = new Entrance("Entrance", "Enter", nelsonLabs, 4, 7, 5, 6, true);
         Door NLED1 = new Door(true, true);
         Door NLED2 = new Door(true, true);
-        Nodeable[] nodeArray = {NLE1, NLE2, NLED1, NLED2};
+        Nodeable[] nodeArray = {NLE1, NLE2, NLED1, NLED2, lamp, lamp};
         nelsonLabsOutside.fillPlaceholders(nodeArray);
 
 
@@ -1492,17 +1709,33 @@ public class Game {
 
 
 
-
     static public void print(String message, int time) {
         System.out.println(message);
         System.out.println();
         time(time);
     }
 
+    static public void sPrint(String message) {
+        int count = 0;
+        for (char c : message.toCharArray()) {
+            if (c == ' ') {
+                count++;
+            }
+        }
+        count++;
+        int sec = (int)((count / 1.6) + 0.5);
+        print(message, sec);
+    }
+
 
     static public String userInput() {
         return input.nextLine();
     }
+
+    static public int intInput() {
+        return input.nextInt();
+    }
+
 
 
 
