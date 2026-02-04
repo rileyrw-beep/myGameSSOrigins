@@ -199,8 +199,8 @@ public class InteractableNode implements Nodeable{
             Game.print("You check the note placed on top of it and see that it is a shipment of chemicals meant for your father.", 7);
             Game.print("You open the package and put the contents in your pocket.", 4);
             System.out.println();
-            Game.print("Added 'Medicine Vail' to your inventory.", 3);
-            g.getPlayer().getInventory().addItem(Inventory.getItemFromDictionary("vial"));
+            Game.print("Added 'Medicine Vials' to your inventory.", 3);
+            g.getPlayer().getInventory().addItem(Inventory.getItemFromDictionary("vials"));
             b.addNode(6,4, new StaticNode("T", "Table"));
             return true;
         });
@@ -210,7 +210,7 @@ public class InteractableNode implements Nodeable{
            if (b.getBoard().get(2).get(2).getActionList().isEmpty()) {
                Game.print("You walk over to Jerry with a mean look on your face.", 4);
                Game.print("You see him enjoying, scarfing down the last bite of the last piece of the Casey's breakfast pizza.", 7);
-               Game.print("You slam the table in front of him", 3);
+               Game.print("You slam the table in front of him...", 3);
                Game.print("BANG!", 2);
 
                System.out.println();
@@ -265,10 +265,10 @@ public class InteractableNode implements Nodeable{
             Game.print("You assumed they came from Dr. Nelson's remote, industrial sized laboratory where he produces his important work.", 6);
             Game.print("You place the vials on the table.", 3);
 
-            g.getPlayer().getInventory().removeItem(Inventory.getItemFromDictionary("vial"));
+            g.getPlayer().getInventory().removeItem(Inventory.getItemFromDictionary("vials"));
 
             StaticNode newVialTable = new StaticNode("V", "Table with the Vials on It");
-            b.addNode(5, 6,  newVialTable);
+            b.addNode(5, 5,  newVialTable);
 
             return true;
         });
@@ -290,8 +290,15 @@ public class InteractableNode implements Nodeable{
             Game.print("Riley * 'Are we being for real? Anyways, where is he now?'", 4);
             System.out.println();
             Game.print("Doctor Robot * 'He is undergoing an experimental treatment in his remote laboratory, he will return within the hour.'", 6);
+            Game.print("Riley * 'Well I have a delivery of some vials from the remote laboratory for him.'", 4);
+            Game.print("Doctor Robot * 'Where did you find these?'", 3);
+            System.out.println();
+            Game.print("Riley * 'In the common room, why?'", 3);
+            Game.print("Doctor Robot * 'Well I do not see any shipments scheduled today in my system.'", 4);
+            Game.print("Riley * 'Well if its your system then it's probably a glitch.'", 4);
+            System.out.println();
+            Game.print("Doctor Robot * 'You're lucky I was programmed to do no harm to humans.'", 4);
             Game.print("Riley * 'Okay, well I will come back and check up on him once I get back from presenting at the Tech Fair.'", 5);
-
             return true;
         });
 
@@ -325,10 +332,10 @@ public class InteractableNode implements Nodeable{
                 return true;
             }
 
-            Game.print("Might I remind you, this is the only invention that has worked for you EVER", 4);
+            Game.print("Might I remind you, this is the only invention that has worked for you EVER.", 4);
 
             options.remove("I mean what I mean");
-            options.add("Eat it");
+            options.addFirst("Eat it");
             if (Game.basicGameLoop(options) == 2) {
                 return true;
             }
@@ -408,7 +415,7 @@ public class InteractableNode implements Nodeable{
 
         actionDict.put("Riley's Addiction Relief Pills", (Board b, Game g) -> {
             Game.print("...", 3);
-            Game.print("Taking after your father, you got into the field of medicine", 4);
+            Game.print("Taking after your father, you got into the field of medicine.", 4);
             Game.print("On the bottle it read:", 1);
             Game.print("Take the necessary amount by mouth twice a day for a week to cure your addiction. Works on any addiction.", 5);
             System.out.println();
@@ -424,7 +431,7 @@ public class InteractableNode implements Nodeable{
         actionDict.put("Generator Cast", (Board b, Game g) -> {
             Game.print("...", 3);
             Game.print("You look on the table and see a machine of metal about the size of your torso.", 4);
-            Game.sPrint("This is the cast that is supposed to regulate the Golden Electricity Generator by collapsing the wave function of the quantumly superpositioned electrons so that it does not get out of hand.");
+            Game.sPrint("This is the cast that is supposed to regulate the Golden Electricity Generator by collapsing the wave function of the quantumly superpositioned electrons so that it does not overload what it is powering.");
             Game.print("However, you could not get it done in time because you procrastinated until last night to start so you are just going to leave it out.", 5);
             System.out.println();
             Game.print("Whoops.", 3);
@@ -451,6 +458,8 @@ public class InteractableNode implements Nodeable{
             Game.sPrint("You see your fellow scientist Amanda walking down the hallway.");
             Game.sPrint("You have always thought highly of her, and you want to get closer to her.");
             Game.sPrint("You run up to her and match her pace by her side.");
+            Game.sPrint("Player, you probably shouldn't mess this up for Riley.");
+
             while (true) {
                 System.out.println();
                 Game.sPrint("What do you say to her?");
@@ -463,16 +472,22 @@ public class InteractableNode implements Nodeable{
 
                 switch (choice) {
                     case 1:
-                        Game.sPrint("Hey Amanda, watcha up to? Nothing important I presume because I've never seen you do anything of substance around here.'");
+                        System.out.print("Hey Amanda, watcha up to... ");
+                        Game.time(3);
+                        Game.print("Nothing important I presume because I've never seen you do anything of substance around here.'", 4);
                         break;
                     case 2:
-                        Game.sPrint("Oh Amanda, long time no see! Did you get into that college you applied for?'");
+                        System.out.print("Oh Amanda, long time no see... ");
+                        Game.time(3);
+                        Game.print("Did you get into that college you applied for?'", 4);
                         Game.sPrint("Amanda (annoyed) * 'No Riley, I already told you I got denied last week.'");
                         Game.sPrint("Riley * 'Huh, you probably deserved it.'");
                         System.out.println();
                         break;
                     case 3:
-                        Game.sPrint("Howdy Amanda, crazy seeing you here, especially after that one time I accidentally burned your hair off with that acidic solution and you had to wear a wig for a month.'");
+                        System.out.print("Howdy Amanda, crazy seeing you here... ");
+                        Game.time(3);
+                        Game.print("especially after that one time I accidentally burned your hair off with that acidic solution and you had to wear a wig for a month.'", 4);
                         Game.sPrint("Amanda (annoyed) * 'I remember that just fine Riley, you did not have to bring it up.'");
                         Game.sPrint("Riley (laughing) * 'But bald Amanda was really funny.'");
                         System.out.println();
@@ -480,29 +495,37 @@ public class InteractableNode implements Nodeable{
 
                 }
 
+                Game.sPrint("Riley (thinking) * 'Dang, why did I say that'");
+
                 Game.sPrint("Amanda * (scowling) 'What's your problem man?'");
 
                 Game.sPrint("How do you respond?");
 
                 options.clear();
                 options.add("Yeah that's my bad...");
-                options.add("I don't see a problem here...");
+                options.add("I don't see my problem here...");
                 options.add("I'm sorry, I don't know what has gotten into me...");
 
 
-                System.out.print("Riley * '");
-
                 choice = Game.basicGameLoop(options);
+
+                System.out.print("Riley * '");
 
                 switch (choice) {
                     case 1:
-                        Game.sPrint("It's just I am not used to respecting people who have faces like that.'");
+                        System.out.print("Yeah that's my bad... ");
+                        Game.time(3);
+                        Game.print("It's just I am not used to respecting people whose face looks like that.'", 4);
                         break;
                     case 2:
-                        Game.sPrint("Actually there is a problem: its the fact you thought it was a good idea to wear that dress today.'");
+                        System.out.print("I don't see my problem here... ");
+                        Game.time(3);
+                        Game.print("The only problem here is the fact you thought it was a good idea to wear that dress today.'", 4);
                         break;
                     case 3:
-                        Game.sPrint("It's just I can't think of a single good thing to say about you.'");
+                        System.out.print("I'm sorry, I don't know what has gotten into me... ");
+                        Game.time(3);
+                        Game.print("It's just I can't think of a single good thing to say about you.'", 4);
                         break;
                 }
 
@@ -516,7 +539,7 @@ public class InteractableNode implements Nodeable{
 
                 options.clear();
                 options.add("Reset Dialogue");
-                options.add("Continue;");
+                options.add("Continue");
 
                 choice = Game.basicGameLoop(options);
 
@@ -525,8 +548,21 @@ public class InteractableNode implements Nodeable{
                 }
             }
 
-            b.addNode(5, 5, new Floor());
+            b.addNode(4, 5, new Floor());
             return true;
+        });
+
+        actionDict.put("Lab Sign 1", (b, g) -> {
+            Game.print("Sign * 'Lab Room #4'", 3);
+            return false;
+        });
+        actionDict.put("Lab Sign 2", (b, g) -> {
+            Game.print("Sign * 'Lab Room #5'", 3);
+            return false;
+        });
+        actionDict.put("Lab Sign 3", (b, g) -> {
+            Game.print("Sign * 'Lab Room #6'", 3);
+            return false;
         });
     }
 

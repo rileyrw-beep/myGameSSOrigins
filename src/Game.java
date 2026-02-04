@@ -16,7 +16,6 @@ public class Game {
     private int currentChapter;
     private int latestChapter;
     private int[] currentAct;
-    private int[] latestActs;
     private final int[] totalActs;
     private Board currentBoard;
     private boolean intendedRoute;
@@ -28,7 +27,7 @@ public class Game {
     static Map currentMap;
 
     //convenience.
-    private int timeNumber;
+    private static int timeNumber;
     private Hobo hobo;
 
     //constructor
@@ -40,7 +39,6 @@ public class Game {
         currentChapter = 0;
         latestChapter = 0;
         currentAct = new int[8];
-        latestActs = new int[8];
         totalActs = new int[]{3, 3, 0, 0, 0, 0, 0, 0};
         timeNumber = 0;
 
@@ -97,9 +95,6 @@ public class Game {
         return latestChapter;
     }
 
-    public int[] getLatestAct() {
-        return latestActs;
-    }
 
     public int[] getTotalActs() {
         return totalActs;
@@ -152,7 +147,7 @@ public class Game {
                 int desiredAct = input.nextInt();
                 input.nextLine();
                 System.out.println();
-                if (desiredAct >= 1 && desiredAct <= latestActs[currentChapter - 1]) {
+                if (desiredAct >= 1) {
                     currentAct[currentChapter - 1] = desiredAct;
                     break;
                 } else {
@@ -167,6 +162,7 @@ public class Game {
     }
 
     static public void time(int sec) {
+        if (timeNumber == 200) return;
         try {
             TimeUnit.SECONDS.sleep(sec);
         } catch (InterruptedException ie) {
@@ -765,7 +761,7 @@ public class Game {
         }
 
         currentAct[currentChapter - 1] = 3;
-        latestActs[latestChapter - 1] = 2;
+
         currentPlayer.getInventory().saveInventory();
         endText();
     }
@@ -791,6 +787,7 @@ public class Game {
         }
 
         currentChapter = 2;
+        latestChapter = 1;
         currentAct[currentChapter - 1] = 1;
         currentPlayer.getInventory().saveInventory();
         endText();
@@ -910,12 +907,13 @@ public class Game {
         //have the package be a node sitting on a table that inputs an item in the inventory and then replaces itself it a table.
         //cover the initial vial explanations in the node itself then explain more in the act 2 instructions
 
-        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 3, 2, 5, 2, -1, -1)) {
+        if (!advancedGameLoop(getPlayer(), nelsonLabs,  3, 2, 5, 2, -1, -1)) {
             return;
         }
 
+
         currentAct[currentChapter - 1] = 2;
-        latestActs[latestChapter - 1] = 1;
+
         currentPlayer.getInventory().saveInventory();
         endText();
 
@@ -929,11 +927,13 @@ public class Game {
         endText();
         time(3);
 
+        nelsonLabs.getMapBoard().get(1).get(5).getBoard().get(1).get(4).performAction("Unlock Door", nelsonLabs.getMapBoard().get(1).get(5), this);
+
         print("After brutally beating up a very innocent botanist, you remember the vials you had picked up.", 7);
         print("It is best you deliver the vials to your father soon.", 5);
         print("His room is marked by the H on the big map, go there now.", 6);
 
-        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 5, 0, 4, 6, -1, -1)) {
+        if (!advancedGameLoop(getPlayer(), nelsonLabs,  5, 0, 4, 6, -1, -1)) {
             return;
         }
 
@@ -947,7 +947,7 @@ public class Game {
         System.out.println();
         print("Place the vials on the table to your right.", 5);
 
-        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 5, 1, 4, 2, -1, -1)) {
+        if (!advancedGameLoop(getPlayer(), nelsonLabs,  5, 1, 4, 2, -1, -1)) {
             return;
         }
 
@@ -955,12 +955,14 @@ public class Game {
         print("For now, you must prepare for the Tech Fair.", 5);
         print("Head to your lab now, it is marked by the board at (4,0) on the big map.", 6);
 
-        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 4, 0, 4, 6, -1, -1)) {
+        nelsonLabs.getMapBoard().get(1).get(4).getBoard().get(1).get(4).performAction("Unlock Door", nelsonLabs.getMapBoard().get(1).get(4), this);
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs,  4, 0, 4, 6, -1, -1)) {
             return;
         }
 
         currentAct[currentChapter - 1] = 3;
-        latestActs[latestChapter - 1] = 2;
+
         currentPlayer.getInventory().saveInventory();
         endText();
 
@@ -979,14 +981,17 @@ public class Game {
         System.out.println();
         print("Grab the generator and then take it out the front where the tech fair will take place.", 6);
 
-        if (!advancedGameLoop(getPlayer(), nelsonLabs, 100, "Hurry up bro.", 4, 1, 4, 2, -1, -1)) {
+        if (!advancedGameLoop(getPlayer(), nelsonLabs,  4, 1, 4, 2, -1, -1)) {
             return;
         }
 
         print("Nice! You got the generator.", 3);
         print("Now, just head directly south about four boards until you reach the main public room of Nelson Labs and place your generator at your stand.", 8);
 
-        if (!advancedGameLoop(getPlayer(), nelsonLabs, 100, "Hurry up bro.", 4, 5, -1, 2, -1, -1)) {
+        nelsonLabs.getMapBoard().get(2).get(4).getBoard().get(8).get(5).performAction("Unlock Door", nelsonLabs.getMapBoard().get(2).get(4), this);
+        nelsonLabs.getMapBoard().get(2).get(4).getBoard().get(8).get(4).performAction("Unlock Door", nelsonLabs.getMapBoard().get(2).get(4), this);
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs,  4, 5, -1, 2, -1, -1)) {
             return;
         }
 
@@ -994,6 +999,7 @@ public class Game {
         print("You look around and see there are already a few scientists setting up.", 5);
         print("You walk over to your little stand and spend a while putting it up.", 4);
         System.out.println();
+        currentPlayer.getInventory().removeItem(Inventory.getItemFromDictionary("geg"));
         print("You get the generator working and plugged into a set of lights. You put up a sign with all the research for people to read.", 7);
         print("You then look over and see Amanda gearing up her virtual reality set she has been working on.", 7);
         print("You think to yourself that you almost feel sorry for her because you are so confident your Golden Electricity Generator will be such a big hit.", 8);
@@ -1016,7 +1022,7 @@ public class Game {
         print("Riley * 'Hello there, wow you're the first person who's came to my presentation!'", 5);
         print("You are excited out of your mind.", 3);
         print("Visitor (under his breath) * 'I couldn't possibly see why.'", 4);
-        print("Riley (putting down the news) * 'Well my name is Riley Nelson, what's yours/'", 5);
+        print("Riley (putting down the news) * 'Well my name is Riley Nelson, what's yours?'", 5);
         System.out.println();
         print("You look up and see this fat, chopped, ungrateful-looking human being.", 4);
         print("Visitor (looking annoyed that he has to be doing this) * 'I'm Dalton Young, now can we get going with the presentation.", 5);
@@ -1047,7 +1053,7 @@ public class Game {
 
 
 
-        latestActs[latestChapter - 1] = 3;
+
         currentChapter = 3;
         latestChapter = 2;
         currentAct[currentChapter - 1] = 1;
@@ -1062,6 +1068,8 @@ public class Game {
         System.out.println("Chapter 2: Riley's Beginning");
         time(3);
         System.out.println();
+
+        currentPlayer.resetPlayer("R", "Riley Nelson", "floor");
 
         //load nelson's labs
         currentMap = nelsonLabs;
@@ -1316,7 +1324,7 @@ public class Game {
                 "- - - - - - - - - - " +
                 "- - - - - - - - - - ");
 
-        if (currentChapter != 1) {
+        if (currentChapter == 1) {
             B45.getBoard().get(1).get(4).performAction("Lock Door", B45, this);
             B45.getBoard().get(1).get(5).performAction("Lock Door", B45, this);
         }
@@ -1381,9 +1389,9 @@ public class Game {
                 "  / / / / / / / /   " +
                 "  / - - - S - - /   " +
                 "  / T - - - - B /   " +
-                "  / T - G - - L /   " +
-                "  / C - - - - 2 /   " +
-                "  / T - - - - P /   " +
+                "  / T - G - - P /   " +
+                "  / C - - - - P /   " +
+                "  / A - - - - 2 /   " +
                 "  / / / [ / / / /   " +
                 "      / - /         " +
                 "      / - /         ");
@@ -1396,7 +1404,7 @@ public class Game {
         InteractableNode gen = new InteractableNode("Golden Electricity Generator", "G", "Pick Up");
         InteractableNode cast = new InteractableNode("Generator Cast", "C", "Inspect");
         InteractableNode addiction = new InteractableNode("Riley's Addiction Relief Pills", "A", "Inspect"); // get an item from these
-        Nodeable[] RL40arr = {sunlightChamber, burger, gen, love, cast, pancake, addiction, pants};
+        Nodeable[] RL40arr = {sunlightChamber, burger, gen, love, cast, pants, addiction, pancake};
         RL40.fillPlaceholders(RL40arr);
 
         H50.setBoardFromString("                    " +
@@ -1474,6 +1482,8 @@ public class Game {
         B41.addNode(5, 2, sci2);
         Civilian sci3 = new Civilian("S", "Scientist",7, 7, floor);
         B41.addNode(7, 7, sci3);
+        B41.getBoard().get(1).get(4).performAction("Lock Door", B41, this);
+
 
         B42.setBoardFromString("  / - - - - - - - - " +
                 "  / - - - - - - - - " +
@@ -1483,8 +1493,8 @@ public class Game {
                 "- [ - - L - L - - - " +
                 "/ / - - L L L - - - " +
                 "  / - - - - - - - - " +
-                "    / / / [ [ / / / " +
-                "        / - - /     ");
+                "    / / [ [ / / / / " +
+                "      / - - /       ");
 
 
         Civilian sci4 = new Civilian("S", "Scientist",3, 6, floor);
@@ -1493,6 +1503,10 @@ public class Game {
         B42.addNode(5, 4, sci5);
         Civilian sci6 = new Civilian("S", "Scientist",7, 7, floor);
         B42.addNode(7, 7, sci6);
+        //8,5
+        //8,6
+        B42.getBoard().get(8).get(5).performAction("Lock Door", B42, this);
+        B42.getBoard().get(8).get(4).performAction("Lock Door", B42, this);
 
         B51.setBoardFromString("      / - /         " +
                 "/ / / / [ / / /     " +
@@ -1511,6 +1525,7 @@ public class Game {
         B51.fillPlaceholders(B51arr);
         B51.getBoard().get(4).get(9).performAction("Lock Door", B51, this);
         B51.getBoard().get(7).get(9).performAction("Lock Door", B51, this);
+        B51.getBoard().get(1).get(4).performAction("Lock Door", B51, this);
         Civilian sci7 = new Civilian("S", "Scientist",3, 6, floor);
         B51.addNode(3, 6, sci7);
         Civilian sci8 = new Civilian("S", "Scientist",5, 5, floor);
@@ -1538,29 +1553,29 @@ public class Game {
 
 
 
-        B43.setBoardFromString("        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     ");
+        B43.setBoardFromString("      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       ");
 
-        B43.setBoardFromString("        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / P - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     " +
-                "        / - - /     ");
+        B44.setBoardFromString("      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / P - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       " +
+                "      / - - /       ");
 
-        B43.fillPlaceholders(new Nodeable[]{new InteractableNode("Amanda", "A", "Talk")});
+        B44.fillPlaceholders(new Nodeable[]{new InteractableNode("Amanda", "A", "Talk")});
 
     }
 

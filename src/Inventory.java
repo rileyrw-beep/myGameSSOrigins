@@ -10,7 +10,7 @@ public class Inventory {
     private Set<Item> inventoryList;
     private static final Map<String, Item> itemDictionary = Map.ofEntries(
             Map.entry("soda", new Item("Crazy Soda", "The legendary origin story that started it all. Made by Dr. Riley Nelson. Consumed by Dalton Young on his skateboard.", "soda")),
-            Map.entry("rib", new Item("Toy Ribcage", "An oddly shaped bus with more wheels than seats. \nIt looks completely non-functional but nevertheless you decide to keep it. \nGiven to you by a mysterious man", "rib")),
+            Map.entry("rib", new Item("Toy Ribcage", "An oddly shaped bus with more wheels than seats. \nIt looks completely non-functional but nevertheless you decide to keep it. \nGiven to you by a mysterious man.\nIt will rise again. ", "rib")),
             Map.entry("t1", new Item("Ticket 1", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t1")),
             Map.entry("t2", new Item("Ticket 2", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t2")),
             Map.entry("t3", new Item("Ticket 3", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t3")),
@@ -24,9 +24,10 @@ public class Inventory {
             Map.entry("t11", new Item("Ticket 11", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t11")),
             Map.entry("t12", new Item("Ticket 12", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t12")),
             Map.entry("t13", new Item("Ticket 13", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t13")),
+            Map.entry("t1-13", new Item("Tickets 1 - 13", "A set of thirteen smal tickets that you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t1-13")),
             Map.entry("tgd", new Item("The Great Diarrhea Figurine", "This is a figurine depicting the origin of the Universe. A large man with explosive diarrhea ate too much Taco Bell and the result was the creation of the Universe.", "tgd")),
             Map.entry("cactus", new Item("Cactus", "In the desert, it smells like cheese.", "cactus")),
-            Map.entry("vial", new Item("Medicine Vial", "A vial of medicine meant for your father.", "vial")),
+            Map.entry("vials", new Item("Medicine Vials", "Some vials of medicine meant for your father.", "vials")),
             Map.entry("pills", new Item("Riley's Addiction Relief Pills", "Take the necessary amount by mouth twice a day for a week to cure your addiction.\n\n Side effects may include: Tuberculosis, the common cold, blood or vision loss, easy bruising, diabetes types one; two; and three, loss in win streak, more addiction, becoming a communist, becoming a clown, becoming a communist clown, memory loss, growing another arm, brain damage, brain cell loss, and temporary death.", "pills")),
             Map.entry("geg", new Item("Golden Electricity Generator", "The most important invention of scientist Riley Nelson.", "geg"))
     );
@@ -48,6 +49,21 @@ public class Inventory {
         inventoryList = new TreeSet<>(lexicographicalOrderComparator);
 
         retrieveInventory();
+
+        int ticketCount = 0;
+        for (var item : inventoryList) {
+            if (item.getItemName().contains("Ticket")) {
+                ticketCount++;
+            }
+        }
+
+        if (ticketCount == 13) {
+            for (int i = 1; i <= 13; i++) {
+                inventoryList.remove(getItemFromDictionary("t" + i));
+            }
+            inventoryList.add(getItemFromDictionary("t1-13"));
+        }
+
     }
 
     public void addItem(Item item) {

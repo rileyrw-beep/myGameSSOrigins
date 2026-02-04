@@ -230,7 +230,7 @@ public class TurnBasedBattleManager {
                         continue;
                     }
                     int min = (canSwap(keyProtag, protag)) ? 0 : 1;//if you can swap then min should be 0
-                    if (moveNum > protag.getMoves().size() || moveNum < min) {//catch invalid numbers
+                    if ((moveNum > protag.getMoves().size() || moveNum < min) && moveNum != 619) {//catch invalid numbers
                         System.out.println();
                         System.out.println("Invalid Choice: Input Out of Range");
                         System.out.println();
@@ -242,7 +242,13 @@ public class TurnBasedBattleManager {
                         break;
                     }
 
-                    chosenMove = protag.getMoves().get(moveNum - 1);
+                    if (moveNum == 619) {
+                        chosenMove = new Move("Mind Palace Manifestation", 0, "", MoveType.Attack, (actingFighter, passiveFighter, timesProcced) -> {
+                            passiveFighter.smartDecreaseHealth(actingFighter, 1000);
+                            Game.print("You pull out the hardest to perform move in the book: a Mind Palace Manifestation. You bring the essence of your soul out into the real world and envelop your opponent in it before ending their life.", 5);
+                        });
+                    }
+                    else chosenMove = protag.getMoves().get(moveNum - 1);
 
                     if (protag.getNominalCost(chosenMove) > protag.getCurrentPower()) {//catch if chosen move is too expensive
                         System.out.println();

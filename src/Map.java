@@ -38,19 +38,26 @@ public class Map {
         this.currentBoardY = currentBoardY;
     }
 
+
     public void printMap() {
-        for (int row = 0; row < map.size(); row++) {
-            for (int col = 0; col < map.get(row).size(); col++) {
-                if (row == currentBoardY && col == currentBoardX) {
-                    System.out.println("P ");
-                    continue;
-                }
-                System.out.print(map.get(row).get(col).getBoardChar() + " ");
+        System.out.println();
+        System.out.print("  ");
+        for (int i = 0; i < map.get(0).size(); i++) {
+            System.out.print(i + " ");
+        }
+        System.out.println("X");
+        for (int i = 0; i < map.size(); i++) {
+            System.out.print(i + " ");
+            for(int j = 0; j < map.get(i).size(); j++) {
+                String x = map.get(i).get(j).getBoardChar();
+
+                System.out.print(x + " ");
             }
             System.out.println();
         }
+        System.out.println("Y");
         System.out.println();
-        System.out.println("You are at the board labeled P.");
+        Game.print("You are at (" + getCurrentBoardX() + ", " + getCurrentBoardY() + ").", 3);
     }
 
     public void boardChanged() {

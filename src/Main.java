@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.ArrayList;
 
@@ -23,7 +22,7 @@ public class Main {
 
 
             //once a chapter ends
-            game.endText();
+            Game.endText();
             System.out.println("Would you like to proceed to the next chapter or a previous one?");
             System.out.println();
             ArrayList<String> optionList = new ArrayList<>();
@@ -40,8 +39,8 @@ public class Main {
 
                 case 2: {
                     System.out.println();
-                    int chap = -1;
-                    int act = -1;
+                    int chap;
+                    int act;
 
                     while (true) {
                         try {
