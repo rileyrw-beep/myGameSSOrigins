@@ -197,7 +197,7 @@ public class TurnBasedBattleManager {
 
 
                 //protag move display sequence
-                if (canSwap(keyProtag, protag)) System.out.println("0. Swap");
+                if (canSwap(keyProtag, protag)) System.out.println("0. Swap\n");
                 for (int i = 0; i < protag.getMoves().size(); i++) {
                     if (protag.getNominalCost(protag.getMoves().get(i)) <= protag.getCurrentPower()) {
                         System.out.print(((i + 1)) + ". " + protag.getMoves().get(i).getName() + " | Cost: ");
@@ -207,6 +207,7 @@ public class TurnBasedBattleManager {
                             System.out.print(protag.getMoves().get(i).getCost());
                         }
                         System.out.println(" | " + protag.getMoves().get(i).getDescription());
+                        if ((i+1) % 3 == 0 && (i+1) != protag.getMoves().size()) System.out.println();
                     }
                 }
                 System.out.println();

@@ -41,7 +41,7 @@ public class Game {
         latestChapter = 0;
         currentAct = new int[8];
         latestActs = new int[8];
-        totalActs = new int[]{3, 0, 0, 0, 0, 0, 0, 0};
+        totalActs = new int[]{3, 3, 0, 0, 0, 0, 0, 0};
         timeNumber = 0;
 
     }
@@ -991,11 +991,11 @@ public class Game {
         }
 
         print("You walk through the double doors and see the large main atrium of Nelson Labs.", 5);
-        print("You look around and realize you are the first person setting up, lucky you.", 5);
+        print("You look around and see there are already a few scientists setting up.", 5);
         print("You walk over to your little stand and spend a while putting it up.", 4);
         System.out.println();
         print("You get the generator working and plugged into a set of lights. You put up a sign with all the research for people to read.", 7);
-        print("You then look over and see your fellow scientist Amanda gearing up her virtual reality set she has been working on.", 7);
+        print("You then look over and see Amanda gearing up her virtual reality set she has been working on.", 7);
         print("You think to yourself that you almost feel sorry for her because you are so confident your Golden Electricity Generator will be such a big hit.", 8);
         System.out.println();
         print("Then, the Tech Fair starts and the doors open up. People pour in and begin to walk around to each station.", 7);
@@ -1376,13 +1376,14 @@ public class Game {
 
         //build riley room:
 
-        RL40.setBoardFromString("                  " +
+
+        RL40.setBoardFromString("                    " +
                 "  / / / / / / / /   " +
                 "  / - - - S - - /   " +
                 "  / T - - - - B /   " +
-                "  / T - G - - P /   " +
+                "  / T - G - - L /   " +
                 "  / C - - - - 2 /   " +
-                "  / A - - - - P /   " +
+                "  / T - - - - P /   " +
                 "  / / / [ / / / /   " +
                 "      / - /         " +
                 "      / - /         ");
@@ -1428,12 +1429,12 @@ public class Game {
                 "                    " +
                 "                    ");
 
-        InteractableNode boStaff = new InteractableNode("Bo Staff", "|", "Inspect");
+        InteractableNode boStaff = new InteractableNode("Bo Staff", "|", "Inspect Bo Staff");
         //bed
         StaticNode desk = new  StaticNode("+", "Desk");
         InteractableNode nightstand = new InteractableNode("Nightstand", "N", "Inspect");
         InteractableNode jukebox = new InteractableNode("Jukebox", "J", "Inspect"); //rickrools you
-        InteractableNode photos = new InteractableNode("Photo Wall", "W", "Inspect");
+        InteractableNode photos = new InteractableNode("Photo Wall", "W", "Inspect Wall");
         Nodeable[] RR31arr = {photos, boStaff, bed, desk, nightstand, jukebox};
         RR31.fillPlaceholders(RR31arr);
 
@@ -1553,12 +1554,13 @@ public class Game {
                 "        / - - /     " +
                 "        / - - /     " +
                 "        / - - /     " +
+                "        / P - /     " +
                 "        / - - /     " +
                 "        / - - /     " +
-                "        / ? ? /     " +
                 "        / - - /     " +
                 "        / - - /     ");
 
+        B43.fillPlaceholders(new Nodeable[]{new InteractableNode("Amanda", "A", "Talk")});
 
     }
 

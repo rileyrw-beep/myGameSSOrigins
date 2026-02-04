@@ -8,18 +8,6 @@ public class Main {
         Game game = new Game();
 
 
-        ArrayList<String> options = new ArrayList<>(Arrays.asList("Eat it", "Move along"));
-        Game.basicGameLoop(options);
-
-        TurnBasedBattleManager.doBattle(new String[]{"jerry"}, new String[]{"riley"}, true);
-
-
-        int y = game.getInput().nextInt();
-
-        if (y % 2 == 0) {
-            return;
-        }
-
         boolean x = game.askPlayerName();
         game.startGame(x);
 

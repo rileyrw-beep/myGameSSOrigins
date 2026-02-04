@@ -155,7 +155,7 @@ public class InteractableNode implements Nodeable{
             Game.print("...", 3);
             Game.print("You walk up to the stand for your Bo Staff which you try and practice daily.", 5);
             Game.print("Its more like weekly now.", 3);
-            Game.print("You have been practicing ever since you took karate as a kid, but you did not keep up with any of the other practices you learned there", 9);
+            Game.print("You have been practicing ever since you took karate as a kid, but you did not keep up with any of the other practices you learned there.", 9);
             System.out.println();
             Game.print("It was the only thing that you were sort of good at, so you still practice to this day.", 5);
             Game.print("You try and ignore the fact that it is a glorified stick.", 4);
@@ -443,6 +443,89 @@ public class InteractableNode implements Nodeable{
             System.out.println();
             Game.print("Added 'Golden Electricity Generator' to your inventory.", 3);
             b.addNode(4, 4, new Floor());
+            return true;
+        });
+
+        actionDict.put("Amanda", (b, g) -> {
+            Game.print("...", 3);
+            Game.sPrint("You see your fellow scientist Amanda walking down the hallway.");
+            Game.sPrint("You have always thought highly of her, and you want to get closer to her.");
+            Game.sPrint("You run up to her and match her pace by her side.");
+            while (true) {
+                System.out.println();
+                Game.sPrint("What do you say to her?");
+
+                ArrayList<String> options = new ArrayList<>(Arrays.asList("Hey Amanda, watcha up to...", "Oh Amanda, long time no see...", "Howdy Amanda, crazy seeing you here..."));
+
+                int choice = Game.basicGameLoop(options);
+
+                System.out.print("Riley * '");
+
+                switch (choice) {
+                    case 1:
+                        Game.sPrint("Hey Amanda, watcha up to? Nothing important I presume because I've never seen you do anything of substance around here.'");
+                        break;
+                    case 2:
+                        Game.sPrint("Oh Amanda, long time no see! Did you get into that college you applied for?'");
+                        Game.sPrint("Amanda (annoyed) * 'No Riley, I already told you I got denied last week.'");
+                        Game.sPrint("Riley * 'Huh, you probably deserved it.'");
+                        System.out.println();
+                        break;
+                    case 3:
+                        Game.sPrint("Howdy Amanda, crazy seeing you here, especially after that one time I accidentally burned your hair off with that acidic solution and you had to wear a wig for a month.'");
+                        Game.sPrint("Amanda (annoyed) * 'I remember that just fine Riley, you did not have to bring it up.'");
+                        Game.sPrint("Riley (laughing) * 'But bald Amanda was really funny.'");
+                        System.out.println();
+                        break;
+
+                }
+
+                Game.sPrint("Amanda * (scowling) 'What's your problem man?'");
+
+                Game.sPrint("How do you respond?");
+
+                options.clear();
+                options.add("Yeah that's my bad...");
+                options.add("I don't see a problem here...");
+                options.add("I'm sorry, I don't know what has gotten into me...");
+
+
+                System.out.print("Riley * '");
+
+                choice = Game.basicGameLoop(options);
+
+                switch (choice) {
+                    case 1:
+                        Game.sPrint("It's just I am not used to respecting people who have faces like that.'");
+                        break;
+                    case 2:
+                        Game.sPrint("Actually there is a problem: its the fact you thought it was a good idea to wear that dress today.'");
+                        break;
+                    case 3:
+                        Game.sPrint("It's just I can't think of a single good thing to say about you.'");
+                        break;
+                }
+
+                Game.sPrint("Amanda * (upset) 'You know what, you are a terrible human being Riley Nelson, and if your father did not own the place you would have been kicked out a long time ago because you really do not deserve to be here.'");
+                Game.sPrint("She then walked away furiously through the double doors towards the main atrium");
+                Game.sPrint("Dang, she really told you.");
+
+                System.out.println();
+
+                Game.sPrint("Riley * 'Shut up narrator.'");
+
+                options.clear();
+                options.add("Reset Dialogue");
+                options.add("Continue;");
+
+                choice = Game.basicGameLoop(options);
+
+                if (choice == 2) {
+                    break;
+                }
+            }
+
+            b.addNode(5, 5, new Floor());
             return true;
         });
     }
