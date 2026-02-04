@@ -70,7 +70,7 @@ public class TurnBasedBattleManager {
                     })),
                     new Move("Riley's Addiction Relief Pills", 7, "Taking these has a 50% chance to clear your status effects and a 50% chance to turn you into a communist clown.", MoveType.Heal, ((actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.clearStatusEffects();
-                        Game.sPrint("You pop a few of the pills and after a bit you feel pretty good. No Communism and no clowns. Status Effects Cleared.");
+                        Game.sPrint("You pop a few of the pills and after a bit you feel pretty good. No Communism and no clowns. You die for a bit but its only temporary. Status Effects Cleared.");
                         timesProcced[0]++;
                     }))
             )))),

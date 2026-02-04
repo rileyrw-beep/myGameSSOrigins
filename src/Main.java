@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.ArrayList;
 
@@ -6,6 +7,9 @@ public class Main {
 
         Game game = new Game();
 
+
+        ArrayList<String> options = new ArrayList<>(Arrays.asList("Eat it", "Move along"));
+        Game.basicGameLoop(options);
 
         TurnBasedBattleManager.doBattle(new String[]{"jerry"}, new String[]{"riley"}, true);
 

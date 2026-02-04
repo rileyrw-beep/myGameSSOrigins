@@ -40,6 +40,7 @@ public class Board {
         }
     }
 
+
     public void setBoardFromString(String boardString) {
         ArrayList<String> splicedStrings = new ArrayList<>();
         int start = 0;

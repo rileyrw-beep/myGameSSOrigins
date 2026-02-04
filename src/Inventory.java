@@ -26,7 +26,9 @@ public class Inventory {
             Map.entry("t13", new Item("Ticket 13", "A small ticket you got from the Nelson Lab's Tech Fair. If you get one from each presenting scientist, then you get free Raising Cane's.", "t13")),
             Map.entry("tgd", new Item("The Great Diarrhea Figurine", "This is a figurine depicting the origin of the Universe. A large man with explosive diarrhea ate too much Taco Bell and the result was the creation of the Universe.", "tgd")),
             Map.entry("cactus", new Item("Cactus", "In the desert, it smells like cheese.", "cactus")),
-            Map.entry("vial", new Item("Medicine Vial", "A vial of medicine meant for your father.", "vial"))
+            Map.entry("vial", new Item("Medicine Vial", "A vial of medicine meant for your father.", "vial")),
+            Map.entry("pills", new Item("Riley's Addiction Relief Pills", "Take the necessary amount by mouth twice a day for a week to cure your addiction.\n\n Side effects may include: Tuberculosis, the common cold, blood or vision loss, easy bruising, diabetes types one; two; and three, loss in win streak, more addiction, becoming a communist, becoming a clown, becoming a communist clown, memory loss, growing another arm, brain damage, brain cell loss, and temporary death.", "pills")),
+            Map.entry("geg", new Item("Golden Electricity Generator", "The most important invention of scientist Riley Nelson.", "geg"))
     );
     private static String filePath;
 

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Arrays;
 
 public class InteractableNode implements Nodeable{
     private String displayid;
@@ -200,6 +201,7 @@ public class InteractableNode implements Nodeable{
             System.out.println();
             Game.print("Added 'Medicine Vail' to your inventory.", 3);
             g.getPlayer().getInventory().addItem(Inventory.getItemFromDictionary("vial"));
+            b.addNode(6,4, new StaticNode("T", "Table"));
             return true;
         });
 
@@ -209,7 +211,7 @@ public class InteractableNode implements Nodeable{
                Game.print("You walk over to Jerry with a mean look on your face.", 4);
                Game.print("You see him enjoying, scarfing down the last bite of the last piece of the Casey's breakfast pizza.", 7);
                Game.print("You slam the table in front of him", 3);
-               Game.print("BANG", 2);
+               Game.print("BANG!", 2);
 
                System.out.println();
                Game.print("Riley * 'DID YOU EAT THE LAST SLICE OF THE CASEYS PIZZA!!!'", 5);
@@ -218,14 +220,14 @@ public class InteractableNode implements Nodeable{
                System.out.println();
 
                Game.print("Jerry * 'I dunno brah.'", 3);
-               Game.print("Riley * 'Man I'm even madder than that time I accidentally decorated my base in 3V3V3V3 GOGOATED for 1000 vbucks.'", 10);
+               Game.print("Riley * 'Man I'm even madder than that time I accidentally payed to decorate my base in 3V3V3V3 GOGOATED for 1000 vbucks.'", 10);
                Game.print("Jerry * 'Well I don't care man, you can go eat the oatmeal, I know that's still there.'", 6);
                System.out.println();
 
                Game.print("Riley * 'OATMEAL!?! NOW YOU'VE REALLY DONE IT!!'", 4);
 
                Game.sPrint("This is another type of battling: Turn Based Battling.");
-               Game.sPrint("Here two teams can battle it out where the team to reduce the health of all the opposing team's members to 0.0 will win.");
+               Game.sPrint("Here two teams can battle it out where the team to reduce the health of all the opposing team's members to 0 will win.");
                Game.sPrint("To keep it simple, this will just be a 1V1.");
                System.out.println();
 
@@ -233,9 +235,16 @@ public class InteractableNode implements Nodeable{
 
                Game.endText();
                Game.sPrint("Wow, you did it!");
+               Game.print("Well, now you stand over Jerry's body as you feel satisfied with your work", 5);
+               Game.print("I never said you were the hero of this story.", 4);
+               System.out.println();
 
-               
+               Player p = g.getPlayer();
 
+               Floor f = new Floor();
+               b.addNode(5, 2, f);
+               p.teleport(b,g,5,2);
+               return true;
            }
            else {
                //what happens if you talk to jerry before going to breakfast
@@ -245,8 +254,196 @@ public class InteractableNode implements Nodeable{
                return false;
            }
 
+        });
 
-            return false;
+        actionDict.put("Table to Put Vials On", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("You look over at the empty table", 3);
+            Game.print("You take the many vials out from the pockets of your lab coat", 5);
+            System.out.println();
+            Game.print("They came in many colors and had long, hard to pronounce names.", 5);
+            Game.print("You assumed they came from Dr. Nelson's remote, industrial sized laboratory where he produces his important work.", 6);
+            Game.print("You place the vials on the table.", 3);
+
+            g.getPlayer().getInventory().removeItem(Inventory.getItemFromDictionary("vial"));
+
+            StaticNode newVialTable = new StaticNode("V", "Table with the Vials on It");
+            b.addNode(5, 6,  newVialTable);
+
+            return true;
+        });
+
+        actionDict.put("Doctor Robot", (Board b, Game g) -> {
+            g.print("...", 3);
+            Game.print("You walk up to the robot and it scowls back at you", 4);
+            System.out.println();
+            Game.print("Doctor Robot * 'Can't you see I am busy?'", 3);
+            Game.print("Riley * 'You don't seem that busy.'", 3);
+            Game.print("Doctor Robot * 'What do you require sir?'", 3);
+            System.out.println();
+            Game.print("Riley * 'How is my father's condition?'", 3);
+            Game.print("Doctor Robot * 'I am afraid it is worsening.'", 3);
+            Game.print("Doctor Robot * 'At this rate, if we do not do something effective soon, his bones may disintegrate entirely.'", 6);
+            System.out.println();
+            Game.print("Riley * 'Oh no, that's not good.'", 3);
+            Game.print("Doctor Robot * 'Precisely, that would mean your dumbass would inherit this place, and in turn me!'", 5);
+            Game.print("Riley * 'Are we being for real? Anyways, where is he now?'", 4);
+            System.out.println();
+            Game.print("Doctor Robot * 'He is undergoing an experimental treatment in his remote laboratory, he will return within the hour.'", 6);
+            Game.print("Riley * 'Okay, well I will come back and check up on him once I get back from presenting at the Tech Fair.'", 5);
+
+            return true;
+        });
+
+        actionDict.put("Sunlight Chamber", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("You look over at the metal cast just about the size of you.", 4);
+            Game.print("It has a hinge and can open, revealing an array of panels that display light that mimics the sun.", 5);
+            Game.sPrint("This is your sunlight chamber, since you never leave the lab and do not get enough sunlight, you have a sunlight chamber you can climb in to get the required Vitamin-D to survive and not look like a vampire.");
+            System.out.println();
+            Game.print("That is literal troll behavior though.", 3);
+            return true;
+        });
+
+        actionDict.put("Burger", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("You look over at the table and see a perfectly fine burger sitting on a plate.", 4);
+            Game.print("Oddly enough, the only invention of yours that has \"worked\": a perfect cheeseburger.", 4);
+            Game.print("There is nothing special about it, no gimmick, it is just a perfect cheeseburger.", 4);
+
+            ArrayList<String> options = new ArrayList<>(Arrays.asList("Eat it", "Move along"));
+            if (Game.basicGameLoop(options) == 2) {
+                return true;
+            }
+
+            Game.print("Hold on now, what do you mean 'Eat it'?", 3);
+
+            options.clear();
+            options.add("I mean what I mean");
+            options.add("Move along");
+            if (Game.basicGameLoop(options) == 2) {
+                return true;
+            }
+
+            Game.print("Might I remind you, this is the only invention that has worked for you EVER", 4);
+
+            options.remove("I mean what I mean");
+            options.add("Eat it");
+            if (Game.basicGameLoop(options) == 2) {
+                return true;
+            }
+
+            Game.print("Okay, but just so you know this is a PERFECT burger.", 3);
+            Game.print("I mean it might even be a crime to ruin this work of art.", 3);
+
+            if (Game.basicGameLoop(options) == 2) {
+                return true;
+            }
+
+            Game.print("Are you sure?", 3);
+
+            options.clear();
+            options.add("Yes");
+            options.add("No");
+
+            if (Game.basicGameLoop(options) == 2) {
+                return true;
+            }
+
+            Game.print("Are you sure you are sure?", 3);
+
+            if (Game.basicGameLoop(options) == 2) {
+                return true;
+            }
+
+            Game.print("Are you really sure?", 3);
+
+            if (Game.basicGameLoop(options) == 2) {
+                return true;
+            }
+
+            Game.print("Okay fine, since it seems you really really want it.", 3);
+            Game.print("You pick up the perfect burger sitting on the table, your one working invention, and your fatass eats it.", 5);
+
+            options.clear();
+            options.add("Yum");
+            Game.basicGameLoop(options);
+
+            Game.print("You did not in fact enjoy it because it has been sitting on your lab table for the past 3 months.", 4);
+            return true;
+        });
+
+        actionDict.put("Love Finding Device", (Board b, Game g) -> {
+            g.print("...", 3);
+            Game.print("You look over at the odd shaped device on the table.", 3);
+            Game.print("It is red and heart-shaped with a screen in the middle.", 3);
+            Game.print("It is a love finding device, it detects all the possible romantic matches there are in the world for someone.", 5);
+            System.out.println();
+            Game.print("However you have decreed that it does not work because when you tried it on yourself, the machine never registered anyone on the planet.", 6);
+            return true;
+        });
+
+        actionDict.put("Two Sided Pancake Cooker", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("One morning when you were cooking pancakes, you had a brilliant idea: in order to speed things up what if you added another side to the pan.", 6);
+            Game.print("Thus, the two sided pancake cooker was born.", 3);
+            Game.print("No longer did you have to flip the pancakes, all you had to do was press both heated sides onto the batter and it cooked perfectly.", 5);
+            System.out.println();
+            Game.print("You even thought of the nice idea of adding designs onto each of the sides to give the pancakes a bit of life.", 4);
+            Game.print("Your favorite design was the grid design that placed a grid of squares on your pancakes.", 4);
+            Game.print("It was around this point when you realized you accidentally invented a waffle maker instead.", 4);
+            return true;
+        });
+
+        actionDict.put("Portal Pocket Pants", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("Ooh this one is a good one.", 3);
+            Game.print("One day, you realized your pockets were not deep enough since you couldn't fit enough sauce packets while smuggling them out of the employee common room.", 7);
+            Game.print("So you decided to make pants with bottomless pockets by exploiting a pocket dimension.", 4);
+            System.out.println();
+            Game.print("The only problem was you never found a way to access a pocket dimension.", 4);
+            Game.print("So right now, they are just regular pants.", 3);
+            return true;
+        });
+
+        actionDict.put("Riley's Addiction Relief Pills", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("Taking after your father, you got into the field of medicine", 4);
+            Game.print("On the bottle it read:", 1);
+            Game.print("Take the necessary amount by mouth twice a day for a week to cure your addiction. Works on any addiction.", 5);
+            System.out.println();
+            Game.print("And in fine print it read:", 1);
+            Game.sPrint("Side effects may include: Tuberculosis, the common cold, blood or vision loss, easy bruising, diabetes types one; two; and three, loss in win streak, more addiction, becoming a communist, becoming a clown, becoming a communist clown, memory loss, growing another arm, brain damage, brain cell loss, and temporary death.");
+            Game.print("You put them in your pocket.", 3);
+            g.getPlayer().getInventory().addItem(Inventory.getItemFromDictionary("pills"));
+            System.out.println();
+            Game.print("Added 'Riley's Addiction Relief Pills' to your inventory.", 3);
+            return true;
+        });
+
+        actionDict.put("Generator Cast", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("You look on the table and see a machine of metal about the size of your torso.", 4);
+            Game.sPrint("This is the cast that is supposed to regulate the Golden Electricity Generator by collapsing the wave function of the quantumly superpositioned electrons so that it does not get out of hand.");
+            Game.print("However, you could not get it done in time because you procrastinated until last night to start so you are just going to leave it out.", 5);
+            System.out.println();
+            Game.print("Whoops.", 3);
+            return true;
+        });
+
+        actionDict.put("Golden Electricity Generator", (Board b, Game g) -> {
+            Game.print("...", 3);
+            Game.print("You look over at your prized possession.", 3);
+            Game.print("The invention that is going to give you your big break.", 4);
+            Game.print("People are really going to drop dead once they feel its power.", 4);
+            System.out.println();
+            Game.print("But for now, you have to get it to the Tech Fair.", 3);
+            Game.print("You put in your pocket.", 3);
+            g.getPlayer().getInventory().addItem(Inventory.getItemFromDictionary("geg"));
+            System.out.println();
+            Game.print("Added 'Golden Electricity Generator' to your inventory.", 3);
+            b.addNode(4, 4, new Floor());
+            return true;
         });
     }
 

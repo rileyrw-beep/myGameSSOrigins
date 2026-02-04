@@ -791,6 +791,7 @@ public class Game {
         }
 
         currentChapter = 2;
+        currentAct[currentChapter - 1] = 1;
         currentPlayer.getInventory().saveInventory();
         endText();
     }
@@ -875,7 +876,7 @@ public class Game {
     public void chapTwoActOne() {
 
         System.out.println();
-        System.out.println("Act 2: Riley's Awakening");
+        System.out.println("Act 1: Riley's Awakening");
         endText();
         time(3);
 
@@ -921,6 +922,139 @@ public class Game {
             //actually do chapter 2
     }
 
+    public void chapTwoActTwo() {
+
+        System.out.println();
+        System.out.println("Act 2: The Father Situation");
+        endText();
+        time(3);
+
+        print("After brutally beating up a very innocent botanist, you remember the vials you had picked up.", 7);
+        print("It is best you deliver the vials to your father soon.", 5);
+        print("His room is marked by the H on the big map, go there now.", 6);
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 5, 0, 4, 6, -1, -1)) {
+            return;
+        }
+
+        print("You open the door and walk into your father's room.", 5);
+        sPrint("It had been converted into a miniature hospital room filled with vials and contained a central hospital bed where your father spent most of his time these days.");
+        sPrint("Dr. Nelson was a brilliant man who had revolutionized the world of AI-Driven Robotics, allowing for machines to display semi-sentient consciousnesses.");
+        System.out.println();
+        print("He also made questionable breakthroughs in the biological world, including work in gene editing and biological enhancement.", 8);
+        sPrint("However, it seems that his time has been cut short by an especially severe case of osteoporosis, a disease which makes the bones weak and brittle.");
+        sPrint("No doubt from possible self testing of his gene editing work.");
+        System.out.println();
+        print("Place the vials on the table to your right.", 5);
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 5, 1, 4, 2, -1, -1)) {
+            return;
+        }
+
+        sPrint("Well done, you hope that your father's condition will get better, but from the looks of it that may not be the case.");
+        print("For now, you must prepare for the Tech Fair.", 5);
+        print("Head to your lab now, it is marked by the board at (4,0) on the big map.", 6);
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs, 10000, "!!!", 4, 0, 4, 6, -1, -1)) {
+            return;
+        }
+
+        currentAct[currentChapter - 1] = 3;
+        latestActs[latestChapter - 1] = 2;
+        currentPlayer.getInventory().saveInventory();
+        endText();
+
+    }
+
+    public void chapTwoActThree() {
+
+        System.out.println();
+        System.out.println("Act 3: The Tech Fair");
+        endText();
+        time(3);
+
+        print("You walk into your personal laboratory.", 4);
+        print("It is filled with all of your past ingenious inventions.", 5);
+        print("You can check them out, but you are here for the greatest of them all: The Golden Electricity Generator.", 7);
+        System.out.println();
+        print("Grab the generator and then take it out the front where the tech fair will take place.", 6);
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs, 100, "Hurry up bro.", 4, 1, 4, 2, -1, -1)) {
+            return;
+        }
+
+        print("Nice! You got the generator.", 3);
+        print("Now, just head directly south about four boards until you reach the main public room of Nelson Labs and place your generator at your stand.", 8);
+
+        if (!advancedGameLoop(getPlayer(), nelsonLabs, 100, "Hurry up bro.", 4, 5, -1, 2, -1, -1)) {
+            return;
+        }
+
+        print("You walk through the double doors and see the large main atrium of Nelson Labs.", 5);
+        print("You look around and realize you are the first person setting up, lucky you.", 5);
+        print("You walk over to your little stand and spend a while putting it up.", 4);
+        System.out.println();
+        print("You get the generator working and plugged into a set of lights. You put up a sign with all the research for people to read.", 7);
+        print("You then look over and see your fellow scientist Amanda gearing up her virtual reality set she has been working on.", 7);
+        print("You think to yourself that you almost feel sorry for her because you are so confident your Golden Electricity Generator will be such a big hit.", 8);
+        System.out.println();
+        print("Then, the Tech Fair starts and the doors open up. People pour in and begin to walk around to each station.", 7);
+        print("You stand there excited, waiting for them to walk up to you.", 4);
+        print("But nobody comes.", 3);
+        System.out.println();
+        print("You stand there for hours, and not a single person talks to you.", 4);
+        print("You see the look in their eyes as they glance at your pitiful presentation and ignore you.", 5);
+        print("However, it seems Amanda was having better luck; everyone seems to have stopped at her station at least once.", 6);
+        System.out.println();
+        print("You wait there for hours, bored out of your mind.", 4);
+        print("About an hour in you hear that your father has returned from his trip.", 5);
+        print("You sit there, waiting, wishing just someone would come and listen to you.", 5);
+        System.out.println();
+        print("Eventually, you distract yourself by reading the news and fidgeting a bit with the generator.", 6);
+        print("That was when you heard someone walk up to your station.", 4);
+        System.out.println();
+        print("Riley * 'Hello there, wow you're the first person who's came to my presentation!'", 5);
+        print("You are excited out of your mind.", 3);
+        print("Visitor (under his breath) * 'I couldn't possibly see why.'", 4);
+        print("Riley (putting down the news) * 'Well my name is Riley Nelson, what's yours/'", 5);
+        System.out.println();
+        print("You look up and see this fat, chopped, ungrateful-looking human being.", 4);
+        print("Visitor (looking annoyed that he has to be doing this) * 'I'm Dalton Young, now can we get going with the presentation.", 5);
+        print("You tell your whole routine about the generator, but you couldn't help but notice that this Dalton guy looks like he doesn't have a care in the world about it.", 8);
+        System.out.println();
+        print("You haven't even finished yet when he thinks you are done and snatched the ticket from you.", 5);
+        print("He then walks over and sees Amanda and immediately becomes engaged.", 4);
+        print("It was at that moment, something in you snapped.", 3);
+        System.out.println();
+        print("You didn't care anymore, you didn't care about the presentation, you didn't even care about the Tech Fair.", 5);
+        print("Jealousy overtook you, you couldn't stand watching this guy just disrespect your invention like that and move on to the next fun thing he sees.", 6);
+        print("That's when you get a brilliant idea: to show him the power of the generator, you decide to hook up Dalton's VR set with it.", 6);
+        System.out.println();
+        print("While Amanda was not looking, you swiftly changed it from the plug in the wall to the Golden Electricity Generator.", 5);
+        print("You then stood, proud of your actions, ready for this Dalton guy to see the power of the generator.", 4);
+        print("What happened next was not exactly planned.", 3);
+        System.out.println();
+        print("You watch as the generator overloads the VR set, probably because probably because you did not finish the cast that prevents this.", 6);
+        print("You watch as Dalton gets fried by the refined golden electricity, as he brutally drops to the floor and spasms around screaming.", 6);
+        print("He then stops and lies, not moving, undoubtably dead.", 3);
+        System.out.println();
+        print("You hear Amanda scream as she sees this horrific sight.", 3);
+        print("And after witnessing the tragedy of Dalton Young, all you can say is:", 4);
+        print("Riley * 'Whoops.'", 3);
+        System.out.println();
+        print("END OF CHAPTER TWO", 4);
+        endText();
+
+
+
+        latestActs[latestChapter - 1] = 3;
+        currentChapter = 3;
+        latestChapter = 2;
+        currentAct[currentChapter - 1] = 1;
+        currentPlayer.getInventory().saveInventory();
+        endText();
+    }
+
     public void chapterTwo() {
         endText();
         buildNelsonLabsMap(2);
@@ -941,6 +1075,12 @@ public class Game {
         //do act 1
         while(currentChapter == 2 && currentAct[currentChapter - 1] == 1) {
             chapTwoActOne();
+        }
+        while(currentChapter == 2 && currentAct[currentChapter - 1] == 2) {
+            chapTwoActTwo();
+        }
+        while(currentChapter == 2 && currentAct[currentChapter - 1] == 3) {
+            chapTwoActThree();
         }
 
         //do act 2
@@ -1272,7 +1412,7 @@ public class Game {
         StaticNode medical = new StaticNode("M", "Medical Machine");
         StaticNode bed = new StaticNode("=", "Hospital Bed");
         InteractableNode doc = new InteractableNode("Doctor Robot", "D", "Talk");
-        InteractableNode vialTable = new InteractableNode("Table to Put Vial On", "O", "Place Vial");
+        InteractableNode vialTable = new InteractableNode("Table to Put Vials On", "O", "Place Vials");
         Nodeable[] H50arr = {medical, medical, bed, vialTable, doc};
         H50.fillPlaceholders(H50arr);
 
@@ -1723,7 +1863,7 @@ public class Game {
             }
         }
         count++;
-        int sec = (int)((count / 1.6) + 0.5);
+        int sec = (int)((count / 2.0) + 0.5);
         print(message, sec);
     }
 
