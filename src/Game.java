@@ -1388,7 +1388,7 @@ public class Game {
         RL40.setBoardFromString("                    " +
                 "  / / / / / / / /   " +
                 "  / - - - S - - /   " +
-                "  / T - - - - B /   " +
+                "  / P - - - - B /   " +
                 "  / T - G - - P /   " +
                 "  / C - - - - P /   " +
                 "  / A - - - - 2 /   " +
@@ -1404,7 +1404,8 @@ public class Game {
         InteractableNode gen = new InteractableNode("Golden Electricity Generator", "G", "Pick Up");
         InteractableNode cast = new InteractableNode("Generator Cast", "C", "Inspect");
         InteractableNode addiction = new InteractableNode("Riley's Addiction Relief Pills", "A", "Inspect"); // get an item from these
-        Nodeable[] RL40arr = {sunlightChamber, burger, gen, love, cast, pants, addiction, pancake};
+        StaticNode comp = new StaticNode("#", "Computer");
+        Nodeable[] RL40arr = {sunlightChamber, comp, burger, gen, love, cast, pants, addiction, pancake};
         RL40.fillPlaceholders(RL40arr);
 
         H50.setBoardFromString("                    " +
