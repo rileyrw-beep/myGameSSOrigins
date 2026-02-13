@@ -359,6 +359,7 @@ public class Game {
             }
             catch (InputMismatchException e) {
                 System.out.println("Be sure to enter in a number, not words.");
+                input.nextLine();
                 continue;
             }
             System.out.println();
