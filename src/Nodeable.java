@@ -16,6 +16,4 @@ public interface Nodeable {
     boolean[] performAction(String response, Board board, Game game);
 
 
-
-
 }

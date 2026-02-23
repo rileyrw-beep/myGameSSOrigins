@@ -164,7 +164,7 @@ public class Game {
     static public void time(int sec) {
         if (timeNumber == 200) return;
         try {
-            TimeUnit.SECONDS.sleep(sec);
+            TimeUnit.SECONDS.sleep(sec+2);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }
@@ -222,6 +222,7 @@ public class Game {
 
     public boolean askPlayerName() {
         this.endText();
+        
         System.out.println("Welcome to S.S. Origins");
         System.out.println();
         System.out.println("Please enter your name:");
