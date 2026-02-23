@@ -37,7 +37,7 @@ public class Inventory {
 
 
     public Inventory() {
-        filePath = "../file/InventorySave.txt";
+        filePath = "file/InventorySave.txt";
         Comparator<Item> lexicographicalOrderComparator = new Comparator<Item>() {
             public int compare(Item i1, Item i2) {
                 if (!Objects.equals(i1.getItemName(), i2.getItemName())) {
