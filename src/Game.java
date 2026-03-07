@@ -347,7 +347,7 @@ public class Game {
         for (int i = 0; i < optionList.size(); i++) {
             if (!optionList.get(i).isEmpty()) {
                 int j = i+1;
-                System.out.println(" " + j + " " + optionList.get(i));
+                System.out.println(" " + j + ". " + optionList.get(i));
             }
         }
         System.out.println();
@@ -1885,6 +1885,15 @@ public class Game {
         count++;
         int sec = (int)((count / 2.0) + 0.5);
         print(message, sec);
+    }
+
+    static public void superPrint(String message, int timesProcced) {
+        if (timesProcced > 0) {
+            print(message, 0);
+        }
+        else {
+            sPrint(message);
+        }
     }
 
 

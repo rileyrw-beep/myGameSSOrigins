@@ -1,9 +1,6 @@
 import java.sql.SQLOutput;
-import java.util.InputMismatchException;
+import java.util.*;
 import java.util.Map;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 
 
 public class TurnBasedBattleManager {
@@ -11,36 +8,27 @@ public class TurnBasedBattleManager {
     //then that means that the methods can be static so we dont need to have some large facade
 
     static final Map<String, Fighter> fighterMap = Map.ofEntries(
-            /*
-            * Fighter - String name, int pwr, double hp, ArrayList<Move> moves
-            * -------------------------------------------------------------------
-            * mv - String name, double hpAmount, int cost, MoveType targetType,
-                MoveType statusType, boolean pureChance, double chance, double multiplier,
-                int duration, String description, String procDescription, String failDescription,
-                String multiDescription, String statusDescription,
-                FighterMoveable extraFunction, FighterMoveable failFunction
-            * */
 
 
             Map.entry("riley", new Fighter("Riley Nelson", 10, 100.0, new ArrayList<Move>(Arrays.asList(
                     new Move("Punch", 0, "Just a regular punch that does 5 damage", MoveType.Attack, ((actingFighter, passiveFighter, timesProcced) -> {
                         passiveFighter.smartDecreaseHealth(actingFighter, 5.0);
-                        Game.sPrint("You throw a punch. Wow.");
+                        Game.superPrint("You throw a punch. Wow.", timesProcced[0]);
                         timesProcced[0]++;
                     })),
                     new Move("Ponder", 0, "You think deeply for a bit (like kiddie pool deep though) for a bit and gain 1 power.", MoveType.PowerGain, ((actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.smartIncreasePower(1);
-                        Game.sPrint("After thinking really hard you get 1 power.");
+                        Game.superPrint("After thinking really hard you get 1 power.", timesProcced[0]);
                         timesProcced[0]++;
                     })),
                     new Move("Quick Snack", 4, "You eat a quick snack (55 burgers, 55 fries, 55 milkshakes) and heal 10 health", MoveType.Heal, ((actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.smartIncreaseHealth(10.0);
-                        Game.sPrint("After eating 55 burgers, 55 fries, 55 milkshakes you feel much better. Fatass.");
+                        Game.superPrint("After eating 55 burgers, 55 fries, 55 milkshakes you feel much better. Fatass.", timesProcced[0]);
                         timesProcced[0]++;
                     })),
                     new Move("Big Punch", 4, "A bigger punch that does 15 damage", MoveType.Attack, ((actingFighter, passiveFighter, timesProcced) -> {
                         passiveFighter.smartDecreaseHealth(actingFighter, 15.0);
-                        Game.sPrint("You throw a pretty big punch. Nice.");
+                        Game.superPrint("You throw a pretty big punch. Nice.", timesProcced[0]);
                         timesProcced[0]++;
                     })),
                     new Move("Using Your Head", 5, "You use your head to charge headfirst into the opponent dealing 30 damage to them but 15 damage back at you, applying a 15% defense nerf to both of you.", MoveType.Attack, ((actingFighter, passiveFighter, timesProcced) -> {
@@ -49,7 +37,7 @@ public class TurnBasedBattleManager {
                         StatusEffect dazed = new StatusEffect("Dazed and Confused", "15% Defense Nerf", 3, MoveType.Defense, false, ((magnitude) -> magnitude * 1.15), null);
                         actingFighter.addStatusEffect(dazed);
                         passiveFighter.addStatusEffect(dazed.copy());
-                        Game.sPrint("You finally decide to use that head of yours, but not to think, instead you charge and headbutt the opponent. It hurts you too.");
+                        Game.superPrint("You finally decide to use that head of yours, but not to think, instead you charge and headbutt the opponent. It hurts you too.", timesProcced[0]);
                         timesProcced[0]++;
                     })),
                     new Move("Crazy Soda", 7, "You make a string concoction and drink it for a 50% chance to get a 2x damage, healing, power, and defensive boost or -15 health", MoveType.Heal, ((actingFighter, passiveFighter, timesProcced) -> {
@@ -60,52 +48,52 @@ public class TurnBasedBattleManager {
                             actingFighter.addStatusEffect(new StatusEffect("Crazy Soda Health Boost", "2x Healing", 5, MoveType.Heal, true, ((magnitude) -> magnitude * 2.0), null));
                             actingFighter.addStatusEffect(new StatusEffect("Crazy Soda Power Boost", "2x Power", 5, MoveType.PowerGain, true, ((magnitude) -> magnitude * 2.0), null));
                             actingFighter.addStatusEffect(new StatusEffect("Crazy Soda Defense Boost", "2x Defense", 5, MoveType.Defense, true, ((magnitude) -> magnitude * 0.5), null));
-                            Game.print("Somehow, someway, it works and you get a 2x damage, healing, power, and defensive buff.", 8);
+                            Game.superPrint("Somehow, someway, it works and you get a 2x damage, healing, power, and defensive buff.", timesProcced[0]);
                         }
                         else {
-                            Game.print("Your stomach hurts and you take 15 damage", 7);
+                            Game.superPrint("Your stomach hurts and you take 15 damage", timesProcced[0]);
                             actingFighter.decreaseHealth(15.0); //absolute cinema
                         }
                         timesProcced[0]++;
                     })),
                     new Move("Riley's Addiction Relief Pills", 7, "Taking these has a 50% chance to clear your status effects and a 50% chance to turn you into a communist clown.", MoveType.Heal, ((actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.clearStatusEffects();
-                        Game.sPrint("You pop a few of the pills and after a bit you feel pretty good. No Communism and no clowns. You die for a bit but its only temporary. Status Effects Cleared.");
+                        Game.superPrint("You pop a few of the pills and after a bit you feel pretty good. No Communism and no clowns. You die for a bit but its only temporary. Status Effects Cleared.", timesProcced[0]);
                         timesProcced[0]++;
                     }))
             )))),
             Map.entry("jerry", new Fighter("Jerry", 15, 110, new ArrayList<Move>(Arrays.asList(
                     new Move("Kick", 0, "", MoveType.Attack, (actingFighter, passiveFighter, timesProcced) -> {
                         passiveFighter.smartDecreaseHealth(actingFighter, 5);
-                        Game.sPrint("Jerry hits you with a roundhouse kick that does 5 damage.");
+                        Game.superPrint("Jerry hits you with a roundhouse kick that does 5 damage.", timesProcced[0]);
                         timesProcced[0]++;
                     }),
                     new Move("Negotiate", 0, "", MoveType.PowerGain,  (actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.smartIncreasePower(1);
                         timesProcced[0]++;
-                        Game.sPrint("Jerry tries to talk it out with you, as he does so he gets 1 power.");
+                        Game.superPrint("Jerry tries to talk it out with you, as he does so he gets 1 power.", timesProcced[0]);
                     }),
                     new Move("Charging Up", 0, "", MoveType.PowerGain, (actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.smartIncreasePower(5);
                         timesProcced[0]++;
-                        Game.sPrint("Jerry takes matters into his own hands and begins yelling as he charges his power up. +5 Power");
+                        Game.superPrint("Jerry takes matters into his own hands and begins yelling as he charges his power up. +5 Power", timesProcced[0]);
                     }),
                     new Move("Quick Heal", 0, "", MoveType.Heal,  (actingFighter, passiveFighter, timesProcced) -> {
                         double preHealth = actingFighter.getCurrentHealth();
                         actingFighter.smartIncreaseHealth(5.0);
                         timesProcced[0]++;
-                        Game.sPrint("Jerry drinks a bit of nectar and quickly heals " + (actingFighter.getCurrentHealth() - preHealth) + " health.");
+                        Game.superPrint("Jerry drinks a bit of nectar and quickly heals " + (actingFighter.getCurrentHealth() - preHealth) + " health.", timesProcced[0]);
                     }),
                     new Move("Photosynthesis", 3, "", MoveType.Heal,  (actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.smartIncreaseHealth(15);
                         timesProcced[0]++;
-                        Game.sPrint("Since Jerry is a botanist he knows how to photosynthesize. He puts some water, leaves, air and sunlight on his arm and it heals for 15 damage.");
+                        Game.superPrint("Since Jerry is a botanist he knows how to photosynthesize. He puts some water, leaves, air and sunlight on his arm and it heals for 15 damage.", timesProcced[0]);
                     }),
-                    new Move("Long Photosynthesis", 5, "", MoveType.Heal,   (actingFighter, passiveFighter, timesProcced) -> {
+                    new Move("Long Photosynthesis", 5, "", MoveType.Defense,   (actingFighter, passiveFighter, timesProcced) -> {
                         actingFighter.addStatusEffect(new StatusEffect("Long Photosynthesis Defense Boost", "25% Defense Boost", 4, MoveType.Defense, true, ((magnitude) -> magnitude * 0.75), null));
                         actingFighter.addStatusEffect(new StatusEffect("Long Photosynthesis Health Boost", "5 HP Regen", 4, MoveType.Heal, true, null, ((f) -> {
                             f.smartIncreaseHealth(5);
-                            Game.sPrint("Jerry photosynthesizes back 5 health.");
+                            Game.superPrint("Jerry photosynthesizes back 5 health.", timesProcced[0]);
                             return true;
                         })));
                         Game.sPrint("Jerry uses his botanist knowledge to convert a bit of his skin to leaves giving him a 25% defensive boost and allowing him to photosynthesize 5 health back up to 4 times.");
@@ -113,26 +101,28 @@ public class TurnBasedBattleManager {
                     }),
                     new Move("Big Kick", 4, "", MoveType.Attack,  (actingFighter, passiveFighter, timesProcced) -> {
                         passiveFighter.smartDecreaseHealth(actingFighter, 15);
-                        Game.sPrint("Jerry hits you with a bigger kick that does 15 damage. Ouch");
+                        Game.superPrint("Jerry hits you with a bigger kick that does 15 damage. Ouch",timesProcced[0]);
                         timesProcced[0]++;
                     }),
                     new Move("Final Jerry Cannon", 10, "", MoveType.Attack, ((actingFighter, passiveFighter, timesProcced) -> {
                         passiveFighter.smartDecreaseHealth(actingFighter, 50.0);
                         timesProcced[0]++;
-                        Game.sPrint("Jerry begins to levitate as he shouts out \"Final Jerry Cannon!\" He hits you with his ultimate attack dealing 50 damage.");
+                        Game.superPrint("Jerry begins to levitate as he shouts out \"Final Jerry Cannon!\" He hits you with his ultimate attack dealing 50 damage.", timesProcced[0]);
+                    }))
+            )))),
+            Map.entry("bum", new Fighter("Bum", 3, 10, new ArrayList<Move>(List.of(
+                    new Move("Heal", 0, "Bum heals back to 10 health", MoveType.Heal, ((actingFighter, passiveFighter, timesProcced) -> {
+                        actingFighter.smartIncreaseHealth(10 - actingFighter.getCurrentHealth());
+                        actingFighter.addStatusEffect(new StatusEffect("Lack of Power", "Reduce marginal power to 0", 1, MoveType.PowerGain, false, ((magnitude) -> magnitude * 0), null));
+                        Game.superPrint("Bum bums around until his health returns", timesProcced[0]);
+                        timesProcced[0]++;
                     }))
             ))))
-            //work on this now
-            //    String name,
-            //    int cost,
-            //    String description,
-            //    MoveType target,
-            //    FighterMoveable uniqueFunction
     );
 
 
 
-    static public boolean doBattle(final String[] keyProtag, final String[] keyEnemy, boolean protagShouldWin) {
+    static public boolean doBattle(final String[] keyProtag, final String[] keyEnemy, boolean protagShouldWin, double healthPercentage) {
         //game loop
         //track using turns: if even then player, if odd then enemy
         //show the possible moves, health, and power
@@ -152,8 +142,8 @@ public class TurnBasedBattleManager {
 
         //introductary stuff
 
-        Game.print((protag.getName() + " VS " + enemy.getName()), 3);
-        Game.print("BEGIN", 3);
+        Game.print((protag.getName() + " VS " + enemy.getName()), 1);
+        Game.print("BEGIN", 1);
 
 
 
@@ -169,15 +159,14 @@ public class TurnBasedBattleManager {
                 System.out.println(protag.getName() + " HP: " + protag.getCurrentHealth() + "/" + protag.getMaxHealth());
                 System.out.println(protag.getName() + " Power: " + protag.getCurrentPower() + "/" + protag.getMaxPower());
 
-                Game.time(1);
                 System.out.println();
 
                 System.out.println(enemy.getName() + " HP: " + enemy.getCurrentHealth() + "/" + enemy.getMaxHealth()); //print out enemy hp too
 
                 //protag status effects
-                Game.print("",1);
+                Game.print("",-1);
                 printStatusEffects(protag);
-                Game.print("", 2);
+                Game.print("", (!protag.getStatusEffects().isEmpty()) ? 0 : -2);
 
 
 
@@ -191,6 +180,7 @@ public class TurnBasedBattleManager {
                 //if the turn is being skipped, skip the turn
                 if (skipTurn) {
                     Game.print(("Skipping " + protag.getName() + "'s Turn..."), 3);
+                    protag.pruneStatusEffects();
                     numTurn++;
                     continue;
                 }
@@ -211,7 +201,7 @@ public class TurnBasedBattleManager {
                     }
                 }
                 System.out.println();
-                Game.time(2);
+
 
                 //protag move choice sequence
                 Move chosenMove = null;
@@ -221,11 +211,13 @@ public class TurnBasedBattleManager {
                     int moveNum;
                     try {
                         moveNum = Game.intInput();
+
                     }
                     catch (InputMismatchException e) {//catch invalid input
                         System.out.println();
                         System.out.println("Invalid choice: Unrecognized Input");
                         System.out.println();
+                        Game.userInput();
                         Game.time(1);
                         continue;
                     }
@@ -234,6 +226,7 @@ public class TurnBasedBattleManager {
                         System.out.println();
                         System.out.println("Invalid Choice: Input Out of Range");
                         System.out.println();
+                        Game.userInput();
                         Game.time(1);
                         continue;
                     }
@@ -266,6 +259,7 @@ public class TurnBasedBattleManager {
                 if (chosenMove == null) { //if no chosen move, must be swapping
                     System.out.print(protag.getName() + " has swapped out with ");
                     currentProtagIndex = swap(keyProtag, currentProtagIndex, new Fighter[]{protag});
+                    protag = fighterMap.get(keyProtag[currentProtagIndex]);
                     System.out.println(protag.getName());
                 }
                 else { //else there is a move and you should do the move
@@ -275,12 +269,13 @@ public class TurnBasedBattleManager {
                     double preHealthP = enemy.getCurrentHealth();
                     int prePowerA = protag.getCurrentPower();
                     int prePowerP = enemy.getCurrentPower();
-                    Game.time(3);
+                    Game.time(1);
                     chosenMove.doMove(protag, enemy); //all move functionality calcuated here
                     System.out.println();
                     displayInfo(protag, preHealthA, prePowerA, enemy, preHealthP, prePowerP);
-                    Game.time(2);
+                    Game.time(0);
                 }
+                protag.pruneStatusEffects();
                 Game.endText();
             }
             else { //determined by modding a counter by two
@@ -293,8 +288,9 @@ public class TurnBasedBattleManager {
 
                 //enemy status effect sequence
                 Game.print("",1);
+                enemy.pruneStatusEffects();
                 printStatusEffects(enemy);
-                Game.print("", 5);
+                Game.print("", (!enemy.getStatusEffects().isEmpty()) ? 1 : -2);
 
                 double preHealth = enemy.getCurrentHealth();
                 boolean skipTurn = enemy.applyStatusEffects();
@@ -308,46 +304,22 @@ public class TurnBasedBattleManager {
                 }
 
                 //enemy turn selection sequence
-                Random rand = new Random();
 
-                ArrayList<Move> possibleMoves = new ArrayList<>();
-
-                if (enemy.getName().equals("Jerry") && enemy.getCurrentPower() >= 10) {
-                    for (Move move : enemy.getMoves()) {
-                        if (move.getCost() >= 10) {
-                            possibleMoves.add(move);
-                        }
-                    }
-                }
-                else if (enemy.getCurrentHealth() / enemy.getMaxHealth() < .3) {
-                    for (Move move : enemy.getMoves()) {
-                        if (enemy.getNominalCost(move) <= enemy.getCurrentPower() && move.getTargetType() == MoveType.Heal) {
-                            possibleMoves.add(move);
-                        }
-                    }
-                }
-                else {
-                    for (Move move : enemy.getMoves()) {
-                        if (enemy.getNominalCost(move) <= enemy.getCurrentPower()) {
-                            possibleMoves.add(move);
-                        }
-                    }
-                }
-
-                int enemyChoice = rand.nextInt(possibleMoves.size());
 
                 double preHealthA = enemy.getCurrentHealth();
                 double preHealthP = protag.getCurrentHealth();
                 int prePowerA = enemy.getCurrentPower();
                 int prePowerP = protag.getCurrentPower();
 
-                Move chosenMove = possibleMoves.get(enemyChoice);
+                Move chosenMove = enemy.calculateRandomMove(protag);
+
                 Game.print(enemy.getName() + " used " + chosenMove.getName() + "!", 4);
                 chosenMove.doMove(enemy, protag);
                 Game.time(0);
                 System.out.println();
                 displayInfo(enemy, preHealthA, prePowerA, protag, preHealthP, prePowerP);
-                Game.time(2);
+                Game.time(0);
+
                 Game.endText();
             }
 
@@ -359,12 +331,17 @@ public class TurnBasedBattleManager {
                             //restart
                         //else
                             //end battle sequence and protag walks away
+
+            if (healthPercentage > 0.0 && enemy.getCurrentHealth() / enemy.getMaxHealth() <= healthPercentage) return true;
+
+
             if (enemy.getCurrentHealth() <= 0) {
                 System.out.print(enemy.getName() + " has fallen");
                 if (canSwap(keyEnemy, enemy)) {
                     int swapCount = 0;
                     while (enemy.getCurrentHealth() <= 0) {
                         currentEnemyIndex = swap(keyEnemy, currentEnemyIndex, new Fighter[]{enemy});
+                        enemy = fighterMap.get(keyEnemy[currentEnemyIndex]);
                         swapCount++;
                         if (swapCount > keyEnemy.length) break;
                     }
@@ -384,6 +361,7 @@ public class TurnBasedBattleManager {
                     int swapCount = 0;
                     while (protag.getCurrentHealth() <= 0) {
                         currentProtagIndex = swap(keyProtag, currentProtagIndex, new Fighter[]{protag});
+                        protag = fighterMap.get(keyProtag[currentProtagIndex]);
                         swapCount++;
                         if (swapCount > keyProtag.length) break;
                     }
@@ -411,6 +389,7 @@ public class TurnBasedBattleManager {
             numTurn++;
         }
 
+        Game.print(((protagWins) ? "Your Team Wins!" : "Enemy Team Wins!"), 0);
 
         //reset both sides.
         for (String str : keyProtag) {
@@ -433,7 +412,7 @@ public class TurnBasedBattleManager {
             System.out.println();
             for (StatusEffect se : f.getStatusEffects()) {
                 System.out.print((se.isBuff()) ? "Buff - " : "Debuff - ");
-                System.out.println(se.getName() + " | Turns Held: " + (se.getTurnsHeld()+1) + "/" + se.getDuration() + " | " + se.getDescription());
+                System.out.println(se.getName() + " | Turns Held: " + (se.getTurnsHeld()) + "/" + se.getDuration() + " | " + se.getDescription());
             }
         }
         else {

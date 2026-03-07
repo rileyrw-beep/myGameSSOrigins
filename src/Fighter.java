@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Stack;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Fighter {
 
@@ -109,7 +107,7 @@ public class Fighter {
     //if returns true then skip the fighter turn
     //usually returns false
     public boolean applyStatusEffects() {
-        ArrayList<StatusEffect> statusEffectsToRemove = new ArrayList<>();
+
         boolean rv = false; //return value
         boolean turnProtected = false;
 
@@ -130,22 +128,30 @@ public class Fighter {
                     break;
             }
 
-            //every status effect increases in turns held each turn
-            se.proc();
-
-            //it is also cleaned up if they reach their limit
-            if (se.checkIfStatusFinished()) {
-                statusEffectsToRemove.add(se);
-                se.resetTurnsHeld();
-            }
         }
-
-        //garbage collector
-        statusEffects.removeAll(statusEffectsToRemove);
 
         if (turnProtected) rv = false;
 
         return rv;
+    }
+
+    public void pruneStatusEffects() {
+        //list to gather
+        ArrayList<StatusEffect> statusEffectsToRemove = new ArrayList<>();
+
+        for (var se : statusEffects) {
+            //it is cleaned up if they reach their limit
+            if (se.checkIfStatusFinished()) {
+                statusEffectsToRemove.add(se);
+                se.resetTurnsHeld();
+            }
+
+            //every status effect increases in turns held each turn
+            se.proc();
+        }
+
+        //garbage collector
+        statusEffects.removeAll(statusEffectsToRemove);
     }
 
 
@@ -198,7 +204,83 @@ public class Fighter {
     }
 
 
+    //method that ramdonly operates AI fighter
+    public Move calculateRandomMove(Fighter other) {
+        Random rand = new Random();
 
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+        boolean highPower = (double)(currentPower) / (double)(MAX_POWER) >= 0.66;
+        boolean lowHealth = currentHealth / MAX_HEALTH < .33;
+        boolean otherLowHealth = other.currentHealth / other.MAX_HEALTH < .33;
+        boolean midHealth = currentHealth / MAX_HEALTH < .5 && !lowHealth;
+
+        for (Move move : ALL_MOVES) {
+            if (otherLowHealth) {
+                if (getNominalCost(move) <= currentPower && move.getTargetType() == MoveType.Attack) {
+                    possibleMoves.add(move);
+                }
+            }
+            if (lowHealth) {
+                if (getNominalCost(move) <= currentPower && move.getTargetType() == MoveType.Heal) {
+                    possibleMoves.add(move);
+                }
+            }
+            else if (highPower) {
+                if (getNominalCost(move) >= 0.66 * MAX_POWER) {
+                    possibleMoves.add(move);
+                }
+            }
+            else if (midHealth) {
+                if (getNominalCost(move) <= currentPower) {
+                    possibleMoves.add(move);
+                }
+            }
+            else {
+                if (getNominalCost(move) <= currentPower && move.getTargetType() != MoveType.Heal) {
+                    possibleMoves.add(move);
+                }
+            }
+        }
+
+
+        if (otherLowHealth) {
+            int highest = possibleMoves.getFirst().getCost();
+            int index = 0;
+            for (int i = 1; i < possibleMoves.size(); i++) {
+                if (possibleMoves.get(i).getCost() > highest) {
+                    highest = possibleMoves.get(i).getCost();
+                    index = i;
+                }
+            }
+            var keep = possibleMoves.get(index);
+            possibleMoves.clear();
+            possibleMoves.add(keep);
+        }
+
+        //safety if highPower fails
+        boolean firstPass = true;
+        while (possibleMoves.isEmpty()) {
+            if (firstPass) {
+                for (Move move : ALL_MOVES) {
+                    if (getNominalCost(move) <= currentPower && move.getTargetType() != MoveType.Heal) {
+                        possibleMoves.add(move);
+                    }
+                }
+                firstPass = false;
+            }
+            else {
+                for (Move move : ALL_MOVES) {
+                    if (getNominalCost(move) <= currentPower) {
+                        possibleMoves.add(move);
+                    }
+                }
+            }
+        }
+
+
+        int randChoice = rand.nextInt(possibleMoves.size());
+        return possibleMoves.get(randChoice);
+    }
 
 
     //this is for when the battle ends

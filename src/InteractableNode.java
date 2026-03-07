@@ -231,7 +231,7 @@ public class InteractableNode implements Nodeable{
                Game.sPrint("To keep it simple, this will just be a 1V1.");
                System.out.println();
 
-               TurnBasedBattleManager.doBattle(new String[]{"riley"}, new String[]{"jerry"}, true);
+               TurnBasedBattleManager.doBattle(new String[]{"riley"}, new String[]{"jerry"}, true, 0.0);
 
                Game.endText();
                Game.sPrint("Wow, you did it!");
